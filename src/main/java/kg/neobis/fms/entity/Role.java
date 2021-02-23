@@ -1,13 +1,11 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enams.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -21,8 +19,8 @@ public class Role {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "role", length = 21, nullable = false)
-    private String role;
+    @Column(name = "name", length = 21, nullable = false)
+    private String name;
 
 //    private Set<Permission> permissions;
 }

@@ -13,9 +13,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name="people")
+@Table(name="peoples")
 public class People {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,17 +26,11 @@ public class People {
     @Column(name="name", length = 100, nullable = false)
     private String name;
 
-    @Column(name="middle_name", length = 100)
-    private String middleName;
-
     @Column(name="phone_number", length = 100)
     private String phoneNumber;
 
-    @Column(name="date_of_birth")
-    private Date dateOfBirth;
-
-    @ManyToOne
-    private GroupOfPeople groupOfPeople;//think twice
+//    @ManyToOne
+//    private GroupOfPeople groupOfPeople;//think twice
 
     @Column(name="created_date")
     private Date createdDate;
@@ -47,5 +40,4 @@ public class People {
 
     @Column(name="debt")
     private double debt;// долг
-
 }
