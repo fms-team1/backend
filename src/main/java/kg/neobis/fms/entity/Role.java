@@ -24,5 +24,10 @@ public class Role {
     @Column(name = "role", length = 21, nullable = false)
     private String role;
 
-//    private Set<Permission> permissions;
+    @ElementCollection(targetClass = Permission.class)
+    @CollectionTable(name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "permission")
+    private Set<Permission> permissions;
 }

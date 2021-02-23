@@ -23,6 +23,5 @@ public class IncomeCategory {
     private String incomeCategory;
 
     @ManyToOne
-//    @JoinColumn(name = "neo_section_id")
     private NeoSection neoSection;
 }

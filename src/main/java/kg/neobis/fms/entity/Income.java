@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Table(name = "incomes")
 public class Income implements Serializable {
 
-
     @Id
     @OneToOne
     private Transaction transaction;

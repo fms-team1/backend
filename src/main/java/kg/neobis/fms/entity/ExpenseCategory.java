@@ -23,6 +23,5 @@ public class ExpenseCategory {
     private String expenseCategory;
 
     @ManyToOne
-//    @JoinColumn(name = "neo_section_id")
     private NeoSection neoSection;
 }

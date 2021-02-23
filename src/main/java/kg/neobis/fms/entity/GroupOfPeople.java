@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -23,4 +24,7 @@ public class GroupOfPeople {
 
     @Column(name = "group_of_people",length = 50, nullable = false)
     private String groupOfPeople;
+
+    @ManyToMany(mappedBy = "groupOfPeople")
+    private Set<People> people;
 }

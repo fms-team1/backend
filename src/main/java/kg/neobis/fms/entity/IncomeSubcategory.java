@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class IncomeSubcategory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 

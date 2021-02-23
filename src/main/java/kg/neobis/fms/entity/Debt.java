@@ -1,41 +1,38 @@
 package kg.neobis.fms.entity;
 
+import kg.neobis.fms.entity.enams.DebtStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "debts")
+public class Debt implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "created_date")
-    private Date createdDate;
-
-    @Column(name = "amount")
-    private double amount;
-
     @ManyToOne
     private User user;
 
-    @ManyToOne
-    private Wallet wallet;
+    @Column( name = "amount", nullable = false)
+    private double amount;
 
-    @Column(name = "deleted_date")
-    private Date deletedDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "debt_status", nullable = false )
+    private DebtStatus debtStatus;
 
-    @Column(name = "comment")
-    private String comment;
+
+    @OneToOne
+    private Transaction transaction;
 }
