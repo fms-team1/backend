@@ -31,7 +31,7 @@ public class People {
     @Column(name="phone_number", length = 50)
     private String phoneNumber;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany//(cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "People_Group",
             joinColumns = { @JoinColumn(name = "person_id") },
