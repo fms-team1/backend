@@ -1,4 +1,4 @@
-package kg.neobis.fms.models;
+package kg.neobis.fms.models.security;
 
 import kg.neobis.fms.entity.User;
 import org.springframework.security.core.GrantedAuthority;

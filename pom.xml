@@ -46,10 +46,16 @@
 			<version>42.2.18</version>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>org.hibernate</groupId>-->
+<!--			<artifactId>hibernate-core</artifactId>-->
+<!--			<version>5.4.28.Final</version>-->
+<!--		</dependency>-->
+
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.4.28.Final</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.4.2</version>
 		</dependency>
 
 		<dependency>
@@ -57,6 +63,7 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -73,6 +80,9 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+=======
+
+>>>>>>> 9c8ed3b9b702a8dadd3a0523f4e4896565be8ddb
 	</dependencies>
 
 	<build>
