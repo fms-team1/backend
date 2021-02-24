@@ -1,6 +1,6 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enams.WalletStatus;
+import kg.neobis.fms.entity.enums.WalletStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

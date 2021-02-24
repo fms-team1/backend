@@ -1,4 +1,4 @@
-package kg.neobis.fms.entity.enams;
+package kg.neobis.fms.entity.enums;
 
 public enum Permission {
     READ,

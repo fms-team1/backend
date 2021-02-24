@@ -1,6 +1,6 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enams.Permission;
+import kg.neobis.fms.entity.enums.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
