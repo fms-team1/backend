@@ -1,7 +1,7 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.models.AuthenticationRequest;
-import kg.neobis.fms.models.AuthenticationResponse;
+import kg.neobis.fms.models.security.AuthenticationRequest;
+import kg.neobis.fms.models.security.AuthenticationResponse;
 import kg.neobis.fms.services.JwtUtil;
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

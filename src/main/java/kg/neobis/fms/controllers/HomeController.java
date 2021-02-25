@@ -1,17 +1,28 @@
 package kg.neobis.fms.controllers;
 
+import kg.neobis.fms.models.BalanceAndLastFifteenTransactions;
+import kg.neobis.fms.services.TransactionService;
+import kg.neobis.fms.services.WalletService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-    @GetMapping("/admin/home")
-    public String getAdmin() {
-        return "Hello admin";
-    }
+    @Autowired
+    private WalletService walletService;
 
-    @GetMapping("/index")
-    public String getUser() {
-        return "Hello user";
+    @Autowired
+    private TransactionService transactionService;
+
+    // API to get current balance of all wallets and last 15 transactions
+    @GetMapping("/home")
+    public BalanceAndLastFifteenTransactions getCurrentBalance() {
+        BalanceAndLastFifteenTransactions home = new BalanceAndLastFifteenTransactions();
+
+        home.setCurrentBalance(walletService.getCurrentBalanceOfAllWallets());
+        home.setLastFifteenTransactions(transactionService.getLastFifteenTransactions());
+
+        return home;
     }
 }

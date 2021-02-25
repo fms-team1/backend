@@ -1,4 +1,4 @@
-package kg.neobis.fms.models;
+package kg.neobis.fms.models.security;
 
 public class AuthenticationResponse {
     private final String jwt;
