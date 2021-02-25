@@ -1,4 +1,4 @@
-Implemented ticket "backend03": getting information in index page. Current balance of all available wallets and last 10 transactions.
+Implemented ticket "backend03". Getting information in index page: current balance of all available wallets and last 10 transactions.
 
 Didn't implemented:
 
