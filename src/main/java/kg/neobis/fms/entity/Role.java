@@ -1,6 +1,6 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enams.Permission;
+import kg.neobis.fms.entity.enums.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public class Role {
     @Column(name = "role", length = 21, nullable = false)
     private String role;
 
-    @ElementCollection(targetClass = Permission.class)
+    @ElementCollection(targetClass = Permission.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"))
     @Enumerated(EnumType.STRING)

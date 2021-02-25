@@ -16,7 +16,6 @@ import java.util.Set;
 @Setter
 @Table(name = "groups_of_people")
 public class GroupOfPeople {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

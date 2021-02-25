@@ -1,6 +1,5 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enams.DebtStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +27,9 @@ public class Debt implements Serializable {
     @Column( name = "amount", nullable = false)
     private double amount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "debt_status", nullable = false )
-    private DebtStatus debtStatus;
-
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "debt_status", nullable = false )
+//    private DebtStatus debtStatus;
 
     @OneToOne
     private Transaction transaction;

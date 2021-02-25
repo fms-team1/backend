@@ -16,7 +16,6 @@ import java.util.Set;
 @Setter
 @Table(name="people")
 public class People {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -31,7 +30,11 @@ public class People {
     @Column(name="phone_number", length = 50)
     private String phoneNumber;
 
-    @ManyToMany//(cascade = { CascadeType.MERGE })
+// <<<<<<< backend2
+//     @ManyToMany//(cascade = { CascadeType.MERGE })
+    @ManyToMany(cascasde= {CascadeType.MERGE}, fetch = FetchType.EAGER) // Merged branches between backend02 and backend03
+//     @ManyToMany(fetch = FetchType.EAGER)
+// >>>>>>> backend03
     @JoinTable(
             name = "People_Group",
             joinColumns = { @JoinColumn(name = "person_id") },
@@ -44,5 +47,4 @@ public class People {
 
     @Column(name="deleted_date")
     private Date deletedDate;
-
 }
