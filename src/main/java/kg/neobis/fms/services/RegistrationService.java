@@ -1,9 +1,9 @@
-package kg.neobis.fms.service;
+package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.People;
-import kg.neobis.fms.model.PersonModel;
-import kg.neobis.fms.model.RegistrationModel;
-import kg.neobis.fms.model.UserModel;
+import kg.neobis.fms.models.PersonModel;
+import kg.neobis.fms.models.RegistrationModel;
+import kg.neobis.fms.models.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

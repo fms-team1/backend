@@ -1,4 +1,4 @@
-package kg.neobis.fms.repository;
+package kg.neobis.fms.repositories;
 
 import kg.neobis.fms.entity.GroupOfPeople;
 import org.springframework.data.jpa.repository.JpaRepository;

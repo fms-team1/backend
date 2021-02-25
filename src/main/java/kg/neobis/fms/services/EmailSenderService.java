@@ -1,4 +1,4 @@
-package kg.neobis.fms.service;
+package kg.neobis.fms.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

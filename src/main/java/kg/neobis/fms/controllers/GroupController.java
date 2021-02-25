@@ -1,4 +1,4 @@
-package kg.neobis.fms.controller;
+package kg.neobis.fms.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package kg.neobis.fms.model;
+package kg.neobis.fms.models;
 
 
 import kg.neobis.fms.entity.GroupOfPeople;

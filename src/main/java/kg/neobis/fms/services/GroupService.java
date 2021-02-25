@@ -1,11 +1,8 @@
-package kg.neobis.fms.service;
+package kg.neobis.fms.services;
 
-import kg.neobis.fms.entity.GroupOfPeople;
-import kg.neobis.fms.repository.GroupRepository;
+import kg.neobis.fms.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class GroupService {

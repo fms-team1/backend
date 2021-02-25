@@ -1,21 +1,16 @@
-package kg.neobis.fms.service;
+package kg.neobis.fms.services;
 
-import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
-import kg.neobis.fms.model.PersonModel;
-import kg.neobis.fms.repository.PeopleRepository;
+import kg.neobis.fms.models.PersonModel;
+import kg.neobis.fms.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-
 
 @Service
 public class PeopleService {
-
     private PeopleRepository peopleRepository;
     private GroupService groupService;
 
@@ -24,7 +19,6 @@ public class PeopleService {
         this.peopleRepository = peopleRepository;
         this.groupService = groupService;
     }
-
 
     /****
      * При добавлении новой записи в таблицу people, id создаются автоматически. В дальнейшем при
@@ -51,6 +45,4 @@ public class PeopleService {
         Optional<People> optionalPerson = peopleRepository.findById(id);
         return optionalPerson.get();
     }
-
-
 }

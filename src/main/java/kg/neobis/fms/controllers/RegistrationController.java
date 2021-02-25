@@ -1,8 +1,8 @@
-package kg.neobis.fms.controller;
+package kg.neobis.fms.controllers;
 
 
-import kg.neobis.fms.model.RegistrationModel;
-import kg.neobis.fms.service.RegistrationService;
+import kg.neobis.fms.models.RegistrationModel;
+import kg.neobis.fms.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

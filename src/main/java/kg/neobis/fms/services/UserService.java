@@ -1,10 +1,9 @@
-package kg.neobis.fms.service;
+package kg.neobis.fms.services;
 
-import kg.neobis.fms.entity.Role;
 import kg.neobis.fms.entity.User;
-import kg.neobis.fms.entity.enams.UserStatus;
-import kg.neobis.fms.model.UserModel;
-import kg.neobis.fms.repository.UserRepository;
+import kg.neobis.fms.entity.enums.UserStatus;
+import kg.neobis.fms.models.UserModel;
+import kg.neobis.fms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
