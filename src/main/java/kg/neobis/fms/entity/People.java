@@ -30,7 +30,11 @@ public class People {
     @Column(name="phone_number", length = 50)
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+// <<<<<<< backend2
+//     @ManyToMany//(cascade = { CascadeType.MERGE })
+    @ManyToMany(cascasde= {CascadeType.MERGE}, fetch = FetchType.EAGER) // Merged branches between backend02 and backend03
+//     @ManyToMany(fetch = FetchType.EAGER)
+// >>>>>>> backend03
     @JoinTable(
             name = "People_Group",
             joinColumns = { @JoinColumn(name = "person_id") },
