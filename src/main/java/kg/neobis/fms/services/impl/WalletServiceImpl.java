@@ -24,6 +24,8 @@ public class WalletServiceImpl implements WalletService {
     public Double getCurrentBalanceOfAllWallets() {
         List<Wallet> wallets = walletRepository.findAll();
 
-        return wallets.stream().mapToDouble(Wallet::getAvailableBalance).sum();
+        return wallets.stream()
+                .filter(wallet -> wallet.getWalletStatus().toString().equals("ACCESSIBLE"))
+                .mapToDouble(Wallet::getAvailableBalance).sum();
     }
 }
