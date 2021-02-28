@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/login", "/swagger-ui.html").permitAll()
-//                    .anyRequest().authenticated()
+                    .anyRequest().authenticated()
                     .and()
                 .logout()
                     .logoutSuccessUrl("/login")
