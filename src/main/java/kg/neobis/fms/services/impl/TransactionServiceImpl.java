@@ -30,7 +30,6 @@ public class TransactionServiceImpl implements TransactionService {
             transactionWithoutUserPassword.setLastName(transaction.getUser().getPerson().getSurname());
             transactionWithoutUserPassword.setComment(transaction.getComment());
             transactionWithoutUserPassword.setWallet(transaction.getWallet());
-            transactionWithoutUserPassword.setDeletedDate(transaction.getDeletedDate());
 
             transactionWithoutUserPasswordList.add(transactionWithoutUserPassword);
         });
