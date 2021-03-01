@@ -14,5 +14,5 @@ import java.util.List;
 @Setter
 public class BalanceAndLastFifteenTransactions {
     private Double currentBalance;
-    private List<Transaction> lastFifteenTransactions;
+    private List<TransactionWithoutUserPassword> lastFifteenTransactions;
 }
