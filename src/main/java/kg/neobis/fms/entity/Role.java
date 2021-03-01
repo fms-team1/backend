@@ -27,7 +27,7 @@ public class Role {
     @ElementCollection(targetClass = Permission.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "permission")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "permission_id")
     private Set<Permission> permissions;
 }
