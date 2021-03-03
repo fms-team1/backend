@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/registration")
-@CrossOrigin(origins = "https://neo-fms.herokuapp.com/", maxAge = 3600)
+@CrossOrigin
 public class RegistrationController {
 
     private RegistrationService registrationService;

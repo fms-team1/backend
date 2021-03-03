@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "https://neo-fms.herokuapp.com/", maxAge = 3600)
+@CrossOrigin
 public class HomeController {
     @Autowired
     private WalletService walletService;
