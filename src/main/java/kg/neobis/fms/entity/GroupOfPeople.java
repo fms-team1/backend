@@ -1,6 +1,7 @@
 package kg.neobis.fms.entity;
 
 
+import kg.neobis.fms.entity.enums.GroupStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,12 @@ public class GroupOfPeople {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "group_of_people",length = 50, nullable = false)
+    @Column(name = "group_of_people",length = 50, nullable = false, unique = true)
     private String groupOfPeople;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status_id")
+    private GroupStatus groupStatus;
 
     @ManyToMany(mappedBy = "groupOfPeople")
     private Set<People> people;

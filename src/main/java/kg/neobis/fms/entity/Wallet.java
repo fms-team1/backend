@@ -31,8 +31,8 @@ public class Wallet {
     @Column(name = "created_date")
     private Date createdDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "wallet_status")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "wallet_status_id")
     private WalletStatus walletStatus;
 
     @Column(name = "available_balance")

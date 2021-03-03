@@ -1,13 +1,17 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.GroupOfPeople;
+import kg.neobis.fms.entity.enums.GroupStatus;
 import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupService {
@@ -24,17 +28,15 @@ public class GroupService {
         List<GroupOfPeople> list = groupRepository.findAll();
 
         List<GroupModel> resList = new ArrayList<>();
-
-        for(GroupOfPeople groupOfPeople: list){
+        for(GroupOfPeople groupOfPeople: list)
             resList.add(new GroupModel(groupOfPeople.getId(), groupOfPeople.getGroupOfPeople()));
-        }
         return resList;
     }
 
     public void addNewGroup(GroupModel groupModel) {
-
         GroupOfPeople group = new GroupOfPeople();
         group.setGroupOfPeople(groupModel.getGroupName());
+        group.setGroupStatus(GroupStatus.ACTIVE);
         groupRepository.save(group);
     }
 
@@ -42,5 +44,36 @@ public class GroupService {
     public boolean isGroupExist(GroupModel groupModel){
         GroupOfPeople group = groupRepository.findByGroupOfPeople(groupModel.getGroupName());
         return group != null;
+    }
+
+    public ResponseEntity<String> updateGroup(GroupModel groupModel) {
+        Optional<GroupOfPeople> optionalGroup = groupRepository.findById(groupModel.getId());
+        if(!optionalGroup.isPresent())
+            return new ResponseEntity<>("the group id does not exist", HttpStatus.BAD_REQUEST);
+
+        GroupOfPeople group = optionalGroup.get();
+        group.setGroupOfPeople(groupModel.getGroupName());
+        groupRepository.save(group);
+        return ResponseEntity.ok("successfully updated");
+    }
+
+    public ResponseEntity<String> archiveGroup(GroupModel groupModel) {
+        Optional<GroupOfPeople> optionalGroup = groupRepository.findById(groupModel.getId());
+        if(optionalGroup.isEmpty())
+            return new ResponseEntity<>("отправленное id группы не сущесвует", HttpStatus.BAD_REQUEST);
+
+        GroupOfPeople group = optionalGroup.get();
+        group.setGroupStatus(GroupStatus.ARCHIVED);
+        groupRepository.save(group);
+        return ResponseEntity.ok("successfully archived");
+    }
+
+    public List<GroupModel> getAllActiveGroups() {
+        List<GroupOfPeople> list = groupRepository.findByGroupStatus(GroupStatus.ACTIVE);
+        List<GroupModel> resultList = new ArrayList<>();
+
+        for(GroupOfPeople person: list)
+            resultList.add(new GroupModel(person.getId(), person.getGroupOfPeople()));
+        return resultList;
     }
 }
