@@ -4,10 +4,12 @@ import kg.neobis.fms.models.BalanceAndLastFifteenTransactions;
 import kg.neobis.fms.services.TransactionService;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "https://neo-fms.herokuapp.com/", maxAge = 3600)
 public class HomeController {
     @Autowired
     private WalletService walletService;
