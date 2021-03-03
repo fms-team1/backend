@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GroupRepository extends JpaRepository<GroupOfPeople, Long> {
-    GroupOfPeople findByGroupOfPeople(String groupName);
+    GroupOfPeople findByName(String groupName);
     List<GroupOfPeople> findByGroupStatus(GroupStatus groupStatus);
 
 }

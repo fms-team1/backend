@@ -22,8 +22,8 @@ public class Wallet {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "wallet", length = 50, nullable = false)
-    private String wallet;
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 
     @Column(name = "deleted_date")
     private Date deletedDate;
