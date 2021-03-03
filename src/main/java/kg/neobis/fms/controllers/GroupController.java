@@ -1,7 +1,10 @@
 package kg.neobis.fms.controllers;
 
+// <<<<<<< develop
 import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.enums.GroupStatus;
+// =======
+// >>>>>>> production
 import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("group")
+@CrossOrigin
 public class GroupController {
 
     private GroupService groupService;
