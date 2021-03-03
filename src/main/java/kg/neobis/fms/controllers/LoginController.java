@@ -1,5 +1,7 @@
 package kg.neobis.fms.controllers;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import kg.neobis.fms.models.security.AuthenticationRequest;
 import kg.neobis.fms.models.security.AuthenticationResponse;
 import kg.neobis.fms.services.JwtUtil;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "https://neo-fms.herokuapp.com/", maxAge = 3600)
+@CrossOrigin
 public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -28,6 +30,10 @@ public class LoginController {
     private JwtUtil jwtTokenUtil;
 
     // Authentication with jwt token
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Get JWT token"),
+            @ApiResponse(code = 500, message = "Toke is expired")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {

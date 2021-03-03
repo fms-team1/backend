@@ -26,4 +26,10 @@ public class UserService {
 //        user.setRole();// доб бухгалтера после миграции, иначе будут конфликты из-за пустой базы
         userRepository.save(user);
     }
+
+
+    public User getByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
 }
