@@ -23,7 +23,7 @@ public class JournalController {
 
     // API to get transaction by id
     @GetMapping("/getById/{id}")
-    public Optional<Transaction> getTransactionById(@PathVariable Long id) {
+    public Optional<Transaction> getTransactionById(@PathVariable("id") Long id) {
         return transactionService.getTransactionById(id);
     }
 }
