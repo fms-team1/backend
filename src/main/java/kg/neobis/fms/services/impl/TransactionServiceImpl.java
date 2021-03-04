@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    // Method to get last 15 transactions
     @Override
     public List<TransactionWithoutUserPassword> getLastFifteenTransactions() {
         List<Transaction> transactions = transactionRepository.findTop15ByOrderByIdDesc();
@@ -35,5 +37,17 @@ public class TransactionServiceImpl implements TransactionService {
         });
 
         return transactionWithoutUserPasswordList;
+    }
+
+    // Method to get all transactions
+    @Override
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
+    // Method to get transaction by id
+    @Override
+    public Optional<Transaction> getTransactionById(Long id) {
+        return transactionRepository.findById(id);
     }
 }
