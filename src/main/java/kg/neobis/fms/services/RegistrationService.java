@@ -5,6 +5,7 @@ import kg.neobis.fms.entity.User;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
+import kg.neobis.fms.services.impl.MyUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationService {
 
-    private UserService userService;
+    private MyUserServiceImpl userService;
     private PeopleService peopleService;
     private EmailSenderService emailSenderService;
 
     @Autowired
-    RegistrationService(UserService userService, PeopleService peopleService, EmailSenderService emailSenderService){
+    RegistrationService(MyUserServiceImpl userService, PeopleService peopleService, EmailSenderService emailSenderService){
         this.userService = userService;
         this.peopleService = peopleService;
         this.emailSenderService = emailSenderService;

@@ -10,12 +10,14 @@ import kg.neobis.fms.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("category")
+@PreAuthorize("hasAnyAuthority('READ_CATEGORY')")
 public class CategoryController {
 
     private CategoryService categoryService;
@@ -52,6 +54,7 @@ public class CategoryController {
         return ResponseEntity.ok(list);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADD_CATEGORY')")
     @PostMapping("add")
     public ResponseEntity<String> addNewCategory(@RequestBody CategoryModel model){
         if(categoryService.isCategoryExist(model))
@@ -60,10 +63,18 @@ public class CategoryController {
         return ResponseEntity.ok("successfully added");
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE_CATEGORY')")
     @PutMapping("update")
     public ResponseEntity<String> updateCategory(@RequestBody CategoryModel model){
         return categoryService.updateCategory(model);
     }
+
+    @PreAuthorize("hasAnyAuthority('ARCHIVE_CATEGORY')")
+    @PutMapping("archive")
+    public ResponseEntity<String> archiveCategory(@RequestBody CategoryModel model){
+        return categoryService.archiveCategory(model);
+    }
+
 
 
 }

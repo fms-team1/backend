@@ -1,24 +1,24 @@
 package kg.neobis.fms.models.security;
 
+import kg.neobis.fms.entity.Role;
 import kg.neobis.fms.entity.User;
+import kg.neobis.fms.entity.enums.Permission;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
-    private List<GrantedAuthority> authorities;
+    private Set<GrantedAuthority> authorities;
     private User user;
 
-    public MyUserDetails(User user, String role) {
+    public MyUserDetails(User user, Role role) {
         this.user = user;
-        this.authorities = Arrays.stream(role.split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        authorities = new HashSet<>();
+        for(Permission permission: role.getPermissions())
+            authorities.add(new SimpleGrantedAuthority(permission.toString()));
     }
 
     public MyUserDetails() {

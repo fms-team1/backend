@@ -1,7 +1,9 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.Category;
+import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.enums.CategoryStatus;
+import kg.neobis.fms.entity.enums.GroupStatus;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +77,16 @@ public class CategoryService {
         category.setCategoryStatus(model.getCategoryStatus());
         categoryRepository.save(category);
         return ResponseEntity.ok("successfully updated");
+    }
+
+    public ResponseEntity<String> archiveCategory(CategoryModel model) {
+        Optional<Category> optionalCategory = categoryRepository.findById(model.getId());
+        if(optionalCategory.isEmpty())
+            return new ResponseEntity<>("the category id does not exist", HttpStatus.BAD_REQUEST);
+
+        Category category = optionalCategory.get();
+        category.setCategoryStatus(CategoryStatus.ARCHIVED);
+        categoryRepository.save(category);
+        return ResponseEntity.ok("successfully archived");
     }
 }
