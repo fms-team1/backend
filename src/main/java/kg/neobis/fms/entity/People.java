@@ -30,7 +30,6 @@ public class People {
     @Column(name="phone_number", length = 50)
     private String phoneNumber;
 
-
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "People_Group",

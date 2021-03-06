@@ -37,6 +37,12 @@ public class CategoryController {
         return ResponseEntity.ok(NeoSection.values());
     }
 
+    @GetMapping("getCategoriesByNeoSection")
+    public ResponseEntity<List<CategoryModel>> getCategoriesByNeoSection(@RequestBody NeoSection neoSection){
+        List<CategoryModel> list =  categoryService.getCategoriesByNeoSection(neoSection);
+        return ResponseEntity.ok(list);
+    }
+
     @GetMapping("getTransactionTypes")
     public ResponseEntity<TransactionType[]> getTransactionTypes(){
         return ResponseEntity.ok(TransactionType.values());

@@ -2,6 +2,7 @@ package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.User;
+import kg.neobis.fms.exaption.RecordNotFoundException;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
@@ -26,7 +27,7 @@ public class RegistrationService {
     }
 
     // add password encoder
-    public ResponseEntity<String> addNewAccountant(RegistrationModel registrationModel) {
+    public ResponseEntity<String> addNewAccountant(RegistrationModel registrationModel) throws RecordNotFoundException {
         if(registrationModel.getName().isEmpty())
             return new ResponseEntity<>("name cannot be empty", HttpStatus.BAD_REQUEST);
         else if(!isEmailValid(registrationModel.getEmail()))

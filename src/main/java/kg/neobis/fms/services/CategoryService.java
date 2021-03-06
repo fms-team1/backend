@@ -4,6 +4,8 @@ import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.GroupStatus;
+import kg.neobis.fms.entity.enums.NeoSection;
+import kg.neobis.fms.exaption.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,14 @@ public class CategoryService {
         List<Category> list = categoryRepository.findAll();
         return getCategoryModels(list);
 
+    }
+
+    public Category getById(long id) throws RecordNotFoundException {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if(optionalCategory.isPresent())
+            return optionalCategory.get();
+        else
+            throw new RecordNotFoundException("the category id does not exist");
     }
 
     public List<CategoryModel> getAllActiveCategories() {
@@ -89,4 +99,10 @@ public class CategoryService {
         categoryRepository.save(category);
         return ResponseEntity.ok("successfully archived");
     }
+
+    public List<CategoryModel> getCategoriesByNeoSection(NeoSection neoSection) {
+        List<Category> list = categoryRepository.findByNeoSection(neoSection);
+        return getCategoryModels(list);
+    }
+
 }

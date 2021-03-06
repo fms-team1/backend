@@ -7,6 +7,8 @@ import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.models.security.MyUserDetails;
 import kg.neobis.fms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,5 +46,12 @@ public class MyUserServiceImpl implements UserDetailsService {
     public User getByEmail(String email){
         User user = userRepository.findByEmail(email);
         return user;
+    }
+
+    public User getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String userEmail= authentication.getName();
+        return getByEmail(userEmail);
     }
 }
