@@ -28,6 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionWithoutUserPassword.setId(transaction.getId());
             transactionWithoutUserPassword.setAmount(transaction.getAmount());
             transactionWithoutUserPassword.setCreatedDate(transaction.getCreatedDate());
+            transactionWithoutUserPassword.setTransactionType(transaction.getCategory().getTransactionType());
             transactionWithoutUserPassword.setName(transaction.getUser().getPerson().getName());
             transactionWithoutUserPassword.setWalletName(transaction.getWallet().getWallet());
             transactionWithoutUserPassword.setWalletBalance(transaction.getWallet().getAvailableBalance());
