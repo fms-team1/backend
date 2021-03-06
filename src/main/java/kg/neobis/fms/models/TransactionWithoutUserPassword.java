@@ -1,6 +1,5 @@
 package kg.neobis.fms.models;
 
-import kg.neobis.fms.entity.Wallet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +16,7 @@ public class TransactionWithoutUserPassword {
     private Date createdDate;
     private double amount;
     private String name;
-    private String lastName;
-    private Wallet wallet;
-    private Date deletedDate;
+    private String walletName;
+    private double walletBalance;
     private String comment;
 }
