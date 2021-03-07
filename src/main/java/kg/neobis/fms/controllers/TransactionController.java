@@ -1,6 +1,7 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.Transaction;
+import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
@@ -37,6 +38,11 @@ public class TransactionController {
         return transactionService.getTransactionById(id);
     }
 
+    @GetMapping("getTransactionTypes")
+    public ResponseEntity<TransactionType[]> getTransactionTypes(){
+        return ResponseEntity.ok(TransactionType.values());
+    }
+
     @PreAuthorize("hasAuthority('ADD_TRANSACTION')")
     @PostMapping("addIncomeOrExpense")
     public ResponseEntity<String> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
@@ -59,4 +65,6 @@ public class TransactionController {
         }
         return ResponseEntity.ok("successfully added");
     }
+
+
 }

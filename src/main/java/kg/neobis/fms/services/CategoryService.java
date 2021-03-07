@@ -3,8 +3,10 @@ package kg.neobis.fms.services;
 import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
+import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
+import kg.neobis.fms.models.ModelToGetCategories;
 import kg.neobis.fms.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,13 @@ public class CategoryService {
 
     public List<CategoryModel> getAllActiveCategories() {
         List<Category> list = categoryRepository.findByCategoryStatus(CategoryStatus.ACTIVE);
+        return getCategoryModels(list);
+    }
+
+    public List<CategoryModel> getAllActiveCategories(ModelToGetCategories model) {
+        TransactionType type = model.getTransactionType();
+        NeoSection neoSection = model.getNeoSection();
+        List<Category> list = categoryRepository.findByNeoSectionAndTransactionType(neoSection, type);
         return getCategoryModels(list);
     }
 
@@ -102,5 +111,6 @@ public class CategoryService {
         List<Category> list = categoryRepository.findByNeoSection(neoSection);
         return getCategoryModels(list);
     }
+
 
 }
