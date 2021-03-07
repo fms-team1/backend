@@ -4,15 +4,22 @@ import kg.neobis.fms.models.BalanceAndLastFifteenTransactions;
 import kg.neobis.fms.services.TransactionService;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+=======
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+>>>>>>> production
 
 
 @RestController
 @PreAuthorize("hasAnyAuthority('HOME')")
 @CrossOrigin
+@RequestMapping("/home")
 public class HomeController {
     @Autowired
     private WalletService walletService;
@@ -21,11 +28,23 @@ public class HomeController {
     private TransactionService transactionService;
 
     // API to get current balance of all wallets and last 15 transactions
-    @GetMapping("/home")
-    public BalanceAndLastFifteenTransactions getCurrentBalance() {
+    @GetMapping("/")
+    public BalanceAndLastFifteenTransactions getCurrentBalance() throws ParseException {
         BalanceAndLastFifteenTransactions home = new BalanceAndLastFifteenTransactions();
 
-        home.setCurrentBalance(walletService.getCurrentBalanceOfAllWallets());
+        home.setIncomeAndExpenses(transactionService.getIncomeANdExpenseForDefaultDate());
+        home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
+        home.setLastFifteenTransactions(transactionService.getLastFifteenTransactions());
+
+        return home;
+    }
+
+    @PostMapping("/{period}")
+    public BalanceAndLastFifteenTransactions getCurrentBalanceAndIncomeAndExpenseForPeriod(@PathVariable("period") String period) throws ParseException {
+        BalanceAndLastFifteenTransactions home = new BalanceAndLastFifteenTransactions();
+
+        home.setIncomeAndExpenses(transactionService.getIncomeAndExpenseForPeriod(period));
+        home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
         home.setLastFifteenTransactions(transactionService.getLastFifteenTransactions());
 
         return home;
