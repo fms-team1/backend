@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("category")
 @PreAuthorize("hasAnyAuthority('READ_CATEGORY')")
+@CrossOrigin
 public class CategoryController {
 
     private CategoryService categoryService;
