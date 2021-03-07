@@ -1,22 +1,58 @@
 package kg.neobis.fms.services.impl;
 
+import kg.neobis.fms.entity.Category;
+import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Transaction;
+<<<<<<< HEAD
 import kg.neobis.fms.models.IncomeAndExpenses;
 import kg.neobis.fms.models.JournalTransactionInfo;
+=======
+import kg.neobis.fms.entity.Wallet;
+import kg.neobis.fms.entity.enums.TransactionStatus;
+import kg.neobis.fms.entity.enums.TransactionType;
+import kg.neobis.fms.exception.NotEnoughAvailableBalance;
+import kg.neobis.fms.exception.NotEnoughDataException;
+import kg.neobis.fms.exception.RecordNotFoundException;
+import kg.neobis.fms.models.IncomeExpenseModel;
+import kg.neobis.fms.models.PersonModel;
+>>>>>>> production
 import kg.neobis.fms.models.TransactionWithoutUserPassword;
+import kg.neobis.fms.models.TransferModel;
 import kg.neobis.fms.repositories.TransactionRepository;
+import kg.neobis.fms.services.CategoryService;
+import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+<<<<<<< HEAD
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+=======
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+>>>>>>> production
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-    @Autowired
+
     private TransactionRepository transactionRepository;
+    private WalletServiceImpl walletService;
+    private CategoryService categoryService;
+    private MyUserServiceImpl userService;
+    private PeopleService peopleService;
+
+    @Autowired
+    TransactionServiceImpl(TransactionRepository transactionRepository, WalletServiceImpl walletService, CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService){
+        this.transactionRepository = transactionRepository;
+        this.walletService = walletService;
+        this.categoryService = categoryService;
+        this.userService = userService;
+        this.peopleService = peopleService;
+    }
 
     // Method to get last 15 transactions
     @Override
@@ -31,6 +67,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionWithoutUserPassword.setCreatedDate(transaction.getCreatedDate());
             transactionWithoutUserPassword.setAmount(transaction.getAmount());
             transactionWithoutUserPassword.setTransactionType(transaction.getCategory().getTransactionType());
+<<<<<<< HEAD
             transactionWithoutUserPassword.setCategoryName(transaction.getCategory().getCategory());
             transactionWithoutUserPassword.setAccountantName(transaction.getUser().getPerson().getName());
             transactionWithoutUserPassword.setAccountantSurname(transaction.getUser().getPerson().getSurname());
@@ -38,6 +75,11 @@ public class TransactionServiceImpl implements TransactionService {
             transactionWithoutUserPassword.setCounterpartyName(transaction.getPerson().getName());
             transactionWithoutUserPassword.setCounterpartySurname(transaction.getPerson().getSurname());
             transactionWithoutUserPassword.setWalletName(transaction.getWallet().getWallet());
+=======
+            transactionWithoutUserPassword.setName(transaction.getUser().getPerson().getName());
+            transactionWithoutUserPassword.setWalletName(transaction.getWallet().getName());
+            transactionWithoutUserPassword.setWalletBalance(transaction.getWallet().getAvailableBalance());
+>>>>>>> production
             transactionWithoutUserPassword.setComment(transaction.getComment());
 
             transactionWithoutUserPasswordList.add(transactionWithoutUserPassword);
@@ -73,6 +115,7 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findById(id);
     }
 
+<<<<<<< HEAD
     // method to get income and expenses for particular period of date
     @Override
     public IncomeAndExpenses getIncomeAndExpenseForPeriod(String period) throws ParseException {
@@ -172,4 +215,73 @@ public class TransactionServiceImpl implements TransactionService {
 
         return totalSum;
     }
+=======
+
+    @Override
+    public void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException {
+        Wallet wallet = walletService.getWalletById(model.getWalletId());
+        Category category = categoryService.getById(model.getCategoryId());
+        double amount = model.getAmount();
+        People counterparty = getCounterparty(model.getCounterpartyId(), model.getCounterpartyName());
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setPerson(counterparty);
+        transaction.setWallet(wallet);
+        transaction.setCategory(category);
+        transaction.setComment(model.getComment());
+
+        transaction.setCreatedDate(new Date());
+        transaction.setUser(userService.getCurrentUser());
+        transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
+
+        if(category.getTransactionType().equals(TransactionType.INCOME))
+            walletService.increaseAvailableBalance(wallet, amount);
+        else if(category.getTransactionType().equals(TransactionType.EXPENSE))
+            walletService.decreaseAvailableBalance(wallet, amount);
+
+        transactionRepository.save(transaction);
+    }
+
+    @Override
+    public void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance {
+        Wallet walletFrom = walletService.getWalletById(model.getWalletFromId());//transfer money FROM this wallet
+        Wallet walletTo = walletService.getWalletById(model.getWalletToId());//TO this one
+        Category category = categoryService.getById(0);// CREATE a category in the database called "transfer"!!!!!!!!!!!!!!!!!!!!
+        double amount = model.getAmount();
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(model.getAmount());
+        transaction.setWallet(walletFrom);
+        transaction.setWallet2(walletTo);
+        transaction.setCategory(category);
+        transaction.setComment(model.getComment());
+
+        transaction.setCreatedDate(new Date());
+        transaction.setUser(userService.getCurrentUser());
+        transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
+
+        walletService.decreaseAvailableBalance(walletFrom, amount);
+        walletService.increaseAvailableBalance(walletTo,amount);
+
+        transactionRepository.save(transaction);
+    }
+
+    private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {
+        People counterparty;
+        if( counterpartyId != null)
+            counterparty = peopleService.getById(counterpartyId);
+        else if (counterpartyName != null){
+            PersonModel personModel = new PersonModel();
+            personModel.setName(counterpartyName);
+
+            long person_id = peopleService.addNewPerson(personModel);
+            counterparty = peopleService.getById(person_id);
+        } else
+            throw new NotEnoughDataException("no data about counterparty");
+        return counterparty;
+    }
+
+
+>>>>>>> production
 }

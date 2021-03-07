@@ -1,6 +1,7 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.People;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,11 @@ public class PeopleService {
         return  person.getId();
     }
 
-    // add check if(optional.isPersist)
-    public People getById(long id){
+    public People getById(long id) throws RecordNotFoundException {
         Optional<People> optionalPerson = peopleRepository.findById(id);
-        return optionalPerson.get();
+        if(optionalPerson.isPresent())
+            return optionalPerson.get();
+        else
+            throw new RecordNotFoundException("id does not exist");
     }
 }

@@ -29,20 +29,20 @@ public class GroupService {
 
         List<GroupModel> resList = new ArrayList<>();
         for(GroupOfPeople groupOfPeople: list)
-            resList.add(new GroupModel(groupOfPeople.getId(), groupOfPeople.getGroupOfPeople()));
+            resList.add(new GroupModel(groupOfPeople.getId(), groupOfPeople.getName()));
         return resList;
     }
 
     public void addNewGroup(GroupModel groupModel) {
         GroupOfPeople group = new GroupOfPeople();
-        group.setGroupOfPeople(groupModel.getGroupName());
+        group.setName(groupModel.getGroupName());
         group.setGroupStatus(GroupStatus.ACTIVE);
         groupRepository.save(group);
     }
 
 
     public boolean isGroupExist(GroupModel groupModel){
-        GroupOfPeople group = groupRepository.findByGroupOfPeople(groupModel.getGroupName());
+        GroupOfPeople group = groupRepository.findByName(groupModel.getGroupName());
         return group != null;
     }
 
@@ -52,7 +52,7 @@ public class GroupService {
             return new ResponseEntity<>("the group id does not exist", HttpStatus.BAD_REQUEST);
 
         GroupOfPeople group = optionalGroup.get();
-        group.setGroupOfPeople(groupModel.getGroupName());
+        group.setName(groupModel.getGroupName());
         groupRepository.save(group);
         return ResponseEntity.ok("successfully updated");
     }
@@ -72,8 +72,8 @@ public class GroupService {
         List<GroupOfPeople> list = groupRepository.findByGroupStatus(GroupStatus.ACTIVE);
         List<GroupModel> resultList = new ArrayList<>();
 
-        for(GroupOfPeople person: list)
-            resultList.add(new GroupModel(person.getId(), person.getGroupOfPeople()));
+        for(GroupOfPeople group: list)
+            resultList.add(new GroupModel(group.getId(), group.getName()));
         return resultList;
     }
 }

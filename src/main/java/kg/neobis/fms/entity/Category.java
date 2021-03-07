@@ -23,8 +23,8 @@ public class Category {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "category", length = 50, nullable = false, unique = true)
-    private String category;
+    @Column(name = "name", length = 50, nullable = false, unique = true)
+    private String name;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "neo_section_id", nullable = false )

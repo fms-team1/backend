@@ -22,8 +22,8 @@ public class GroupOfPeople {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "group_of_people",length = 50, nullable = false, unique = true)
-    private String groupOfPeople;
+    @Column(name = "name",length = 50, nullable = false, unique = true)
+    private String name;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status_id")
