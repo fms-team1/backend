@@ -6,6 +6,7 @@ import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.IncomeExpenseModel;
+import kg.neobis.fms.models.JournalTransactionInfoModel;
 import kg.neobis.fms.models.TransferModel;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class TransactionController {
 
     // API to get all transactions
     @GetMapping("/getAll")
-    public List<Transaction> getAllTransactions() {
+    public List<JournalTransactionInfoModel> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 

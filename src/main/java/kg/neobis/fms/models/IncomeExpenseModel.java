@@ -1,6 +1,5 @@
 package kg.neobis.fms.models;
 
-import kg.neobis.fms.entity.People;
 import lombok.Data;
 
 @Data

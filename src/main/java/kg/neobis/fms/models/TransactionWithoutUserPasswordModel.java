@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TransactionWithoutUserPassword {
+public class TransactionWithoutUserPasswordModel {
     private long id;
     private Date createdDate;
     private double amount;

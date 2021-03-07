@@ -1,15 +1,11 @@
 package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Wallet;
-<<<<<<< HEAD
-import kg.neobis.fms.models.WalletBalanceAndName;
-=======
+import kg.neobis.fms.models.WalletBalanceAndNameModel;
 import kg.neobis.fms.entity.enums.WalletStatus;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.RecordNotFoundException;
-import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.models.WalletModel;
->>>>>>> production
 import kg.neobis.fms.repositories.WalletRepository;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +28,22 @@ public class WalletServiceImpl implements WalletService {
 
     // Method to get balance of all wallets
     @Override
-    public List<WalletBalanceAndName> getCurrentBalanceOfAllWallets() {
+    public List<WalletBalanceAndNameModel> getCurrentBalanceOfAllWallets() {
         List<Wallet> wallets = walletRepository.findAll();
-        List<WalletBalanceAndName> walletBalanceAndNameList = new ArrayList<>();
+        List<WalletBalanceAndNameModel> walletBalanceAndNameModelList = new ArrayList<>();
 
         wallets.forEach(wallet -> {
             if (wallet.getWalletStatus().toString().equals("ACCESSIBLE")) {
-                WalletBalanceAndName walletBalanceAndName = new WalletBalanceAndName();
+                WalletBalanceAndNameModel walletBalanceAndNameModel = new WalletBalanceAndNameModel();
 
-                walletBalanceAndName.setWalletName(wallet.getWallet());
-                walletBalanceAndName.setBalance(wallet.getAvailableBalance());
+                walletBalanceAndNameModel.setWalletName(wallet.getName());
+                walletBalanceAndNameModel.setBalance(wallet.getAvailableBalance());
 
-                walletBalanceAndNameList.add(walletBalanceAndName);
+                walletBalanceAndNameModelList.add(walletBalanceAndNameModel);
             }
         });
 
-        return walletBalanceAndNameList;
+        return walletBalanceAndNameModelList;
     }
 
     @Override

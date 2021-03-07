@@ -1,19 +1,16 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.models.BalanceAndLastFifteenTransactions;
+import kg.neobis.fms.models.BalanceAndLastFifteenTransactionsModel;
 import kg.neobis.fms.services.TransactionService;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-=======
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
->>>>>>> production
 
 
 @RestController
@@ -29,10 +26,10 @@ public class HomeController {
 
     // API to get current balance of all wallets and last 15 transactions
     @GetMapping("/")
-    public BalanceAndLastFifteenTransactions getCurrentBalance() throws ParseException {
-        BalanceAndLastFifteenTransactions home = new BalanceAndLastFifteenTransactions();
+    public BalanceAndLastFifteenTransactionsModel getCurrentBalance() throws ParseException {
+        BalanceAndLastFifteenTransactionsModel home = new BalanceAndLastFifteenTransactionsModel();
 
-        home.setIncomeAndExpenses(transactionService.getIncomeANdExpenseForDefaultDate());
+        home.setIncomesAndExpensesHomeModel(transactionService.getIncomeANdExpenseForDefaultDate());
         home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
         home.setLastFifteenTransactions(transactionService.getLastFifteenTransactions());
 
@@ -40,10 +37,10 @@ public class HomeController {
     }
 
     @PostMapping("/{period}")
-    public BalanceAndLastFifteenTransactions getCurrentBalanceAndIncomeAndExpenseForPeriod(@PathVariable("period") String period) throws ParseException {
-        BalanceAndLastFifteenTransactions home = new BalanceAndLastFifteenTransactions();
+    public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@PathVariable("period") String period) throws ParseException {
+        BalanceAndLastFifteenTransactionsModel home = new BalanceAndLastFifteenTransactionsModel();
 
-        home.setIncomeAndExpenses(transactionService.getIncomeAndExpenseForPeriod(period));
+        home.setIncomesAndExpensesHomeModel(transactionService.getIncomeAndExpenseForPeriod(period));
         home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
         home.setLastFifteenTransactions(transactionService.getLastFifteenTransactions());
 

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class JournalTransactionInfo {
+public class JournalTransactionInfoModel {
     private long id;
     private Date createdDate;
     private double amount;
