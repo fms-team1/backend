@@ -1,7 +1,7 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.People;
-import kg.neobis.fms.exaption.RecordNotFoundException;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,9 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.Category;
-import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.enums.CategoryStatus;
-import kg.neobis.fms.entity.enums.GroupStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
-import kg.neobis.fms.exaption.RecordNotFoundException;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

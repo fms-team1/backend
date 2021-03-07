@@ -1,7 +1,7 @@
 package kg.neobis.fms.controllers;
 
 
-import kg.neobis.fms.exaption.RecordNotFoundException;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;

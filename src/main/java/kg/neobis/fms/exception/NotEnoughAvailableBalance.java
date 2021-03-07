@@ -1,4 +1,4 @@
-package kg.neobis.fms.exaption;
+package kg.neobis.fms.exception;
 
 public class NotEnoughAvailableBalance extends Exception{
     public NotEnoughAvailableBalance(String message){

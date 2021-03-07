@@ -3,6 +3,7 @@ package kg.neobis.fms.services.impl;
 import kg.neobis.fms.entity.Role;
 import kg.neobis.fms.entity.User;
 import kg.neobis.fms.entity.enums.UserStatus;
+import kg.neobis.fms.models.CounterpartyModel;
 import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.models.security.MyUserDetails;
 import kg.neobis.fms.repositories.UserRepository;
@@ -53,5 +54,13 @@ public class MyUserServiceImpl implements UserDetailsService {
 
         String userEmail= authentication.getName();
         return getByEmail(userEmail);
+    }
+
+    public CounterpartyModel getCurrentCounterparty(){
+        User user = getCurrentUser();
+        CounterpartyModel model = new CounterpartyModel();
+        model.setName(user.getPerson().getName());
+        model.setEmail(user.getEmail());
+        return model;
     }
 }

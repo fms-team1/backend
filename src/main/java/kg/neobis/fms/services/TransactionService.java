@@ -1,9 +1,9 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.Transaction;
-import kg.neobis.fms.exaption.NotEnoughAvailableBalance;
-import kg.neobis.fms.exaption.NotEnoughDataException;
-import kg.neobis.fms.exaption.RecordNotFoundException;
+import kg.neobis.fms.exception.NotEnoughAvailableBalance;
+import kg.neobis.fms.exception.NotEnoughDataException;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.IncomeExpenseModel;
 import kg.neobis.fms.models.TransactionWithoutUserPassword;
 import kg.neobis.fms.models.TransferModel;

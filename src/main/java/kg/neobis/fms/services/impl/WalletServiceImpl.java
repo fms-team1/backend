@@ -1,13 +1,17 @@
 package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Wallet;
-import kg.neobis.fms.exaption.NotEnoughAvailableBalance;
-import kg.neobis.fms.exaption.RecordNotFoundException;
+import kg.neobis.fms.entity.enums.WalletStatus;
+import kg.neobis.fms.exception.NotEnoughAvailableBalance;
+import kg.neobis.fms.exception.RecordNotFoundException;
+import kg.neobis.fms.models.GroupModel;
+import kg.neobis.fms.models.WalletModel;
 import kg.neobis.fms.repositories.WalletRepository;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,21 @@ public class WalletServiceImpl implements WalletService {
         return wallets.stream()
                 .filter(wallet -> wallet.getWalletStatus().toString().equals("ACCESSIBLE"))
                 .mapToDouble(Wallet::getAvailableBalance).sum();
+    }
+
+    @Override
+    public List<WalletModel> getAllActiveWallets() {
+        List<Wallet> list =  walletRepository.findAllByWalletStatus(WalletStatus.ACCESSIBLE);
+        List<WalletModel> resultList = new ArrayList<>();
+
+        for(Wallet wallet: list){
+            WalletModel model = new WalletModel();
+            model.setId(wallet.getId());
+            model.setName(wallet.getName());
+            model.setAvailableBalance(wallet.getAvailableBalance());
+            resultList.add(model);
+        }
+        return resultList;
     }
 
     public Wallet getWalletById(long id) throws RecordNotFoundException {
