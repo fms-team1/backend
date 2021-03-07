@@ -1,6 +1,7 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.Transaction;
+import kg.neobis.fms.models.JournalTransactionInfo;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class JournalController {
 
     // API to get all transactions
     @GetMapping("/getAll")
-    public List<Transaction> getAllTransactions() {
+    public List<JournalTransactionInfo> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 

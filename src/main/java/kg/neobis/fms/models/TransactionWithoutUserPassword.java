@@ -1,5 +1,6 @@
 package kg.neobis.fms.models;
 
+import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +18,12 @@ public class TransactionWithoutUserPassword {
     private Date createdDate;
     private double amount;
     private TransactionType transactionType;
-    private String name;
+    private String categoryName;
+    private String accountantName;
+    private String accountantSurname;
+    private NeoSection neoSection;
+    private String counterpartyName;
+    private String counterpartySurname;
     private String walletName;
-    private double walletBalance;
     private String comment;
 }

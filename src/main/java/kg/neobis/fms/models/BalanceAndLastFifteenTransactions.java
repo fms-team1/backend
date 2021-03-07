@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class BalanceAndLastFifteenTransactions {
-    private Double currentBalance;
+    private IncomeAndExpenses incomeAndExpenses;
+    private List<WalletBalanceAndName> walletBalance;
     private List<TransactionWithoutUserPassword> lastFifteenTransactions;
 }
