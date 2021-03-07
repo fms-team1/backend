@@ -1,6 +1,5 @@
 package kg.neobis.fms.models;
 
-import kg.neobis.fms.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
