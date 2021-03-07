@@ -35,7 +35,7 @@ public class HomeController {
         return home;
     }
 
-    @PostMapping("home/{period}")
+    @GetMapping("/home/{period}")
     public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@PathVariable("period") String period) throws ParseException {
         BalanceAndLastFifteenTransactionsModel home = new BalanceAndLastFifteenTransactionsModel();
 
