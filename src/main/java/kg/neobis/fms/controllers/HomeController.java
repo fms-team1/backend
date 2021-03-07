@@ -35,8 +35,8 @@ public class HomeController {
         return home;
     }
 
-    @GetMapping("/home/{period}")
-    public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@PathVariable("period") String period) throws ParseException {
+    @PostMapping("/home")
+    public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@RequestParam(value = "period") String period) throws ParseException {
         BalanceAndLastFifteenTransactionsModel home = new BalanceAndLastFifteenTransactionsModel();
 
         home.setIncomesAndExpensesHomeModel(transactionService.getIncomeAndExpenseForPeriod(period));
