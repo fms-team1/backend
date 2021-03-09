@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@PreAuthorize("hasAnyAuthority('READ_GROUP')")
+@PreAuthorize("hasAnyAuthority('READ_GROUP')")///////////////
 @RestController
 @RequestMapping("wallet")
 @CrossOrigin
