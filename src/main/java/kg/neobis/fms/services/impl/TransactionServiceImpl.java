@@ -164,14 +164,14 @@ public class TransactionServiceImpl implements TransactionService {
     public void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance {
         Wallet walletFrom = walletService.getWalletById(model.getWalletFromId());//transfer money FROM this wallet
         Wallet walletTo = walletService.getWalletById(model.getWalletToId());//TO this one
-//        Category category = categoryService.getById(0l);// CREATE a category in the database called "transfer"!!!!!!!!!!!!!!!!!!!!
+        Category category = categoryService.getById(1_000_000l);// CREATE a category in the database called "transfer"!!!!!!!!!!!!!!!!!!!!
         double amount = model.getAmount();
 
         Transaction transaction = new Transaction();
         transaction.setAmount(model.getAmount());
         transaction.setWallet(walletFrom);
         transaction.setWallet2(walletTo);
-//        transaction.setCategory(category);
+        transaction.setCategory(category);
         transaction.setComment(model.getComment());
 
         transaction.setCreatedDate(new Date());
