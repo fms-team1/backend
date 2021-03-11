@@ -24,8 +24,12 @@ import java.util.Optional;
 @CrossOrigin
 public class TransactionController {
 
+    private final TransactionService transactionService;
+
     @Autowired
-    private TransactionService transactionService;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     // API to get all transactions
     @GetMapping("/getAll")

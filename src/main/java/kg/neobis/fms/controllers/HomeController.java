@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("hasAnyAuthority('HOME')")
 @CrossOrigin
 public class HomeController {
-    @Autowired
-    private WalletService walletService;
+    private final WalletService walletService;
+    private final TransactionService transactionService;
 
     @Autowired
-    private TransactionService transactionService;
+    public HomeController(WalletService walletService, TransactionService transactionService) {
+        this.walletService = walletService;
+        this.transactionService = transactionService;
+    }
 
     // API to get current balance of all wallets and last 15 transactions
     @GetMapping("/home")
@@ -36,7 +39,7 @@ public class HomeController {
     }
 
     @PostMapping("/home")
-    public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@RequestParam(value = "period") String period) throws ParseException {
+    public BalanceAndLastFifteenTransactionsModel getCurrentBalanceAndIncomeAndExpenseForPeriod(@RequestParam String period) throws ParseException {
         BalanceAndLastFifteenTransactionsModel home = new BalanceAndLastFifteenTransactionsModel();
 
         home.setIncomesAndExpensesHomeModel(transactionService.getIncomeAndExpenseForPeriod(period));

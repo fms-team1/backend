@@ -13,8 +13,12 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class JournalController {
+    private final TransactionService transactionService;
+
     @Autowired
-    private TransactionService transactionService;
+    public JournalController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     // API to get all transactions
     @GetMapping("/getAll")

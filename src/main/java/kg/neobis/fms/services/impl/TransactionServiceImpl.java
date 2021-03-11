@@ -128,6 +128,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         List<Transaction> transactions = transactionRepository.findAllWithByCreatedDateBetween(from, to);
 
+        System.out.println(transactions.size());
+
         incomesAndExpensesHomeModel.setIncome(getIncome(transactions));
         incomesAndExpensesHomeModel.setExpense(getExpense(transactions));
 

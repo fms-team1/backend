@@ -20,14 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 public class LoginController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final MyUserServiceImpl myUserServiceImpl;
+    private final JwtUtil jwtTokenUtil;
 
     @Autowired
-    private MyUserServiceImpl myUserServiceImpl;
-
-    @Autowired
-    private JwtUtil jwtTokenUtil;
+    public LoginController(AuthenticationManager authenticationManager, MyUserServiceImpl myUserServiceImpl, JwtUtil jwtTokenUtil) {
+        this.authenticationManager = authenticationManager;
+        this.myUserServiceImpl = myUserServiceImpl;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     // Authentication with jwt token
     @ApiResponses(value = {
