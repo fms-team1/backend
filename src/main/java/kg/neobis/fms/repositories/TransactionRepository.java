@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findTop15ByOrderByIdDesc();
-    List<Transaction> findAllWithByCreatedDateBetween(Date from, Date to);
+    List<Transaction> findAllByCreatedDateBetween(Date startDate, Date endDate);
 }

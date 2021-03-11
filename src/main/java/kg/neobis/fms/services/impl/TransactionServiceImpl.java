@@ -24,21 +24,17 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    private TransactionRepository transactionRepository;
-    private WalletServiceImpl walletService;
-    private CategoryService categoryService;
-    private MyUserServiceImpl userService;
-    private PeopleService peopleService;
+    private final TransactionRepository transactionRepository;
+    private final WalletServiceImpl walletService;
+    private final CategoryService categoryService;
+    private final MyUserServiceImpl userService;
+    private final PeopleService peopleService;
 
     @Autowired
     TransactionServiceImpl(TransactionRepository transactionRepository, WalletServiceImpl walletService, CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService){
@@ -66,10 +62,16 @@ public class TransactionServiceImpl implements TransactionService {
             transactionWithoutUserPasswordModel.setAccountantName(transaction.getUser().getPerson().getName());
             transactionWithoutUserPasswordModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
             transactionWithoutUserPasswordModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionWithoutUserPasswordModel.setCounterpartyName(transaction.getPerson().getName());
-            transactionWithoutUserPasswordModel.setCounterpartySurname(transaction.getPerson().getSurname());
             transactionWithoutUserPasswordModel.setWalletName(transaction.getWallet().getName());
             transactionWithoutUserPasswordModel.setComment(transaction.getComment());
+
+            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                transactionWithoutUserPasswordModel.setCounterpartyName("");
+                transactionWithoutUserPasswordModel.setCounterpartySurname("");
+            } else {
+                transactionWithoutUserPasswordModel.setCounterpartyName(transaction.getPerson().getName());
+                transactionWithoutUserPasswordModel.setCounterpartySurname(transaction.getPerson().getSurname());
+            }
 
             transactionWithoutUserPasswordModelList.add(transactionWithoutUserPasswordModel);
         });
@@ -108,10 +110,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
-        Date from = dateConverter(period);
-        Date to = dateConverter(period);
+        Date startDate = dateConverter(period);
+        Date endDate = dateConverter(period);
 
-        List<Transaction> transactions = transactionRepository.findAllWithByCreatedDateBetween(from, to);
+        List<Transaction> transactions = transactionRepository.findAllByCreatedDateBetween(startDate, endDate);
 
         incomesAndExpensesHomeModel.setIncome(getIncome(transactions));
         incomesAndExpensesHomeModel.setExpense(getExpense(transactions));
@@ -123,12 +125,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
-        Date from = getLastWeek();
-        Date to = getCurrentDate();
+        Date startDate = getLastWeek();
+        Date endDate = getCurrentDate();
 
-        List<Transaction> transactions = transactionRepository.findAllWithByCreatedDateBetween(from, to);
-
-        System.out.println(transactions.size());
+        List<Transaction> transactions = transactionRepository.findAllByCreatedDateBetween(startDate, endDate);
 
         incomesAndExpensesHomeModel.setIncome(getIncome(transactions));
         incomesAndExpensesHomeModel.setExpense(getExpense(transactions));
@@ -206,37 +206,32 @@ public class TransactionServiceImpl implements TransactionService {
         String[] date = period.split("");
         SimpleDateFormat dateConverter = new SimpleDateFormat("yyyy-MM-dd");
 
-        return dateConverter.parse(period);
+        return dateConverter.parse(date[0]);
     }
 
     // method to get past week since today
-    private Date getLastWeek() {
+    private Date getLastWeek() throws ParseException {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 
         int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
         c.add(Calendar.DATE, -i - 7);
-        Date start = c.getTime();
         c.add(Calendar.DATE, 6);
-        Date end = c.getTime();
 
-        return end;
+        return c.getTime();
     }
 
     // method to get current date
-    private Date getCurrentDate() {
+    private Date getCurrentDate() throws ParseException {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 
         int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
         c.add(Calendar.DATE, -i - 7);
-        Date start = c.getTime();
-        c.add(Calendar.DATE, 6);
-        Date end = c.getTime();
 
-        return start;
+        return c.getTime();
     }
 
     // method to get income for particular period of date
