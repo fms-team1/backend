@@ -1,6 +1,7 @@
 package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Wallet;
+import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.models.WalletBalanceAndNameModel;
 import kg.neobis.fms.entity.enums.WalletStatus;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,9 +62,36 @@ public class WalletServiceImpl implements WalletService {
             model.setId(wallet.getId());
             model.setName(wallet.getName());
             model.setAvailableBalance(wallet.getAvailableBalance());
+            model.setStatus(wallet.getWalletStatus());
             resultList.add(model);
         }
         return resultList;
+    }
+
+    @Override
+    public void addNewWallet(WalletModel model) throws AlreadyExistException {
+        if(getByName(model.getName()) != null)
+            throw new AlreadyExistException("wallet with the same name already exists");
+        Wallet wallet = new Wallet();
+        wallet.setName(model.getName());
+        wallet.setAvailableBalance(model.getAvailableBalance());
+        wallet.setWalletStatus(WalletStatus.ACCESSIBLE);
+        long time = new Date().getTime();
+        wallet.setCreatedDate(new java.sql.Date(time));
+        walletRepository.save(wallet);
+    }
+
+    @Override
+    public void updateWallet(WalletModel model) throws RecordNotFoundException {
+        Optional<Wallet> optionalWallet = walletRepository.findById(model.getId());
+        if(!optionalWallet.isPresent()){
+            throw new RecordNotFoundException("wallet id doest exist");
+        }
+        Wallet wallet = optionalWallet.get();
+        wallet.setName(model.getName());
+        wallet.setAvailableBalance(model.getAvailableBalance());
+        wallet.setWalletStatus(model.getStatus());
+        walletRepository.save(wallet);
     }
 
     public Wallet getWalletById(long id) throws RecordNotFoundException {
@@ -83,5 +112,10 @@ public class WalletServiceImpl implements WalletService {
             throw new NotEnoughAvailableBalance("The availableBalance of the wallet is not enough for this operation!");
         wallet.setAvailableBalance(wallet.getAvailableBalance() - amount);
         walletRepository.save(wallet);
+    }
+
+
+    private Wallet getByName(String name){
+        return walletRepository.findByName(name);
     }
 }

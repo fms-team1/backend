@@ -3,6 +3,7 @@ package kg.neobis.fms.services.impl;
 import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Transaction;
+import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.models.IncomesAndExpensesHomeModel;
 import kg.neobis.fms.models.JournalTransactionInfoModel;
 import kg.neobis.fms.entity.Wallet;
@@ -149,8 +150,10 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setWallet(wallet);
         transaction.setCategory(category);
         transaction.setComment(model.getComment());
-
-        transaction.setCreatedDate(new Date());
+        if(model.getDate() != null)
+            transaction.setCreatedDate(model.getDate());
+        else
+            transaction.setCreatedDate(new Date());
         transaction.setUser(userService.getCurrentUser());
         transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
 
@@ -184,6 +187,12 @@ public class TransactionServiceImpl implements TransactionService {
         walletService.increaseAvailableBalance(walletTo,amount);
 
         transactionRepository.save(transaction);
+    }
+
+    @Override
+    public List<Transaction> getByNeoSection(NeoSection neoSection) {
+        List<Transaction> transactions = transactionRepository.retrieveByNeoSection(neoSection);
+        return transactions;
     }
 
     private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {

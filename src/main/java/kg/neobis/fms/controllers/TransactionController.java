@@ -1,6 +1,7 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.Transaction;
+import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
@@ -53,10 +54,10 @@ public class TransactionController {
     public ResponseEntity<String> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
         try {
             transactionService.addIncomeOrExpense(model);
+            return ResponseEntity.ok("successfully added");
         } catch (RecordNotFoundException | NotEnoughAvailableBalance | NotEnoughDataException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok("successfully added");
     }
 
     @PreAuthorize("hasAuthority('ADD_TRANSACTION')")
@@ -65,10 +66,15 @@ public class TransactionController {
 
         try {
             transactionService.addMoneyTransfer(model);
+            return ResponseEntity.ok("successfully added");
         } catch (RecordNotFoundException | NotEnoughAvailableBalance e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok("successfully added");
+    }
+
+    @GetMapping("getByNeoSection")/////////////////////////////////
+    public ResponseEntity<List<Transaction>> getByNeoSection(@ModelAttribute NeoSection neoSection){
+        return ResponseEntity.ok(transactionService.getByNeoSection(neoSection));
     }
 
 

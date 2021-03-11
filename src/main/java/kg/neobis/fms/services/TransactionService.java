@@ -1,6 +1,7 @@
 package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.Transaction;
+import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.models.IncomesAndExpensesHomeModel;
 import kg.neobis.fms.models.JournalTransactionInfoModel;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
@@ -24,4 +25,6 @@ public interface TransactionService {
     IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException;
     void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException;
     void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance;
+
+    List<Transaction> getByNeoSection(NeoSection neoSection);
 }

@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
     List<Wallet> findAllByWalletStatus(WalletStatus status);
+
+    Wallet findByName(String name);
 }

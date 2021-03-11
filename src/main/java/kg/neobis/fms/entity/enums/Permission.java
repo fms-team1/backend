@@ -15,6 +15,9 @@ public enum Permission {
     HOME,
     READ_TRANSACTION,
     ADD_TRANSACTION,
-    UPDATE_TRANSACTION
+    UPDATE_TRANSACTION,
+    READ_WALLET,
+    ADD_WALLET,
+    UPDATE_WALLET
 
     }
