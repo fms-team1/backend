@@ -1,23 +1,20 @@
 package kg.neobis.fms.entity.enums;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
 public enum Permission {
-    READ_CATEGORY,
-    ADD_CATEGORY,
-    UPDATE_CATEGORY,
-    ARCHIVE_CATEGORY,
-    READ_GROUP,
-    UPDATE_GROUP,
-    ARCHIVE_GROUP,
-    ADD_GROUP,
-    REGISTRATION,
-    HOME,
-    READ_TRANSACTION,
-    ADD_TRANSACTION,
-    UPDATE_TRANSACTION,
-    READ_WALLET,
-    ADD_WALLET,
-    UPDATE_WALLET
-
-    }
+    READ_CATEGORY,      // 0
+    ADD_CATEGORY,       // 1
+    UPDATE_CATEGORY,    // 2
+    ARCHIVE_CATEGORY,   // 3
+    READ_GROUP,         // 4
+    UPDATE_GROUP,       // 5
+    ARCHIVE_GROUP,      // 6
+    ADD_GROUP,          // 7
+    REGISTRATION,       // 8
+    HOME,               // 9
+    READ_TRANSACTION,   // 10
+    ADD_TRANSACTION,    // 11
+    UPDATE_TRANSACTION, // 12
+    READ_WALLET,        // 13
+    ADD_WALLET,         // 14
+    UPDATE_WALLET       // 15
+}

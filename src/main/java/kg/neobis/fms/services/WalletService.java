@@ -3,10 +3,8 @@ package kg.neobis.fms.services;
 import kg.neobis.fms.entity.Wallet;
 import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
-import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.WalletBalanceAndNameModel;
 import kg.neobis.fms.models.WalletModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

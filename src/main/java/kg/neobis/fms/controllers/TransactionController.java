@@ -1,7 +1,5 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Transaction;
-import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
@@ -18,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @PreAuthorize("hasAnyAuthority('READ_TRANSACTION')")
 @RestController

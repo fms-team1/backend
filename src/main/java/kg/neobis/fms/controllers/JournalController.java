@@ -1,6 +1,5 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.models.JournalTransactionInfoModel;
 import kg.neobis.fms.models.TransactionModel;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/journal")
 @RestController
