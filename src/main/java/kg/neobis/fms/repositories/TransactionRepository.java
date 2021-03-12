@@ -13,10 +13,8 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findTop15ByOrderByIdDesc();
-    List<Transaction> findAllByCreatedDateBetween(Date startDate, Date endDate);
+    List<Transaction> findAllByCreatedDateBetween(java.sql.Date startDate, java.sql.Date endDate);
 
-
-@Query(value = "SELECT u FROM Transaction u where u.category.neoSection = :neoSection")
-List<Transaction> retrieveByNeoSection(@Param("neoSection") NeoSection neoSection);
-
+    @Query(value = "SELECT u FROM Transaction u where u.category.neoSection = :neoSection")
+    List<Transaction> retrieveByNeoSection(@Param("neoSection") NeoSection neoSection);
 }

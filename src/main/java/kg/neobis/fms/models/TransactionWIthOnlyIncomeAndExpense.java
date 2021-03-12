@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TransactionWithoutUserPasswordModel {
+public class TransactionWIthOnlyIncomeAndExpense {
     private long id;
     private Date createdDate;
     private double amount;
@@ -24,6 +24,7 @@ public class TransactionWithoutUserPasswordModel {
     private NeoSection neoSection;
     private String counterpartyName;
     private String counterpartySurname;
+    private Long walletId;
     private String walletName;
     private String comment;
 }

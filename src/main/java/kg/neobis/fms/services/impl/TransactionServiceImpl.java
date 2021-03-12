@@ -4,18 +4,13 @@ import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.NeoSection;
-import kg.neobis.fms.models.IncomesAndExpensesHomeModel;
-import kg.neobis.fms.models.JournalTransactionInfoModel;
+import kg.neobis.fms.models.*;
 import kg.neobis.fms.entity.Wallet;
 import kg.neobis.fms.entity.enums.TransactionStatus;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
-import kg.neobis.fms.models.IncomeExpenseModel;
-import kg.neobis.fms.models.PersonModel;
-import kg.neobis.fms.models.TransactionWithoutUserPasswordModel;
-import kg.neobis.fms.models.TransferModel;
 import kg.neobis.fms.repositories.TransactionRepository;
 import kg.neobis.fms.services.CategoryService;
 import kg.neobis.fms.services.PeopleService;
@@ -24,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
+import java.time.LocalDate;
 import java.util.*;
+
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -48,36 +43,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Method to get last 15 transactions
     @Override
-    public List<TransactionWithoutUserPasswordModel> getLastFifteenTransactions() {
+    public TransactionGeneral getLastFifteenTransactions() {
         List<Transaction> transactions = transactionRepository.findTop15ByOrderByIdDesc();
-        List<TransactionWithoutUserPasswordModel> transactionWithoutUserPasswordModelList = new ArrayList<>();
+        TransactionGeneral transactionGeneral = new TransactionGeneral();
 
-        transactions.forEach(transaction -> {
-            TransactionWithoutUserPasswordModel transactionWithoutUserPasswordModel = new TransactionWithoutUserPasswordModel();
+        transactionGeneral.setTransactionWIthOnlyTransfers(getTransactionWithOnlyTransfers(transactions));
+        transactionGeneral.setTransactionWIthOnlyIncomeAndExpense(getTransactionWithOnlyIncomeAndExpense(transactions));
 
-            transactionWithoutUserPasswordModel.setId(transaction.getId());
-            transactionWithoutUserPasswordModel.setCreatedDate(transaction.getCreatedDate());
-            transactionWithoutUserPasswordModel.setAmount(transaction.getAmount());
-            transactionWithoutUserPasswordModel.setTransactionType(transaction.getCategory().getTransactionType());
-            transactionWithoutUserPasswordModel.setCategoryName(transaction.getCategory().getName());
-            transactionWithoutUserPasswordModel.setAccountantName(transaction.getUser().getPerson().getName());
-            transactionWithoutUserPasswordModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-            transactionWithoutUserPasswordModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionWithoutUserPasswordModel.setWalletName(transaction.getWallet().getName());
-            transactionWithoutUserPasswordModel.setComment(transaction.getComment());
-
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionWithoutUserPasswordModel.setCounterpartyName("");
-                transactionWithoutUserPasswordModel.setCounterpartySurname("");
-            } else {
-                transactionWithoutUserPasswordModel.setCounterpartyName(transaction.getPerson().getName());
-                transactionWithoutUserPasswordModel.setCounterpartySurname(transaction.getPerson().getSurname());
-            }
-
-            transactionWithoutUserPasswordModelList.add(transactionWithoutUserPasswordModel);
-        });
-
-        return transactionWithoutUserPasswordModelList;
+        return transactionGeneral;
     }
 
     // Method to get all transactions
@@ -111,8 +84,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
-        Date startDate = dateConverter(period);
-        Date endDate = dateConverter(period);
+        java.sql.Date startDate = dateConverter(period, true);
+        java.sql.Date endDate = dateConverter(period, false);
 
         List<Transaction> transactions = transactionRepository.findAllByCreatedDateBetween(startDate, endDate);
 
@@ -126,10 +99,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
-        Date startDate = getLastWeek();
-        Date endDate = getCurrentDate();
+        java.sql.Date currentDate = getCurrentDate();
+        java.sql.Date startDate = getLastWeek(currentDate);
 
-        List<Transaction> transactions = transactionRepository.findAllByCreatedDateBetween(startDate, endDate);
+        List<Transaction> transactions = transactionRepository.findAllByCreatedDateBetween(startDate, currentDate);
 
         incomesAndExpensesHomeModel.setIncome(getIncome(transactions));
         incomesAndExpensesHomeModel.setExpense(getExpense(transactions));
@@ -191,8 +164,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> getByNeoSection(NeoSection neoSection) {
-        List<Transaction> transactions = transactionRepository.retrieveByNeoSection(neoSection);
-        return transactions;
+        return transactionRepository.retrieveByNeoSection(neoSection);
     }
 
     private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {
@@ -211,36 +183,33 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     // method to convert string do date format
-    private Date dateConverter(String period) throws ParseException {
-        String[] date = period.split("");
-        SimpleDateFormat dateConverter = new SimpleDateFormat("yyyy-MM-dd");
+    private java.sql.Date dateConverter(String period, boolean flag) throws ParseException {
+        String trimQuotes = period.replaceAll("^\"|\"$", "");
+        String[] date = trimQuotes.split(" ");
 
-        return dateConverter.parse(date[0]);
+        if (flag)
+            return java.sql.Date.valueOf(date[0]);
+        else
+            return java.sql.Date.valueOf(date[1]);
     }
 
     // method to get past week since today
-    private Date getLastWeek() throws ParseException {
-        Date date = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
+    private java.sql.Date getLastWeek(java.sql.Date today) throws ParseException {
+        LocalDate start = today.toLocalDate();
 
-        int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
-        c.add(Calendar.DATE, -i - 7);
-        c.add(Calendar.DATE, 6);
+        for (int i = 0; i < 8; i++) {
+            start = start.minusDays(1);
+        }
 
-        return c.getTime();
+        return java.sql.Date.valueOf(start);
     }
 
     // method to get current date
-    private Date getCurrentDate() throws ParseException {
-        Date date = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
+    private java.sql.Date getCurrentDate() throws ParseException {
+        LocalDate today = LocalDate.now();
+        today = today.plusDays(1);
 
-        int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
-        c.add(Calendar.DATE, -i - 7);
-
-        return c.getTime();
+        return java.sql.Date.valueOf(today);
     }
 
     // method to get income for particular period of date
@@ -273,5 +242,58 @@ public class TransactionServiceImpl implements TransactionService {
             totalSum += d;
 
         return totalSum;
+    }
+
+    // method to get transaction with type 'Income' and 'Expense'
+    private List<TransactionWIthOnlyIncomeAndExpense> getTransactionWithOnlyIncomeAndExpense(List<Transaction> transactions) {
+        List<TransactionWIthOnlyIncomeAndExpense> transactionWIthOnlyIncomeAndExpenseList = new ArrayList<>();
+
+        transactions.forEach(transaction -> {
+            if (!transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                TransactionWIthOnlyIncomeAndExpense transactionWIthOnlyIncomeAndExpense = new TransactionWIthOnlyIncomeAndExpense();
+
+                transactionWIthOnlyIncomeAndExpense.setId(transaction.getId());
+                transactionWIthOnlyIncomeAndExpense.setCreatedDate(transaction.getCreatedDate());
+                transactionWIthOnlyIncomeAndExpense.setTransactionType(transaction.getCategory().getTransactionType());
+                transactionWIthOnlyIncomeAndExpense.setCategoryName(transaction.getCategory().getName());
+                transactionWIthOnlyIncomeAndExpense.setAccountantName(transaction.getUser().getPerson().getName());
+                transactionWIthOnlyIncomeAndExpense.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+                transactionWIthOnlyIncomeAndExpense.setNeoSection(transaction.getCategory().getNeoSection());
+                transactionWIthOnlyIncomeAndExpense.setCounterpartyName(transaction.getPerson().getName());
+                transactionWIthOnlyIncomeAndExpense.setCounterpartySurname(transaction.getPerson().getSurname());
+                transactionWIthOnlyIncomeAndExpense.setWalletId(transaction.getWallet().getId());
+                transactionWIthOnlyIncomeAndExpense.setWalletName(transaction.getWallet().getName());
+                transactionWIthOnlyIncomeAndExpense.setComment(transaction.getComment());
+
+                transactionWIthOnlyIncomeAndExpenseList.add(transactionWIthOnlyIncomeAndExpense);
+            }
+        });
+
+        return transactionWIthOnlyIncomeAndExpenseList;
+    }
+
+    // method to get transaction with type 'Money_Transfer'
+    private List<TransactionWithOnlyTransfers> getTransactionWithOnlyTransfers(List<Transaction> transactions) {
+        List<TransactionWithOnlyTransfers> transactionWithOnlyTransfersList = new ArrayList<>();
+
+        transactions.forEach(transaction -> {
+            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                TransactionWithOnlyTransfers transactionWithOnlyTransfers = new TransactionWithOnlyTransfers();
+
+                transactionWithOnlyTransfers.setId(transaction.getId());
+                transactionWithOnlyTransfers.setCreatedDate(transaction.getCreatedDate());
+                transactionWithOnlyTransfers.setAmount(transaction.getAmount());
+                transactionWithOnlyTransfers.setTransactionType(transaction.getCategory().getTransactionType());
+                transactionWithOnlyTransfers.setAccountantName(transaction.getUser().getPerson().getName());
+                transactionWithOnlyTransfers.setWalletFromId(transaction.getWallet().getId());
+                transactionWithOnlyTransfers.setWalletFrom(transaction.getWallet().getName());
+                transactionWithOnlyTransfers.setWalletToId(transaction.getWallet2().getId());
+                transactionWithOnlyTransfers.setWalletTo(transaction.getWallet2().getName());
+
+                transactionWithOnlyTransfersList.add(transactionWithOnlyTransfers);
+            }
+        });
+
+        return transactionWithOnlyTransfersList;
     }
 }

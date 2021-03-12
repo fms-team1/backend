@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BalanceAndLastFifteenTransactionsModel {
+public class TransactionLastFifteenBalanceAndIncomeExpenseSum {
     private IncomesAndExpensesHomeModel incomesAndExpensesHomeModel;
     private List<WalletBalanceAndNameModel> walletBalance;
-    private List<TransactionWithoutUserPasswordModel> lastFifteenTransactions;
+    private TransactionGeneral transactionGeneral;
 }

@@ -71,11 +71,4 @@ public class TransactionController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
-    @GetMapping("getByNeoSection")/////////////////////////////////
-    public ResponseEntity<List<Transaction>> getByNeoSection(@ModelAttribute NeoSection neoSection){
-        return ResponseEntity.ok(transactionService.getByNeoSection(neoSection));
-    }
-
-
 }
