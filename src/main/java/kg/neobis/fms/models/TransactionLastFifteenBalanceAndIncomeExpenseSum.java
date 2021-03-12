@@ -14,5 +14,5 @@ import java.util.List;
 public class TransactionLastFifteenBalanceAndIncomeExpenseSum {
     private IncomesAndExpensesHomeModel incomesAndExpensesHomeModel;
     private List<WalletBalanceAndNameModel> walletBalance;
-    private TransactionGeneral transactionGeneral;
+    private List<TransactionModel> transactionModels;
 }

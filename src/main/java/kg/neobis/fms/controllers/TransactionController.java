@@ -8,6 +8,7 @@ import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.IncomeExpenseModel;
 import kg.neobis.fms.models.JournalTransactionInfoModel;
+import kg.neobis.fms.models.TransactionModel;
 import kg.neobis.fms.models.TransferModel;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class TransactionController {
 
     // API to get transaction by id
     @GetMapping("/getById/{id}")
-    public Optional<Transaction> getTransactionById(@PathVariable Long id) {
+    public TransactionModel getTransactionById(@PathVariable Long id) {
         return transactionService.getTransactionById(id);
     }
 

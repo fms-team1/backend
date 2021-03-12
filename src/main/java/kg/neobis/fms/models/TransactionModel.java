@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TransactionWIthOnlyIncomeAndExpense {
+public class TransactionModel {
     private long id;
     private Date createdDate;
     private double amount;

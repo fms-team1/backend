@@ -16,6 +16,7 @@ import kg.neobis.fms.services.CategoryService;
 import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -43,14 +44,37 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Method to get last 15 transactions
     @Override
-    public TransactionGeneral getLastFifteenTransactions() {
+    public List<TransactionModel> getLastFifteenTransactions() {
         List<Transaction> transactions = transactionRepository.findTop15ByOrderByIdDesc();
-        TransactionGeneral transactionGeneral = new TransactionGeneral();
+        List<TransactionModel> transactionModelList = new ArrayList<>();
 
-        transactionGeneral.setTransactionWIthOnlyTransfers(getTransactionWithOnlyTransfers(transactions));
-        transactionGeneral.setTransactionWIthOnlyIncomeAndExpense(getTransactionWithOnlyIncomeAndExpense(transactions));
+        transactions.forEach(transaction -> {
+            TransactionModel transactionModel = new TransactionModel();
 
-        return transactionGeneral;
+            transactionModel.setId(transaction.getId());
+            transactionModel.setCreatedDate(transaction.getCreatedDate());
+            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+            transactionModel.setCategoryName(transaction.getCategory().getName());
+            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
+            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
+            transactionModel.setWalletId(transaction.getWallet().getId());
+            transactionModel.setWalletName(transaction.getWallet().getName());
+            transactionModel.setComment(transaction.getComment());
+
+            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                transactionModel.setCounterpartyName("");
+                transactionModel.setCounterpartySurname("");
+            } else {
+                transactionModel.setCounterpartyName(transaction.getPerson().getName());
+                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
+            }
+
+            transactionModelList.add(transactionModel);
+
+        });
+
+        return transactionModelList;
     }
 
     // Method to get all transactions
@@ -76,8 +100,30 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Method to get transaction by id
     @Override
-    public Optional<Transaction> getTransactionById(Long id) {
-        return transactionRepository.findById(id);
+    public TransactionModel getTransactionById(Long id) {
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("There is no such username"));
+        TransactionModel transactionModel = new TransactionModel();
+
+        transactionModel.setId(transaction.getId());
+        transactionModel.setCreatedDate(transaction.getCreatedDate());
+        transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+        transactionModel.setCategoryName(transaction.getCategory().getName());
+        transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
+        transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+        transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
+        transactionModel.setWalletId(transaction.getWallet().getId());
+        transactionModel.setWalletName(transaction.getWallet().getName());
+        transactionModel.setComment(transaction.getComment());
+
+        if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+            transactionModel.setCounterpartyName("");
+            transactionModel.setCounterpartySurname("");
+        } else {
+            transactionModel.setCounterpartyName(transaction.getPerson().getName());
+            transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
+        }
+
+        return transactionModel;
     }
 
     // method to get income and expenses for particular period of date
@@ -163,14 +209,36 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionGeneral getByNeoSection(NeoSection neoSection) {
+    public List<TransactionModel> getByNeoSection(NeoSection neoSection) {
         List<Transaction> transactionsFilteredByNeoSection = transactionRepository.retrieveByNeoSection(neoSection);
-        TransactionGeneral transactionGeneral = new TransactionGeneral();
+        List<TransactionModel> transactionModelsList = new ArrayList<>();
 
-        transactionGeneral.setTransactionWIthOnlyIncomeAndExpense(getTransactionWithOnlyIncomeAndExpense(transactionsFilteredByNeoSection));
-        transactionGeneral.setTransactionWIthOnlyTransfers(getTransactionWithOnlyTransfers(transactionsFilteredByNeoSection));
+        transactionsFilteredByNeoSection.forEach(transaction -> {
+            TransactionModel transactionModel = new TransactionModel();
 
-        return transactionGeneral;
+            transactionModel.setId(transaction.getId());
+            transactionModel.setCreatedDate(transaction.getCreatedDate());
+            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+            transactionModel.setCategoryName(transaction.getCategory().getName());
+            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
+            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
+            transactionModel.setWalletId(transaction.getWallet().getId());
+            transactionModel.setWalletName(transaction.getWallet().getName());
+            transactionModel.setComment(transaction.getComment());
+
+            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                transactionModel.setCounterpartyName("");
+                transactionModel.setCounterpartySurname("");
+            } else {
+                transactionModel.setCounterpartyName(transaction.getPerson().getName());
+                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
+            }
+
+            transactionModelsList.add(transactionModel);
+        });
+
+        return transactionModelsList;
     }
 
     private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {
@@ -248,58 +316,5 @@ public class TransactionServiceImpl implements TransactionService {
             totalSum += d;
 
         return totalSum;
-    }
-
-    // method to get transaction with type 'Income' and 'Expense'
-    private List<TransactionWIthOnlyIncomeAndExpense> getTransactionWithOnlyIncomeAndExpense(List<Transaction> transactions) {
-        List<TransactionWIthOnlyIncomeAndExpense> transactionWIthOnlyIncomeAndExpenseList = new ArrayList<>();
-
-        transactions.forEach(transaction -> {
-            if (!transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                TransactionWIthOnlyIncomeAndExpense transactionWIthOnlyIncomeAndExpense = new TransactionWIthOnlyIncomeAndExpense();
-
-                transactionWIthOnlyIncomeAndExpense.setId(transaction.getId());
-                transactionWIthOnlyIncomeAndExpense.setCreatedDate(transaction.getCreatedDate());
-                transactionWIthOnlyIncomeAndExpense.setTransactionType(transaction.getCategory().getTransactionType());
-                transactionWIthOnlyIncomeAndExpense.setCategoryName(transaction.getCategory().getName());
-                transactionWIthOnlyIncomeAndExpense.setAccountantName(transaction.getUser().getPerson().getName());
-                transactionWIthOnlyIncomeAndExpense.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-                transactionWIthOnlyIncomeAndExpense.setNeoSection(transaction.getCategory().getNeoSection());
-                transactionWIthOnlyIncomeAndExpense.setCounterpartyName(transaction.getPerson().getName());
-                transactionWIthOnlyIncomeAndExpense.setCounterpartySurname(transaction.getPerson().getSurname());
-                transactionWIthOnlyIncomeAndExpense.setWalletId(transaction.getWallet().getId());
-                transactionWIthOnlyIncomeAndExpense.setWalletName(transaction.getWallet().getName());
-                transactionWIthOnlyIncomeAndExpense.setComment(transaction.getComment());
-
-                transactionWIthOnlyIncomeAndExpenseList.add(transactionWIthOnlyIncomeAndExpense);
-            }
-        });
-
-        return transactionWIthOnlyIncomeAndExpenseList;
-    }
-
-    // method to get transaction with type 'Money_Transfer'
-    private List<TransactionWithOnlyTransfers> getTransactionWithOnlyTransfers(List<Transaction> transactions) {
-        List<TransactionWithOnlyTransfers> transactionWithOnlyTransfersList = new ArrayList<>();
-
-        transactions.forEach(transaction -> {
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                TransactionWithOnlyTransfers transactionWithOnlyTransfers = new TransactionWithOnlyTransfers();
-
-                transactionWithOnlyTransfers.setId(transaction.getId());
-                transactionWithOnlyTransfers.setCreatedDate(transaction.getCreatedDate());
-                transactionWithOnlyTransfers.setAmount(transaction.getAmount());
-                transactionWithOnlyTransfers.setTransactionType(transaction.getCategory().getTransactionType());
-                transactionWithOnlyTransfers.setAccountantName(transaction.getUser().getPerson().getName());
-                transactionWithOnlyTransfers.setWalletFromId(transaction.getWallet().getId());
-                transactionWithOnlyTransfers.setWalletFrom(transaction.getWallet().getName());
-                transactionWithOnlyTransfers.setWalletToId(transaction.getWallet2().getId());
-                transactionWithOnlyTransfers.setWalletTo(transaction.getWallet2().getName());
-
-                transactionWithOnlyTransfersList.add(transactionWithOnlyTransfers);
-            }
-        });
-
-        return transactionWithOnlyTransfersList;
     }
 }

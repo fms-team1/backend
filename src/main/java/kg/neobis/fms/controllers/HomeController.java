@@ -33,7 +33,7 @@ public class HomeController {
 
         home.setIncomesAndExpensesHomeModel(transactionService.getIncomeANdExpenseForDefaultDate());
         home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
-        home.setTransactionGeneral(transactionService.getLastFifteenTransactions());
+        home.setTransactionModels(transactionService.getLastFifteenTransactions());
 
         return home;
     }
@@ -44,7 +44,7 @@ public class HomeController {
 
         home.setIncomesAndExpensesHomeModel(transactionService.getIncomeAndExpenseForPeriod(period));
         home.setWalletBalance(walletService.getCurrentBalanceOfAllWallets());
-        home.setTransactionGeneral(transactionService.getLastFifteenTransactions());
+        home.setTransactionModels(transactionService.getLastFifteenTransactions());
 
         return home;
     }
