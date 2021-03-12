@@ -26,12 +26,6 @@ public class WalletServiceImpl implements WalletService {
         this.walletRepository = walletRepository;
     }
 
-    // Method to get all wallets
-    @Override
-    public List<Wallet> getAllWallets() {
-        return walletRepository.findAll();
-    }
-
     // Method to get balance of all wallets
     @Override
     public List<WalletBalanceAndNameModel> getCurrentBalanceOfAllWallets() {
@@ -42,6 +36,7 @@ public class WalletServiceImpl implements WalletService {
             if (wallet.getWalletStatus().toString().equals("ACCESSIBLE")) {
                 WalletBalanceAndNameModel walletBalanceAndNameModel = new WalletBalanceAndNameModel();
 
+                walletBalanceAndNameModel.setId(wallet.getId());
                 walletBalanceAndNameModel.setWalletName(wallet.getName());
                 walletBalanceAndNameModel.setBalance(wallet.getAvailableBalance());
 
