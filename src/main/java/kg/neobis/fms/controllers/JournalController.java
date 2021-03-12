@@ -3,6 +3,7 @@ package kg.neobis.fms.controllers;
 import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.models.JournalTransactionInfoModel;
+import kg.neobis.fms.models.TransactionGeneral;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class JournalController {
 
     // APi to get transaction by neo sections
     @GetMapping("/getByNeoSection")
-    public ResponseEntity<List<Transaction>> getByNeoSection(@ModelAttribute NeoSection neoSection){
+    public ResponseEntity<TransactionGeneral> getByNeoSection(@ModelAttribute NeoSection neoSection){
         return ResponseEntity.ok(transactionService.getByNeoSection(neoSection));
     }
 }

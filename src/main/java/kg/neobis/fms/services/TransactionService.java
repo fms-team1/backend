@@ -14,13 +14,12 @@ import java.util.Optional;
 
 @Service
 public interface TransactionService {
-    TransactionGeneral getLastFifteenTransactions();
-    List<JournalTransactionInfoModel> getAllTransactions();
-    Optional<Transaction> getTransactionById(Long id);
-    IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException;
-    IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException;
+    TransactionGeneral getLastFifteenTransactions(); // get last fifteen transactions
+    TransactionGeneral getByNeoSection(NeoSection neoSection); // get transaction by neo section
+    List<JournalTransactionInfoModel> getAllTransactions(); // get all transactions with some fields
+    Optional<Transaction> getTransactionById(Long id); // get transaction by id
+    IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException; // get sum of expenses and incomes for particular period of time
+    IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException; // get sum of expenses and incomes for default period of time
     void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException;
     void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance;
-
-    List<Transaction> getByNeoSection(NeoSection neoSection);
 }

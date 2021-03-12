@@ -163,8 +163,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getByNeoSection(NeoSection neoSection) {
-        return transactionRepository.retrieveByNeoSection(neoSection);
+    public TransactionGeneral getByNeoSection(NeoSection neoSection) {
+        List<Transaction> transactionsFilteredByNeoSection = transactionRepository.retrieveByNeoSection(neoSection);
+        TransactionGeneral transactionGeneral = new TransactionGeneral();
+
+        transactionGeneral.setTransactionWIthOnlyIncomeAndExpense(getTransactionWithOnlyIncomeAndExpense(transactionsFilteredByNeoSection));
+        transactionGeneral.setTransactionWIthOnlyTransfers(getTransactionWithOnlyTransfers(transactionsFilteredByNeoSection));
+
+        return transactionGeneral;
     }
 
     private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {
