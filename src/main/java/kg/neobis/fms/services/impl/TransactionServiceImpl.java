@@ -72,7 +72,6 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
             transactionModelList.add(transactionModel);
-
         });
 
         return transactionModelList;
@@ -97,6 +96,40 @@ public class TransactionServiceImpl implements TransactionService {
         });
 
         return journalTransactionInfoModelList;
+    }
+
+    @Override
+    public List<TransactionModel> getAllTransactionsWebVersion() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        List<TransactionModel> transactionModelList = new ArrayList<>();
+
+        transactions.forEach(transaction -> {
+            TransactionModel transactionModel = new TransactionModel();
+
+            transactionModel.setId(transaction.getId());
+            transactionModel.setCreatedDate(transaction.getCreatedDate());
+            transactionModel.setAmount(transaction.getAmount());
+            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+            transactionModel.setCategoryName(transaction.getCategory().getName());
+            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
+            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
+            transactionModel.setWalletId(transaction.getWallet().getId());
+            transactionModel.setWalletName(transaction.getWallet().getName());
+            transactionModel.setComment(transaction.getComment());
+
+            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+                transactionModel.setCounterpartyName("");
+                transactionModel.setCounterpartySurname("");
+            } else {
+                transactionModel.setCounterpartyName(transaction.getPerson().getName());
+                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
+            }
+
+            transactionModelList.add(transactionModel);
+        });
+
+        return transactionModelList;
     }
 
     // Method to get transaction by id

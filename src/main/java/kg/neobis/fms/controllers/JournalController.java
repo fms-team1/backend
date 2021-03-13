@@ -21,10 +21,15 @@ public class JournalController {
         this.transactionService = transactionService;
     }
 
-    // API to get all transactions
+    // API to get all transactions for android
     @GetMapping("/getAll")
     public List<JournalTransactionInfoModel> getAllTransactions() {
         return transactionService.getAllTransactions();
+    }
+
+    @GetMapping("/getAllWeb")
+    public List<TransactionModel> getAllTransactionsWebVersion() {
+        return transactionService.getAllTransactionsWebVersion();
     }
 
     // API to get transaction by id
