@@ -26,5 +26,7 @@ public class TransactionModel {
     private String counterpartySurname;
     private Long walletId;
     private String walletName;
+    private Long transferWalletId;// for transfers
+    private String transferWalletName;// for transfers
     private String comment;
 }

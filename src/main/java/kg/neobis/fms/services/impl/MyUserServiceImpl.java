@@ -62,9 +62,12 @@ public class MyUserServiceImpl implements UserDetailsService {
 
     public CounterpartyModel getCurrentCounterparty(){
         User user = getCurrentUser();
+
         CounterpartyModel model = new CounterpartyModel();
         model.setName(user.getPerson().getName());
         model.setEmail(user.getEmail());
+        model.setSurname(user.getPerson().getSurname());
+        model.setRole(user.getRole().getRole());
         return model;
     }
 }

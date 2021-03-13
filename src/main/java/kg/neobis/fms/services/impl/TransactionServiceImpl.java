@@ -260,10 +260,11 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModel.setWalletId(transaction.getWallet().getId());
             transactionModel.setWalletName(transaction.getWallet().getName());
             transactionModel.setComment(transaction.getComment());
+            transactionModel.setAmount(transaction.getAmount());
 
             if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionModel.setCounterpartyName("");
-                transactionModel.setCounterpartySurname("");
+                transactionModel.setTransferWalletId(transaction.getWallet2().getId());
+                transactionModel.setTransferWalletName(transaction.getWallet2().getName());
             } else {
                 transactionModel.setCounterpartyName(transaction.getPerson().getName());
                 transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());

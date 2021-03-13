@@ -5,6 +5,7 @@ import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.validation.ObjectError;
 
 import java.util.List;
 
@@ -14,5 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByNeoSectionAndTransactionType(NeoSection neoSection, TransactionType type);
 
     Category findByName(String name);
+
 
 }
