@@ -5,6 +5,7 @@ import kg.neobis.fms.models.JournalTransactionInfoModel;
 import kg.neobis.fms.models.TransactionModel;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,12 @@ public class JournalController {
         return transactionService.getAllTransactions();
     }
 
+    // API to get all transactions for web
     @GetMapping("/getAllWeb")
-    public List<TransactionModel> getAllTransactionsWebVersion() {
-        return transactionService.getAllTransactionsWebVersion();
+    public Page<TransactionModel> getAllTransactionsWebVersion(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                               @RequestParam(defaultValue = "2") Integer pageSize,
+                                                               @RequestParam(defaultValue = "id") String sortBy) {
+        return transactionService.getAllTransactionsWebVersion(pageNo, pageSize, sortBy);
     }
 
     // API to get transaction by id

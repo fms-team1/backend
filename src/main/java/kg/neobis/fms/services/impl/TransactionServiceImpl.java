@@ -11,11 +11,13 @@ import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
+import kg.neobis.fms.repositories.TransactionPaginationRepository;
 import kg.neobis.fms.repositories.TransactionRepository;
 import kg.neobis.fms.services.CategoryService;
 import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import java.util.*;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    private final TransactionPaginationRepository transactionPaginationRepository;
     private final TransactionRepository transactionRepository;
     private final WalletServiceImpl walletService;
     private final CategoryService categoryService;
@@ -34,7 +37,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final PeopleService peopleService;
 
     @Autowired
-    TransactionServiceImpl(TransactionRepository transactionRepository, WalletServiceImpl walletService, CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService){
+    TransactionServiceImpl(TransactionPaginationRepository transactionPaginationRepository, TransactionRepository transactionRepository, WalletServiceImpl walletService, CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService){
+        this.transactionPaginationRepository = transactionPaginationRepository;
         this.transactionRepository = transactionRepository;
         this.walletService = walletService;
         this.categoryService = categoryService;
@@ -99,8 +103,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionModel> getAllTransactionsWebVersion() {
-        List<Transaction> transactions = transactionRepository.findAll();
+    public Page<TransactionModel> getAllTransactionsWebVersion(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Transaction> transactions = transactionPaginationRepository.findAll(pageable);
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
         transactions.forEach(transaction -> {
@@ -129,7 +135,9 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModelList.add(transactionModel);
         });
 
-        return transactionModelList;
+        Page<TransactionModel> response = new PageImpl<TransactionModel>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactionModelList.size());
+
+        return response;
     }
 
     // Method to get transaction by id
