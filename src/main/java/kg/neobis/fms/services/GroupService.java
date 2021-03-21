@@ -2,6 +2,7 @@ package kg.neobis.fms.services;
 
 import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.enums.GroupStatus;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,12 @@ public class GroupService {
         this.groupRepository = groupRepository;
     }
 
-
+    public GroupOfPeople getById(long id) throws RecordNotFoundException {
+        Optional<GroupOfPeople> optionalGroup = groupRepository.findById(id);
+        if(optionalGroup.isEmpty())
+            throw new RecordNotFoundException("нет группы с id : " + id);
+        return optionalGroup.get();
+    }
     public List<GroupModel> getAllGroups(){
         List<GroupOfPeople> list = groupRepository.findAll();
 

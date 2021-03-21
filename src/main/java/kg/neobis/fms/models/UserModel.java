@@ -1,17 +1,25 @@
 package kg.neobis.fms.models;
 
+import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import kg.neobis.fms.entity.Role;
+import kg.neobis.fms.entity.enums.UserStatus;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import javax.persistence.*;
+import java.sql.Date;
+import java.util.Set;
+
+@Data
 public class UserModel {
-    private People person;
+
+    private long id;
+    private String surname;
+    private String name;
+    private String phoneNumber;
+    private Set<GroupOfPeople> groups;
+
     private String email;
-    private String password;
+    private Role role;
+    private UserStatus userStatus;
 }

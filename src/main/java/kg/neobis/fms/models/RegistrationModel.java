@@ -16,5 +16,5 @@ public class RegistrationModel {
     private String name;
     private String surname;
     private String phoneNumber;
-    private Set<GroupOfPeople> groupOfPeople;
+    private Set<Long> group_ids;
 }
