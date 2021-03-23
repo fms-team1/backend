@@ -2,6 +2,7 @@ package kg.neobis.fms.controllers;
 
 
 import kg.neobis.fms.exception.RecordNotFoundException;
+import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,9 @@ public class RegistrationController {
     @PostMapping("/newAccountant")
     public ResponseEntity<String> registerNewAccountant(@RequestBody RegistrationModel registrationModel){
         try {
-            return registrationService.addNewAccountant(registrationModel);
-        } catch (RecordNotFoundException e) {
+            registrationService.addNewAccountant(registrationModel);
+            return ResponseEntity.ok("successfully added");
+        } catch (RecordNotFoundException | WrongDataException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
