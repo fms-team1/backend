@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("user")
 @CrossOrigin
-//@PreAuthorize("hasAuthority('READ_USER')")
+@PreAuthorize("hasAuthority('READ_USER')")
 public class UserController {
     private MyUserServiceImpl userService;
 
