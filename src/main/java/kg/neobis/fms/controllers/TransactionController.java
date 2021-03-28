@@ -1,5 +1,6 @@
 package kg.neobis.fms.controllers;
 
+import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
@@ -68,5 +69,12 @@ public class TransactionController {
         } catch (RecordNotFoundException | NotEnoughAvailableBalance e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("getByGlobalFiltration")
+    public ResponseEntity<List<Transaction>> getByGlobalFiltration(
+            @RequestParam(required = false) TransactionType transactionType
+    ){
+        return ResponseEntity.ok(transactionService.getByGlobalFiltration( transactionType));
     }
 }

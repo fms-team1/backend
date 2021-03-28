@@ -30,6 +30,7 @@ public class UserController {
         return ResponseEntity.ok(model);
     }
 
+
     @PutMapping("changePassword")
     public ResponseEntity<String> changePassword(@RequestBody ModelToChangePassword model){
         try {

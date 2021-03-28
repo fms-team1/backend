@@ -17,7 +17,7 @@ public class UserModel {
     private String surname;
     private String name;
     private String phoneNumber;
-    private Set<GroupOfPeople> groups;
+    private Set<GroupModel> groups;
 
     private String email;
     private Role role;
