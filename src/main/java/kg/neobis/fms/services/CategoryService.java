@@ -108,9 +108,14 @@ public class CategoryService {
         return ResponseEntity.ok("successfully archived");
     }
 
-    public List<CategoryModel> getCategoriesByNeoSection(NeoSection neoSection) {
-        List<Category> list = categoryRepository.findByNeoSection(neoSection);
-        return getCategoryModels(list);
+    public List<CategoryModel> getCategoriesByNeoSection(long neoSectionId) throws RecordNotFoundException {
+        NeoSection[] neoSections = NeoSection.values();
+        for(NeoSection neoSection: neoSections)
+            if(neoSection.ordinal() == neoSectionId){
+                List<Category> list = categoryRepository.findByNeoSection(neoSection);
+                return getCategoryModels(list);
+            }
+        throw new RecordNotFoundException("нет органицации с таким id");
     }
 
 

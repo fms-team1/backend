@@ -5,6 +5,7 @@ import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.ModelToGetCategories;
 import kg.neobis.fms.models.NeoSectionModel;
@@ -15,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("category")
@@ -46,17 +44,22 @@ public class CategoryController {
     }
 
     @GetMapping("getNeoSections")
-    public ResponseEntity<NeoSectionModel> getNeoSections(){
-        NeoSectionModel model = new NeoSectionModel();
-        Set<NeoSection> set = new HashSet<>(Arrays.asList(NeoSection.values()));
-        model.setNames(set);
-        return ResponseEntity.ok(model);
+    public ResponseEntity<List<NeoSectionModel>> getNeoSections(){
+        List<NeoSectionModel> list = new ArrayList<>();
+        for(NeoSection neoSection: NeoSection.values())
+            list.add(new NeoSectionModel(neoSection.ordinal(), neoSection));
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("getCategoriesByNeoSection")
-    public ResponseEntity<List<CategoryModel>> getCategoriesByNeoSection(@RequestBody NeoSection neoSection){
-        List<CategoryModel> list =  categoryService.getCategoriesByNeoSection(neoSection);
-        return ResponseEntity.ok(list);
+    public ResponseEntity getCategoriesByNeoSection(@RequestParam long neoSectionId){
+        try {
+            List<CategoryModel> list = categoryService.getCategoriesByNeoSection(neoSectionId);
+            return ResponseEntity.ok(list);
+        } catch (RecordNotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("getAll")
