@@ -1,5 +1,6 @@
 package kg.neobis.fms.services.impl;
 
+import kg.neobis.fms.dao.TransactionDao;
 import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Transaction;
@@ -36,14 +37,18 @@ public class TransactionServiceImpl implements TransactionService {
     private final MyUserServiceImpl userService;
     private final PeopleService peopleService;
 
+    private final TransactionDao transactionDao;
+
     @Autowired
-    TransactionServiceImpl(TransactionPaginationRepository transactionPaginationRepository, TransactionRepository transactionRepository, WalletServiceImpl walletService, CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService){
+    TransactionServiceImpl(TransactionPaginationRepository transactionPaginationRepository, TransactionRepository transactionRepository, WalletServiceImpl walletService,
+                           CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService, TransactionDao transactionDao){
         this.transactionPaginationRepository = transactionPaginationRepository;
         this.transactionRepository = transactionRepository;
         this.walletService = walletService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.peopleService = peopleService;
+        this.transactionDao = transactionDao;
     }
 
     // Method to get last 15 transactions
@@ -397,8 +402,60 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public List<Transaction> getByGlobalFiltration(TransactionType transactionType){// change it later
-        List<Transaction> resultList = transactionRepository.findAll();
+    public List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model){// change it later
+        List<Transaction> transactions;
+        if(model.getStartDate() != null && model.getEndDate() != null)
+            transactions = transactionRepository.findAllByCreatedDateBetween(model.getStartDate(), model.getEndDate());
+        else
+            transactions = transactionRepository.findAll();
+        List<TransactionModel> resultList = new ArrayList<>();
+        for(Transaction transaction: transactions){
+            boolean flag = true;
+            if(model.getTransactionType() != null)
+                flag = transaction.getCategory().getTransactionType() == model.getTransactionType();
+            if(model.getWalletId() != null)
+                flag = transaction.getWallet().getId() == model.getWalletId();
+            if(model.getCategoryId() != null )
+                flag = transaction.getCategory().getId() == model.getCategoryId();
+            if(model.getUserId() != null)
+                flag = transaction.getUser().getPerson().getId() == model.getUserId();
+            if(model.getCounterpartyId() != null)
+                flag = transaction.getPerson().getId() == model.getCounterpartyId();
+            if(model.getTransferWalletId() != null)
+                flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionType() == TransactionType.MONEY_TRANSFER;
+
+
+            if(flag)
+                resultList.add(convertToTransactionModel(transaction));
+
+        }
+
         return resultList;
+    }
+
+
+    private TransactionModel convertToTransactionModel(Transaction transaction){
+        TransactionModel transactionModel = new TransactionModel();
+
+        transactionModel.setId(transaction.getId());
+        transactionModel.setCreatedDate(transaction.getCreatedDate());
+        transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+        transactionModel.setCategoryName(transaction.getCategory().getName());
+        transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
+        transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+        transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
+        transactionModel.setWalletId(transaction.getWallet().getId());
+        transactionModel.setWalletName(transaction.getWallet().getName());
+        transactionModel.setComment(transaction.getComment());
+        transactionModel.setAmount(transaction.getAmount());
+
+        if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+            transactionModel.setTransferWalletId(transaction.getWallet2().getId());
+            transactionModel.setTransferWalletName(transaction.getWallet2().getName());
+        } else {
+            transactionModel.setCounterpartyName(transaction.getPerson().getName());
+            transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
+        }
+        return transactionModel;
     }
 }

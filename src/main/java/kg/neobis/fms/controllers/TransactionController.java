@@ -5,10 +5,7 @@ import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
-import kg.neobis.fms.models.IncomeExpenseModel;
-import kg.neobis.fms.models.JournalTransactionInfoModel;
-import kg.neobis.fms.models.TransactionModel;
-import kg.neobis.fms.models.TransferModel;
+import kg.neobis.fms.models.*;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,9 +69,9 @@ public class TransactionController {
     }
 
     @GetMapping("getByGlobalFiltration")
-    public ResponseEntity<List<Transaction>> getByGlobalFiltration(
-            @RequestParam(required = false) TransactionType transactionType
-    ){
-        return ResponseEntity.ok(transactionService.getByGlobalFiltration( transactionType));
+    public ResponseEntity<List<TransactionModel>> getByGlobalFiltration(
+            @ModelAttribute ModelToGetFilteredTransactions model
+            ){
+        return ResponseEntity.ok(transactionService.getByGlobalFiltration(model));
     }
 }
