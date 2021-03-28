@@ -1,11 +1,13 @@
 package kg.neobis.fms.services.impl;
 
+import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Role;
 import kg.neobis.fms.entity.User;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
+import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.models.ModelToChangePassword;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
@@ -19,6 +21,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class MyUserServiceImpl implements UserDetailsService {
@@ -74,9 +79,16 @@ public class MyUserServiceImpl implements UserDetailsService {
         model.setEmail(user.getEmail());
         model.setPhoneNumber(user.getPerson().getPhoneNumber());
         model.setRole(user.getRole());
-        model.setGroups(user.getPerson().getGroupOfPeople());
+        model.setGroups(getGroups(user.getPerson().getGroupOfPeople()));
         model.setUserStatus(user.getUserStatus());
         return model;
+    }
+
+    private Set<GroupModel> getGroups(Set<GroupOfPeople> groupOfPeople ){
+        Set<GroupModel> resultSet = new HashSet<>();
+        for(GroupOfPeople group: groupOfPeople)
+            resultSet.add(new GroupModel(group.getId(), group.getName()));
+        return resultSet;
     }
 
     public void setNewPassword(ModelToChangePassword model) throws WrongDataException {
@@ -90,4 +102,5 @@ public class MyUserServiceImpl implements UserDetailsService {
         user.setPassword(model.getNewPassword());
         userRepository.save(user);
     }
+
 }

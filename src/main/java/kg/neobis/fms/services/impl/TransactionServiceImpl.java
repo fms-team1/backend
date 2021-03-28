@@ -394,4 +394,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         return totalSum;
     }
+
+
+    @Override
+    public List<Transaction> getByGlobalFiltration(TransactionType transactionType){// change it later
+        List<Transaction> resultList = transactionRepository.findAll();
+        return resultList;
+    }
 }
