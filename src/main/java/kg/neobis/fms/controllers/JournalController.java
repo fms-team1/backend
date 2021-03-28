@@ -47,4 +47,13 @@ public class JournalController {
     public ResponseEntity<List<TransactionModel>> getByNeoSection(@ModelAttribute NeoSection neoSection){
         return ResponseEntity.ok(transactionService.getByNeoSection(neoSection));
     }
+
+    // API to get transaction by neo section with pagination
+    @GetMapping("/getByNeoSectionWeb")
+    public ResponseEntity<Page<TransactionModel>> getByNeoSection(@ModelAttribute NeoSection neoSection,
+                                                                  @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                  @RequestParam(defaultValue = "2") Integer pageSize,
+                                                                  @RequestParam(defaultValue = "id") String sortBy){
+        return ResponseEntity.ok(transactionService.getByNeoSectionWebVersion(neoSection, pageNo, pageSize, sortBy));
+    }
 }

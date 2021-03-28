@@ -15,7 +15,8 @@ import java.util.List;
 public interface TransactionService {
     List<TransactionModel> getLastFifteenTransactions(); // get last fifteen transactions
     List<JournalTransactionInfoModel> getAllTransactions(); // get all transactions for android
-    Page<TransactionModel> getAllTransactionsWebVersion(Integer pageNo, Integer pageSize, String sortBy); // get all transactions for android
+    Page<TransactionModel> getAllTransactionsWebVersion(Integer pageNo, Integer pageSize, String sortBy); // get all transactions for web with pagination
+    Page<TransactionModel> getByNeoSectionWebVersion(NeoSection neoSection, Integer pageNo, Integer pageSize, String sortBy);
     List<TransactionModel> getByNeoSection(NeoSection neoSection); // get transaction by neo section
     TransactionModel getTransactionById(Long id); // get transaction by id
     IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException; // get sum of expenses and incomes for particular period of time
