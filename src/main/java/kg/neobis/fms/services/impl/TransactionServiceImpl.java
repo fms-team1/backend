@@ -424,13 +424,19 @@ public class TransactionServiceImpl implements TransactionService {
             if(model.getTransferWalletId() != null)
                 flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionType() == TransactionType.MONEY_TRANSFER;
 
-
             if(flag)
                 resultList.add(convertToTransactionModel(transaction));
 
         }
 
         return resultList;
+
+//        List<Transaction> transactions = transactionDao.test();
+//        List<TransactionModel> resultList = new ArrayList<>();
+//        for(Transaction transaction: transactions)
+//            resultList.add(convertToTransactionModel(transaction));
+//        return resultList;
+
     }
 
 

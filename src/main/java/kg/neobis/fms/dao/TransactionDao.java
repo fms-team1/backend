@@ -1,11 +1,12 @@
 package kg.neobis.fms.dao;
 
+import kg.neobis.fms.entity.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class TransactionDao {
@@ -33,7 +34,23 @@ public class TransactionDao {
         return connection;
     }
 
-    public void test(){
+    public List<Transaction> test(){
+        String query = "select * from transactions";
+        List<Transaction> list = new ArrayList<>();
+
+        try(Connection connection = getConnection();Statement statement = connection.createStatement();) {
+            statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()){
+                Transaction transaction = new Transaction();
+                transaction.setId(resultSet.getInt("id"));
+                transaction.setAmount(resultSet.getDouble("amount"));
+                list.add(transaction);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
 
     }
 
