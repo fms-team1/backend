@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class ModelToGetCategories {
-    private NeoSection neoSection;
-    private TransactionType transactionType;
+    private Integer neoSectionId;
+    private Integer transactionTypeId;
 }

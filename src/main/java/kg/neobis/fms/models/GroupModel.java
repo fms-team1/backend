@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GroupModel {
     private long id;
-    private String groupName;
+    private String name;
 }

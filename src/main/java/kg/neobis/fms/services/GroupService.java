@@ -41,14 +41,14 @@ public class GroupService {
 
     public void addNewGroup(GroupModel groupModel) {
         GroupOfPeople group = new GroupOfPeople();
-        group.setName(groupModel.getGroupName());
+        group.setName(groupModel.getName());
         group.setGroupStatus(GroupStatus.ACTIVE);
         groupRepository.save(group);
     }
 
 
     public boolean isGroupExist(GroupModel groupModel){
-        GroupOfPeople group = groupRepository.findByName(groupModel.getGroupName());
+        GroupOfPeople group = groupRepository.findByName(groupModel.getName());
         return group != null;
     }
 
@@ -58,7 +58,7 @@ public class GroupService {
             return new ResponseEntity<>("the group id does not exist", HttpStatus.BAD_REQUEST);
 
         GroupOfPeople group = optionalGroup.get();
-        group.setName(groupModel.getGroupName());
+        group.setName(groupModel.getName());
         groupRepository.save(group);
         return ResponseEntity.ok("successfully updated");
     }

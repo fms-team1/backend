@@ -411,8 +411,10 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> resultList = new ArrayList<>();
         for(Transaction transaction: transactions){
             boolean flag = true;
-            if(model.getTransactionType() != null)
-                flag = transaction.getCategory().getTransactionType() == model.getTransactionType();
+            if(model.getTransactionTypeId() != null){
+                int index = model.getTransactionTypeId();
+                flag = transaction.getCategory().getTransactionType() == TransactionType.values()[index];
+            }
             if(model.getWalletId() != null)
                 flag = transaction.getWallet().getId() == model.getWalletId();
             if(model.getCategoryId() != null )
@@ -422,7 +424,7 @@ public class TransactionServiceImpl implements TransactionService {
             if(model.getCounterpartyId() != null)
                 flag = transaction.getPerson().getId() == model.getCounterpartyId();
             if(model.getTransferWalletId() != null)
-                flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionType() == TransactionType.MONEY_TRANSFER;
+                flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
 
             if(flag)
                 resultList.add(convertToTransactionModel(transaction));
@@ -437,6 +439,15 @@ public class TransactionServiceImpl implements TransactionService {
 //            resultList.add(convertToTransactionModel(transaction));
 //        return resultList;
 
+    }
+
+    @Override
+    public List<TransactionTypeModel> getTransactionTypes() {
+        List<TransactionTypeModel> resultList = new ArrayList();
+        TransactionType[] types = TransactionType.values();
+        for(TransactionType type: types)
+            resultList.add(new TransactionTypeModel(type.ordinal(), type));
+        return resultList;
     }
 
 

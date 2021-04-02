@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PreAuthorize("hasAnyAuthority('READ_TRANSACTION')")
@@ -38,11 +39,6 @@ public class TransactionController {
     @GetMapping("/getById/{id}")
     public TransactionModel getTransactionById(@PathVariable Long id) {
         return transactionService.getTransactionById(id);
-    }
-
-    @GetMapping("getTransactionTypes")
-    public ResponseEntity<TransactionType[]> getTransactionTypes(){
-        return ResponseEntity.ok(TransactionType.values());
     }
 
     @PreAuthorize("hasAuthority('ADD_TRANSACTION')")
@@ -73,5 +69,11 @@ public class TransactionController {
             @ModelAttribute ModelToGetFilteredTransactions model
             ){
         return ResponseEntity.ok(transactionService.getByGlobalFiltration(model));
+    }
+
+    @GetMapping("getTransactionTypes")
+    public ResponseEntity<List<TransactionTypeModel>> getTransactionTypes(){
+        List<TransactionTypeModel> resultList = transactionService.getTransactionTypes();
+        return ResponseEntity.ok(resultList);
     }
 }

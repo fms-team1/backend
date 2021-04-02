@@ -9,8 +9,8 @@ public class IncomeExpenseModel {
     private Double amount;
     private Long counterpartyId;
     private String counterpartyName;
-    private long walletId;
-    private long categoryId;
+    private Long walletId;
+    private Long categoryId;
     private String comment;
     private Date date;
 }

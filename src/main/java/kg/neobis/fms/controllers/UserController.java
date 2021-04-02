@@ -1,5 +1,6 @@
 package kg.neobis.fms.controllers;
 
+import kg.neobis.fms.entity.User;
 import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.ModelToChangePassword;
 import kg.neobis.fms.models.UserModel;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -30,6 +33,18 @@ public class UserController {
         return ResponseEntity.ok(model);
     }
 
+    @GetMapping("getAllUsers")
+    public ResponseEntity<List<UserModel>> getAllUsers(){
+        List<UserModel> list = userService.getAllUsers();
+        return ResponseEntity.ok(list);
+    }
+
+//    @GetMapping("getAllCounterparties")
+//    public ResponseEntity<List<User>> getAllCounterparties(){
+//        List<>
+//
+//        return null;
+//    }
 
     @PutMapping("changePassword")
     public ResponseEntity<String> changePassword(@RequestBody ModelToChangePassword model){

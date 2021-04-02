@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -103,4 +105,22 @@ public class MyUserServiceImpl implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public List<UserModel> getAllUsers() {
+        List<UserModel> resultList = new ArrayList<>();
+
+        List<User> usersList = userRepository.findAll();
+        for(User user : usersList){
+            UserModel model = new UserModel();
+            model.setId(user.getPerson().getId());
+            model.setEmail(user.getEmail());
+            model.setUserStatus(user.getUserStatus());
+            model.setRole(user.getRole());
+            model.setSurname(user.getPerson().getSurname());
+            model.setName(user.getPerson().getName());
+            model.setPhoneNumber(user.getPerson().getPhoneNumber());
+            model.setGroups(getGroups(user.getPerson().getGroupOfPeople()));
+            resultList.add(model);
+        }
+        return resultList;
+    }
 }
