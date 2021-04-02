@@ -89,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
     // Method to get all transactions
     @Override
     public List<JournalTransactionInfoModel> getAllTransactions() {
-        List<Transaction> transactions = transactionRepository.findTop15ByOrderByIdDesc();
+        List<Transaction> transactions = transactionRepository.findAll();
         List<JournalTransactionInfoModel> journalTransactionInfoModelList = new ArrayList<>();
 
         transactions.forEach(transaction -> {
