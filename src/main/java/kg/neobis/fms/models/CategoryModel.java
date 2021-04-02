@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryModel {
     private long id;
-    private String category;
+    private String name;
     private NeoSection neoSection;
     private TransactionType transactionType;
     private CategoryStatus categoryStatus;

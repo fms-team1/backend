@@ -63,7 +63,7 @@ public class CategoryService {
         for(Category category: list){
             CategoryModel model = new CategoryModel();
             model.setId(category.getId());
-            model.setCategory(category.getName());
+            model.setName(category.getName());
             model.setCategoryStatus(category.getCategoryStatus());
             model.setNeoSection(category.getNeoSection());
             model.setTransactionType(category.getTransactionType());
@@ -73,13 +73,13 @@ public class CategoryService {
     }
 
     public boolean isCategoryExist(CategoryModel model) {
-        Category category = categoryRepository.findByName(model.getCategory());
+        Category category = categoryRepository.findByName(model.getName());
         return category != null;
     }
 
     public void addNewCategory(CategoryModel model) {
         Category category = new Category();
-        category.setName(model.getCategory());
+        category.setName(model.getName());
         category.setNeoSection(model.getNeoSection());
         category.setTransactionType(model.getTransactionType());
         category.setCategoryStatus(CategoryStatus.ACTIVE);
@@ -91,7 +91,7 @@ public class CategoryService {
         if(!optionalCategory.isPresent())
             return new ResponseEntity<>("the category id does not exist", HttpStatus.BAD_REQUEST);
         Category category = optionalCategory.get();
-        category.setName(model.getCategory());
+        category.setName(model.getName());
         category.setNeoSection(model.getNeoSection());
         category.setTransactionType(model.getTransactionType());
         category.setCategoryStatus(model.getCategoryStatus());
