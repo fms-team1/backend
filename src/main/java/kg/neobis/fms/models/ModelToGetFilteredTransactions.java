@@ -12,5 +12,6 @@ public class ModelToGetFilteredTransactions {
     private Long transferWalletId;
     private Long counterpartyId;
     private Long categoryId;
+    private Long neoSectionId;
     //наличие долга
 }

@@ -331,7 +331,7 @@ public class TransactionServiceImpl implements TransactionService {
             PersonModel personModel = new PersonModel();
             personModel.setName(counterpartyName);
 
-            long person_id = peopleService.addNewPerson(personModel);
+            long person_id = peopleService.addNewPerson(personModel, null);// можно задать какую-то группу по умолчанию
             counterparty = peopleService.getById(person_id);
         } else
             throw new NotEnoughDataException("no data about counterparty");
@@ -411,22 +411,21 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> resultList = new ArrayList<>();
         for(Transaction transaction: transactions){
             boolean flag = true;
-            if(model.getTransactionTypeId() != null){
-                int index = model.getTransactionTypeId();
-                flag = transaction.getCategory().getTransactionType() == TransactionType.values()[index];
-            }
-            if(model.getWalletId() != null)
+            if(model.getTransactionTypeId() != null)
+                flag = transaction.getCategory().getTransactionType().ordinal() == model.getTransactionTypeId();
+            if(model.getWalletId() != null && flag)
                 flag = transaction.getWallet().getId() == model.getWalletId();
-            if(model.getCategoryId() != null )
+            if(model.getCategoryId() != null && flag)
                 flag = transaction.getCategory().getId() == model.getCategoryId();
-            if(model.getUserId() != null)
+            if(model.getUserId() != null && flag)
                 flag = transaction.getUser().getPerson().getId() == model.getUserId();
-            if(model.getCounterpartyId() != null)
+            if(model.getCounterpartyId() != null && flag)
                 flag = transaction.getPerson().getId() == model.getCounterpartyId();
-            if(model.getTransferWalletId() != null)
+            if(model.getTransferWalletId() != null && flag)
                 flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
-
-            if(flag)
+            if(model.getNeoSectionId() != null && flag)
+                flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
+            if(flag )
                 resultList.add(convertToTransactionModel(transaction));
 
         }

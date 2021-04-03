@@ -17,5 +17,5 @@ public class PersonModel {
     private String surname;
     private String name;
     private String phoneNumber;
-    private Set<GroupOfPeople> groupOfPeople;
+    private Set<GroupModel> groupOfPeople;
 }

@@ -48,8 +48,8 @@ public class RegistrationService {
         personModel.setName(registrationModel.getName());
         personModel.setSurname(registrationModel.getSurname());
         personModel.setPhoneNumber(registrationModel.getPhoneNumber());
-        personModel.setGroupOfPeople(getSetOfGroups(registrationModel.getGroup_ids()));
-        long createdPersonId = peopleService.addNewPerson(personModel);
+        Set<GroupOfPeople> setOfGroups = getSetOfGroups(registrationModel.getGroup_ids());
+        long createdPersonId = peopleService.addNewPerson(personModel, setOfGroups);
 
         UserModel userModel = new UserModel();
         userModel.setEmail(registrationModel.getEmail());

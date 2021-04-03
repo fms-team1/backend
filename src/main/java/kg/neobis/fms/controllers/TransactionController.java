@@ -74,7 +74,8 @@ public class TransactionController {
             @RequestParam(required = false) Long walletId,
             @RequestParam(required = false) Long transferWalletId,
             @RequestParam(required = false) Long counterpartyId,
-            @RequestParam(required = false) Long categoryId
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long neoSectionId
             ){
         ModelToGetFilteredTransactions model = new ModelToGetFilteredTransactions();
         model.setCategoryId(categoryId);
@@ -85,6 +86,7 @@ public class TransactionController {
         model.setWalletId(walletId);
         model.setTransferWalletId(transferWalletId);
         model.setCounterpartyId(counterpartyId);
+        model.setNeoSectionId(neoSectionId);
         return ResponseEntity.ok(transactionService.getByGlobalFiltration(model));
     }
 
