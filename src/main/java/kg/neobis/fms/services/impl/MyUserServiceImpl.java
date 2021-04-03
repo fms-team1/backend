@@ -123,4 +123,13 @@ public class MyUserServiceImpl implements UserDetailsService {
         }
         return resultList;
     }
+
+    public void updateUser(UserModel model) {
+        User user = userRepository.findByEmail(model.getEmail());
+        user.setUserStatus(model.getUserStatus());
+        user.getPerson().setSurname(model.getSurname());
+        user.getPerson().setName(model.getName());
+        user.getPerson().setPhoneNumber(model.getPhoneNumber());
+//        user.getPerson().setGroupOfPeople();
+    }
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 public class UserModel {
 
-    private long id;
+    private Long id;
     private String surname;
     private String name;
     private String phoneNumber;

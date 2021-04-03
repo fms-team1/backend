@@ -49,4 +49,10 @@ public class UserController {
         }
     }
 
+    @PutMapping("updateProfile")
+    public ResponseEntity updateProfile(@RequestBody UserModel model){
+        userService.updateUser(model);
+        return null;
+    }
+
 }

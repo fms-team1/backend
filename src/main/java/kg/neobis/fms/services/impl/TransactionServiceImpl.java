@@ -58,28 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
         transactions.forEach(transaction -> {
-            TransactionModel transactionModel = new TransactionModel();
-
-            transactionModel.setId(transaction.getId());
-            transactionModel.setCreatedDate(transaction.getCreatedDate());
-            transactionModel.setAmount(transaction.getAmount());
-            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
-            transactionModel.setCategoryName(transaction.getCategory().getName());
-            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
-            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionModel.setWalletId(transaction.getWallet().getId());
-            transactionModel.setWalletName(transaction.getWallet().getName());
-            transactionModel.setComment(transaction.getComment());
-
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionModel.setCounterpartyName("");
-                transactionModel.setCounterpartySurname("");
-            } else {
-                transactionModel.setCounterpartyName(transaction.getPerson().getName());
-                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
-            }
-
+            TransactionModel transactionModel = convertToTransactionModel(transaction);
             transactionModelList.add(transactionModel);
         });
 
@@ -115,27 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
         transactions.forEach(transaction -> {
-            TransactionModel transactionModel = new TransactionModel();
-
-            transactionModel.setId(transaction.getId());
-            transactionModel.setCreatedDate(transaction.getCreatedDate());
-            transactionModel.setAmount(transaction.getAmount());
-            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
-            transactionModel.setCategoryName(transaction.getCategory().getName());
-            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
-            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionModel.setWalletId(transaction.getWallet().getId());
-            transactionModel.setWalletName(transaction.getWallet().getName());
-            transactionModel.setComment(transaction.getComment());
-
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionModel.setCounterpartyName("");
-                transactionModel.setCounterpartySurname("");
-            } else {
-                transactionModel.setCounterpartyName(transaction.getPerson().getName());
-                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
-            }
+            TransactionModel transactionModel = convertToTransactionModel(transaction);
 
             transactionModelList.add(transactionModel);
         });
@@ -151,28 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
         transactions.forEach(transaction -> {
-            TransactionModel transactionModel = new TransactionModel();
-
-            transactionModel.setId(transaction.getId());
-            transactionModel.setCreatedDate(transaction.getCreatedDate());
-            transactionModel.setAmount(transaction.getAmount());
-            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
-            transactionModel.setCategoryName(transaction.getCategory().getName());
-            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
-            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionModel.setWalletId(transaction.getWallet().getId());
-            transactionModel.setWalletName(transaction.getWallet().getName());
-            transactionModel.setComment(transaction.getComment());
-
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionModel.setCounterpartyName("");
-                transactionModel.setCounterpartySurname("");
-            } else {
-                transactionModel.setCounterpartyName(transaction.getPerson().getName());
-                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
-            }
-
+            TransactionModel transactionModel = convertToTransactionModel(transaction);
             transactionModelList.add(transactionModel);
         });
 
@@ -183,26 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionModel getTransactionById(Long id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("There is no such username"));
-        TransactionModel transactionModel = new TransactionModel();
-
-        transactionModel.setId(transaction.getId());
-        transactionModel.setCreatedDate(transaction.getCreatedDate());
-        transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
-        transactionModel.setCategoryName(transaction.getCategory().getName());
-        transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
-        transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-        transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
-        transactionModel.setWalletId(transaction.getWallet().getId());
-        transactionModel.setWalletName(transaction.getWallet().getName());
-        transactionModel.setComment(transaction.getComment());
-
-        if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-            transactionModel.setCounterpartyName("");
-            transactionModel.setCounterpartySurname("");
-        } else {
-            transactionModel.setCounterpartyName(transaction.getPerson().getName());
-            transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
-        }
+        TransactionModel transactionModel = convertToTransactionModel(transaction);
 
         return transactionModel;
     }
@@ -295,27 +214,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionModel> transactionModelsList = new ArrayList<>();
 
         transactionsFilteredByNeoSection.forEach(transaction -> {
-            TransactionModel transactionModel = new TransactionModel();
-
-            transactionModel.setId(transaction.getId());
-            transactionModel.setCreatedDate(transaction.getCreatedDate());
-            transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
-            transactionModel.setCategoryName(transaction.getCategory().getName());
-            transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
-            transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-            transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
-            transactionModel.setWalletId(transaction.getWallet().getId());
-            transactionModel.setWalletName(transaction.getWallet().getName());
-            transactionModel.setComment(transaction.getComment());
-            transactionModel.setAmount(transaction.getAmount());
-
-            if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
-                transactionModel.setTransferWalletId(transaction.getWallet2().getId());
-                transactionModel.setTransferWalletName(transaction.getWallet2().getName());
-            } else {
-                transactionModel.setCounterpartyName(transaction.getPerson().getName());
-                transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
-            }
+            TransactionModel transactionModel = convertToTransactionModel(transaction);
 
             transactionModelsList.add(transactionModel);
         });
@@ -400,7 +299,6 @@ public class TransactionServiceImpl implements TransactionService {
         return totalSum;
     }
 
-
     @Override
     public List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model){// change it later
         List<Transaction> transactions;
@@ -420,7 +318,7 @@ public class TransactionServiceImpl implements TransactionService {
             if(model.getUserId() != null && flag)
                 flag = transaction.getUser().getPerson().getId() == model.getUserId();
             if(model.getCounterpartyId() != null && flag)
-                flag = transaction.getPerson().getId() == model.getCounterpartyId();
+                flag = transaction.getPerson() != null &&transaction.getPerson().getId() == model.getCounterpartyId();
             if(model.getTransferWalletId() != null && flag)
                 flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
             if(model.getNeoSectionId() != null && flag)
@@ -442,7 +340,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
-        List<TransactionTypeModel> resultList = new ArrayList();
+        List<TransactionTypeModel> resultList = new ArrayList<>();
         TransactionType[] types = TransactionType.values();
         for(TransactionType type: types)
             resultList.add(new TransactionTypeModel(type.ordinal(), type));
@@ -465,7 +363,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactionModel.setComment(transaction.getComment());
         transactionModel.setAmount(transaction.getAmount());
 
-        if (transaction.getCategory().getTransactionType().toString().equals("MONEY_TRANSFER")) {
+        if (transaction.getCategory().getTransactionType() == TransactionType.MONEY_TRANSFER) {
             transactionModel.setTransferWalletId(transaction.getWallet2().getId());
             transactionModel.setTransferWalletName(transaction.getWallet2().getName());
         } else {
