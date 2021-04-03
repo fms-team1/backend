@@ -66,8 +66,25 @@ public class TransactionController {
 
     @GetMapping("getByGlobalFiltration")
     public ResponseEntity<List<TransactionModel>> getByGlobalFiltration(
-            @ModelAttribute ModelToGetFilteredTransactions model
+
+            @RequestParam(required = false) java.sql.Date startDate,
+            @RequestParam(required = false) java.sql.Date endDate,
+            @RequestParam(required = false) Integer transactionTypeId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long walletId,
+            @RequestParam(required = false) Long transferWalletId,
+            @RequestParam(required = false) Long counterpartyId,
+            @RequestParam(required = false) Long categoryId
             ){
+        ModelToGetFilteredTransactions model = new ModelToGetFilteredTransactions();
+        model.setCategoryId(categoryId);
+        model.setEndDate(endDate);
+        model.setStartDate(startDate);
+        model.setTransactionTypeId(transactionTypeId);
+        model.setUserId(userId);
+        model.setWalletId(walletId);
+        model.setTransferWalletId(transferWalletId);
+        model.setCounterpartyId(counterpartyId);
         return ResponseEntity.ok(transactionService.getByGlobalFiltration(model));
     }
 

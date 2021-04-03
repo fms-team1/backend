@@ -39,13 +39,6 @@ public class UserController {
         return ResponseEntity.ok(list);
     }
 
-//    @GetMapping("getAllCounterparties")
-//    public ResponseEntity<List<User>> getAllCounterparties(){
-//        List<>
-//
-//        return null;
-//    }
-
     @PutMapping("changePassword")
     public ResponseEntity<String> changePassword(@RequestBody ModelToChangePassword model){
         try {

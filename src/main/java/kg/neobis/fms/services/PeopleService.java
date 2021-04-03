@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +49,21 @@ public class PeopleService {
             return optionalPerson.get();
         else
             throw new RecordNotFoundException("id does not exist");
+    }
+
+    public List<PersonModel> getAll() {
+        List<People> peopleList = peopleRepository.findAll();
+        List<PersonModel> resultList = new ArrayList<>();
+
+        for(People person: peopleList){
+            PersonModel model = new PersonModel();
+            model.setId(person.getId());
+            model.setSurname(person.getSurname());
+            model.setName(person.getName());
+            model.setPhoneNumber(person.getPhoneNumber());
+            model.setGroupOfPeople(person.getGroupOfPeople());
+            resultList.add(model);
+        }
+        return resultList;
     }
 }
