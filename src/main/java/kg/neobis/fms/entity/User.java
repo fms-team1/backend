@@ -30,4 +30,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status")
     private UserStatus userStatus;
+
+    @Column(name = "reset_token")
+    private String resetToken;
 }

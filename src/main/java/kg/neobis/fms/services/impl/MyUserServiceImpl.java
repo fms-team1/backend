@@ -1,15 +1,11 @@
 package kg.neobis.fms.services.impl;
 
-import kg.neobis.fms.entity.GroupOfPeople;
-import kg.neobis.fms.entity.People;
-import kg.neobis.fms.entity.Role;
-import kg.neobis.fms.entity.User;
+import kg.neobis.fms.entity.*;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.models.ModelToChangePassword;
-import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.models.security.MyUserDetails;
 import kg.neobis.fms.repositories.UserRepository;
@@ -131,5 +127,9 @@ public class MyUserServiceImpl implements UserDetailsService {
         user.getPerson().setName(model.getName());
         user.getPerson().setPhoneNumber(model.getPhoneNumber());
 //        user.getPerson().setGroupOfPeople();
+    }
+
+    public User findUserByResetToken(String resetToken) {
+        return userRepository.findByResetToken(resetToken);
     }
 }
