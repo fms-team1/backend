@@ -31,8 +31,8 @@ public class TransactionController {
 
     // API to get all transactions
     @GetMapping("/getAll")
-    public List<JournalTransactionInfoModel> getAllTransactions() {
-        return transactionService.getAllTransactions();
+    public List<TransactionModel> getAllTransactions() {
+        return transactionService.getAllTransactionsTeam2();
     }
 
     // API to get transaction by id
