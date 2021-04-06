@@ -384,6 +384,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModel.setCounterpartyName(transaction.getPerson().getName());
             transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
         }
+
         return transactionModel;
     }
 }
