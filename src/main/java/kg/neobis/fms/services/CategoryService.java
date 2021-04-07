@@ -48,7 +48,7 @@ public class CategoryService {
         return getCategoryModels(list);
     }
 
-    public List<CategoryModel> getAllActiveCategories(ModelToGetCategories model) {
+    public List<CategoryModel> getAllActiveCategoriesByNeoSectionAndTransactionType(ModelToGetCategories model) {
         int indexOfTransaction = model.getTransactionTypeId();
         int indexOfNeoSection = model.getNeoSectionId();
         TransactionType type = TransactionType.values()[indexOfTransaction];

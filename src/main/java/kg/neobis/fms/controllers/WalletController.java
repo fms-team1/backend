@@ -6,6 +6,7 @@ import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.GroupModel;
+import kg.neobis.fms.models.TotalBalanceModel;
 import kg.neobis.fms.models.WalletModel;
 import kg.neobis.fms.services.GroupService;
 import kg.neobis.fms.services.WalletService;
@@ -34,6 +35,12 @@ public class WalletController {
     public ResponseEntity<List<WalletModel>> getAllGroups(){
         List<WalletModel> list = walletService.getAllActiveWallets();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("getTotalBalance")
+    public ResponseEntity<TotalBalanceModel> getTotalSumOfAllWallets(){
+        TotalBalanceModel model = walletService.getTotalSumOfAllWallets();
+        return  ResponseEntity.ok(model);
     }
 
     @PreAuthorize("hasAnyAuthority('ADD_WALLET')")

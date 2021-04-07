@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryModel {
-    private long id;
+    private Long id;
     private String name;
     private NeoSection neoSection;
     private TransactionType transactionType;

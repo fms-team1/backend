@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TransactionPaginationRepository extends PagingAndSortingRepository<Transaction, Long> {
     @Query(value = "SELECT u FROM Transaction u where u.category.neoSection = :neoSection")
     Page<Transaction> retrieveByNeoSection(@Param("neoSection") NeoSection neoSection, Pageable pageable);
+
+    Page<Transaction> findAllByCreatedDateBetween(java.sql.Date startDate, java.sql.Date endDate, Pageable pageable);
+
 }
