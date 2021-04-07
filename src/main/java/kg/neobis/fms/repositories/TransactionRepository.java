@@ -24,7 +24,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT sum(u.amount) from Transaction u where u.category.neoSection = :neoSection " +
             "and u.category.transactionType = :transactionType and u.createdDate >= :startDate and u.createdDate <= :endDate")
-    double totalSum(
+    Double totalSum(
             @Param("neoSection") NeoSection neoSection,
             @Param("transactionType") TransactionType transactionType,
             @Param("startDate") Date startDate,
