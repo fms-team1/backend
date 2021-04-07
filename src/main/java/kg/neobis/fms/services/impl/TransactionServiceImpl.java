@@ -113,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModelList.add(transactionModel);
         });
 
-        return new PageImpl<TransactionModel>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactionModelList.size());
+        return new PageImpl<TransactionModel>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactions.getSize());
     }
 
     @Override
