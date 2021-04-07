@@ -1,1 +1,1 @@
-Project of Team №1, NEO-FMS
+Project of Team №3

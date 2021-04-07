@@ -87,6 +87,20 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionModel> getAllTransactionsTeam2() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        List<TransactionModel> transactionModelList = new ArrayList<>();
+
+        transactions.forEach(transaction -> {
+            TransactionModel transactionModel = convertToTransactionModel(transaction);
+
+            transactionModelList.add(transactionModel);
+        });
+
+        return transactionModelList;
+    }
+
+    @Override
     public Page<TransactionModel> getAllTransactionsWebVersion(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
@@ -441,6 +455,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModel.setCounterpartyName(transaction.getPerson().getName());
             transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
         }
+
         return transactionModel;
     }
 }

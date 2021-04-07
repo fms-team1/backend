@@ -1,7 +1,5 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Transaction;
-import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
@@ -14,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @PreAuthorize("hasAnyAuthority('READ_TRANSACTION')")
@@ -32,8 +29,8 @@ public class TransactionController {
 
     // API to get all transactions
     @GetMapping("/getAll")
-    public List<JournalTransactionInfoModel> getAllTransactions() {
-        return transactionService.getAllTransactions();
+    public List<TransactionModel> getAllTransactions() {
+        return transactionService.getAllTransactionsTeam2();
     }
 
     // API to get transaction by id
