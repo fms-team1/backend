@@ -104,40 +104,41 @@ public class TransactionServiceImpl implements TransactionService {
     public Page<TransactionModel> getAllTransactionsWebVersion(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
-        Page<Transaction> transactions = transactionPaginationRepository.findAll(pageable);
+        List<Transaction> transactionList = transactionRepository.findAll();
+        Page<Transaction> transactionPage = transactionPaginationRepository.findAll(pageable);
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
-        transactions.forEach(transaction -> {
+        transactionPage.forEach(transaction -> {
             TransactionModel transactionModel = convertToTransactionModel(transaction);
 
             transactionModelList.add(transactionModel);
         });
 
-        return new PageImpl<TransactionModel>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactions.getSize());
+        return new PageImpl<>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactionList.size());
     }
 
     @Override
     public Page<TransactionModel> getByNeoSectionWebVersion(NeoSection neoSection, Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
-        Page<Transaction> transactions = transactionPaginationRepository.retrieveByNeoSection(neoSection, pageable);
+        List<Transaction> transactionList = transactionRepository.findAll();
+        Page<Transaction> transactionPage = transactionPaginationRepository.retrieveByNeoSection(neoSection, pageable);
         List<TransactionModel> transactionModelList = new ArrayList<>();
 
-        transactions.forEach(transaction -> {
+        transactionPage.forEach(transaction -> {
             TransactionModel transactionModel = convertToTransactionModel(transaction);
             transactionModelList.add(transactionModel);
         });
 
-        return new PageImpl<TransactionModel>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy.toString())), transactionModelList.size());
+        return new PageImpl<>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactionList.size());
     }
 
     // Method to get transaction by id
     @Override
     public TransactionModel getTransactionById(Long id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("There is no such username"));
-        TransactionModel transactionModel = convertToTransactionModel(transaction);
 
-        return transactionModel;
+        return convertToTransactionModel(transaction);
     }
 
     // method to get income and expenses for particular period of date
@@ -354,7 +355,6 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Page<TransactionModel> getByGlobalFiltrationPagination(ModelToGetFilteredTransactions model, Integer pageNo, Integer pageSize, String sortBy){
-
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
         Page<Transaction> transactions;
