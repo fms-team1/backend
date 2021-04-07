@@ -27,6 +27,9 @@ public interface TransactionService {
     void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance;
 
     List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model);
-
+    public Page<TransactionModel> getByGlobalFiltrationPagination(ModelToGetFilteredTransactions model, Integer pageNo, Integer pageSize, String sortBy);
     List<TransactionTypeModel> getTransactionTypes();
+
+
+    AnalyticsModel getAnalytics(ModelToGetAnalytics model);
 }

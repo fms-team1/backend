@@ -2,6 +2,7 @@ package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Wallet;
 import kg.neobis.fms.exception.AlreadyExistException;
+import kg.neobis.fms.models.TotalBalanceModel;
 import kg.neobis.fms.models.WalletBalanceAndNameModel;
 import kg.neobis.fms.entity.enums.WalletStatus;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
@@ -87,6 +88,13 @@ public class WalletServiceImpl implements WalletService {
         wallet.setAvailableBalance(model.getAvailableBalance());
         wallet.setWalletStatus(model.getStatus());
         walletRepository.save(wallet);
+    }
+
+    @Override
+    public TotalBalanceModel getTotalSumOfAllWallets() {
+        Double totalSumOfAllWallets = walletRepository.getTotalSumOfAllWallets();
+        TotalBalanceModel model = new TotalBalanceModel(totalSumOfAllWallets);
+        return model;
     }
 
     public Wallet getWalletById(long id) throws RecordNotFoundException {

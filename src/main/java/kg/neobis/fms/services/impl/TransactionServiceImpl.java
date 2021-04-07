@@ -339,12 +339,83 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public Page<TransactionModel> getByGlobalFiltrationPagination(ModelToGetFilteredTransactions model, Integer pageNo, Integer pageSize, String sortBy){
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Transaction> transactions;
+        if(model.getStartDate() != null && model.getEndDate() != null)
+            transactions = transactionPaginationRepository.findAllByCreatedDateBetween(model.getStartDate(), model.getEndDate(), pageable);
+        else
+            transactions = transactionPaginationRepository.findAll(pageable);
+
+        List<TransactionModel> resultList = new ArrayList<>();
+        for(Transaction transaction: transactions){
+            boolean flag = true;
+            if(model.getTransactionTypeId() != null)
+                flag = transaction.getCategory().getTransactionType().ordinal() == model.getTransactionTypeId();
+            if(model.getWalletId() != null && flag)
+                flag = transaction.getWallet().getId() == model.getWalletId();
+            if(model.getCategoryId() != null && flag)
+                flag = transaction.getCategory().getId() == model.getCategoryId();
+            if(model.getUserId() != null && flag)
+                flag = transaction.getUser().getPerson().getId() == model.getUserId();
+            if(model.getCounterpartyId() != null && flag)
+                flag = transaction.getPerson() != null &&transaction.getPerson().getId() == model.getCounterpartyId();
+            if(model.getTransferWalletId() != null && flag)
+                flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
+            if(model.getNeoSectionId() != null && flag)
+                flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
+            if(flag )
+                resultList.add(convertToTransactionModel(transaction));
+
+        }
+
+        return new PageImpl<>(resultList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), resultList.size());
+    }
+
+
+
+    @Override
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
         TransactionType[] types = TransactionType.values();
         for(TransactionType type: types)
             resultList.add(new TransactionTypeModel(type.ordinal(), type));
         return resultList;
+    }
+
+    @Override
+    public AnalyticsModel getAnalytics(ModelToGetAnalytics model) {
+        AnalyticsModel result = new AnalyticsModel();
+
+        NeoSection neoSection = NeoSection.values()[model.getNeoSectionId()];
+        TransactionType transactionType = TransactionType.values()[model.getTransactionTypeId()];
+        java.sql.Date startDate = model.getStartDate();
+        java.sql.Date endDate = model.getEndDate();
+        endDate.setTime(endDate.getTime() + 23*60*60* 1000); // hour * minutes* sec * millisec, 23ч перевел на миллисек и добавил к endDate. Это нужно было,чтобы сделать период [startDate endDate]
+        Double totalBalance = transactionRepository.totalSum(neoSection,transactionType, startDate, endDate);
+
+        ModelToGetCategories modelToGetCategories = new ModelToGetCategories(model.getNeoSectionId(), model.getTransactionTypeId());
+        List<CategoryModel> categories = categoryService.getAllActiveCategoriesByNeoSectionAndTransactionType(modelToGetCategories);
+
+        List<CategoryForAnalyticsModel> resultCategoryList = new ArrayList<>();
+        for(CategoryModel category: categories){
+            Long categoryId = category.getId();
+
+            Double categoryAmount = transactionRepository.categoryAmount(categoryId, startDate, endDate);
+
+            CategoryForAnalyticsModel categoryForAnalyticsModel = new CategoryForAnalyticsModel();
+            categoryForAnalyticsModel.setId(categoryId);
+            categoryForAnalyticsModel.setName(category.getName());
+            categoryForAnalyticsModel.setAmount(categoryAmount);
+            resultCategoryList.add(categoryForAnalyticsModel);
+        }
+
+        result.setTotalBalance(totalBalance);
+        result.setDetails(resultCategoryList);
+
+        return result;
     }
 
 

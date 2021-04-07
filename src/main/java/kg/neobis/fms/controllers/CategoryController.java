@@ -1,10 +1,7 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Category;
-import kg.neobis.fms.entity.Transaction;
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
-import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.ModelToGetCategories;
@@ -39,7 +36,7 @@ public class CategoryController {
 
     @GetMapping("getAllActiveCategoriesBySectionAndType")
     public ResponseEntity<List<CategoryModel>> getTransactionTypes(@ModelAttribute ModelToGetCategories model){
-        List<CategoryModel> list = categoryService.getAllActiveCategories(model);
+        List<CategoryModel> list = categoryService.getAllActiveCategoriesByNeoSectionAndTransactionType(model);
         return ResponseEntity.ok(list);
     }
 
