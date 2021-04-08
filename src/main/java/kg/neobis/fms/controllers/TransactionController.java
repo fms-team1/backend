@@ -100,8 +100,8 @@ public class TransactionController {
             @RequestParam(required = false) Long counterpartyId,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long neoSectionId,
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "2") Integer pageSize,
+            @RequestParam(defaultValue = "1") Integer pageNo,
+            @RequestParam(defaultValue = "15") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy
     ){
         ModelToGetFilteredTransactions model = new ModelToGetFilteredTransactions();

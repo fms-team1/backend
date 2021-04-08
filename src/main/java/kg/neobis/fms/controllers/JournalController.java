@@ -30,8 +30,8 @@ public class JournalController {
 
     // API to get all transactions for web
     @GetMapping("/getAllWeb")
-    public Page<TransactionModel> getAllTransactionsWebVersion(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                               @RequestParam(defaultValue = "2") Integer pageSize,
+    public Page<TransactionModel> getAllTransactionsWebVersion(@RequestParam(defaultValue = "1") Integer pageNo,
+                                                               @RequestParam(defaultValue = "15") Integer pageSize,
                                                                @RequestParam(defaultValue = "id") String sortBy) {
         return transactionService.getAllTransactionsWebVersion(pageNo, pageSize, sortBy);
     }
@@ -51,8 +51,8 @@ public class JournalController {
     // API to get transaction by neo section with pagination
     @GetMapping("/getByNeoSectionWeb")
     public ResponseEntity<Page<TransactionModel>> getByNeoSection(@ModelAttribute NeoSection neoSection,
-                                                                  @RequestParam(defaultValue = "0") Integer pageNo,
-                                                                  @RequestParam(defaultValue = "2") Integer pageSize,
+                                                                  @RequestParam(defaultValue = "1") Integer pageNo,
+                                                                  @RequestParam(defaultValue = "15") Integer pageSize,
                                                                   @RequestParam(defaultValue = "id") String sortBy){
         return ResponseEntity.ok(transactionService.getByNeoSectionWebVersion(neoSection, pageNo, pageSize, sortBy));
     }
