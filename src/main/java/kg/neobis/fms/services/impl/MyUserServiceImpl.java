@@ -6,9 +6,11 @@ import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.GroupModel;
 import kg.neobis.fms.models.ModelToChangePassword;
+import kg.neobis.fms.models.ModelToUpdateUser;
 import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.models.security.MyUserDetails;
 import kg.neobis.fms.repositories.UserRepository;
+import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,11 +29,13 @@ import java.util.Set;
 public class MyUserServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final PeopleService peopleService;
 
     @Autowired
-    public MyUserServiceImpl(UserRepository userRepository, RoleService roleService) {
+    public MyUserServiceImpl(UserRepository userRepository, RoleService roleService, PeopleService peopleService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -77,12 +81,12 @@ public class MyUserServiceImpl implements UserDetailsService {
         model.setEmail(user.getEmail());
         model.setPhoneNumber(user.getPerson().getPhoneNumber());
         model.setRole(user.getRole());
-        model.setGroups(getGroups(user.getPerson().getGroupOfPeople()));
+        model.setGroups(getGroupModels(user.getPerson().getGroupOfPeople()));
         model.setUserStatus(user.getUserStatus());
         return model;
     }
 
-    private Set<GroupModel> getGroups(Set<GroupOfPeople> groupOfPeople ){
+    private Set<GroupModel> getGroupModels(Set<GroupOfPeople> groupOfPeople ){
         Set<GroupModel> resultSet = new HashSet<>();
         for(GroupOfPeople group: groupOfPeople)
             resultSet.add(new GroupModel(group.getId(), group.getName(),group.getGroupStatus()));
@@ -114,19 +118,21 @@ public class MyUserServiceImpl implements UserDetailsService {
             model.setSurname(user.getPerson().getSurname());
             model.setName(user.getPerson().getName());
             model.setPhoneNumber(user.getPerson().getPhoneNumber());
-            model.setGroups(getGroups(user.getPerson().getGroupOfPeople()));
+            model.setGroups(getGroupModels(user.getPerson().getGroupOfPeople()));
             resultList.add(model);
         }
         return resultList;
     }
 
-    public void updateUser(UserModel model) {
+    public void updateUser(ModelToUpdateUser model) throws RecordNotFoundException {
         User user = userRepository.findByEmail(model.getEmail());
-        user.setUserStatus(model.getUserStatus());
-        user.getPerson().setSurname(model.getSurname());
-        user.getPerson().setName(model.getName());
-        user.getPerson().setPhoneNumber(model.getPhoneNumber());
-//        user.getPerson().setGroupOfPeople();
+        if(user == null)
+            throw new RecordNotFoundException("пользователь с указанной почтой не найден");
+
+        if(model.getUserStatus() != null)
+            user.setUserStatus(model.getUserStatus());
+        peopleService.update(model);
+        userRepository.save(user);
     }
 
     public User findUserByResetToken(String resetToken) {

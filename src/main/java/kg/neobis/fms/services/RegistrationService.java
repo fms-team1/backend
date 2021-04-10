@@ -11,8 +11,6 @@ import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,10 +19,10 @@ import java.util.Set;
 @Service
 public class RegistrationService {
 
-    private MyUserServiceImpl userService;
-    private PeopleService peopleService;
-    private EmailSenderService emailSenderService;
-    private GroupService groupService;
+    private final MyUserServiceImpl userService;
+    private final PeopleService peopleService;
+    private final EmailSenderService emailSenderService;
+    private final GroupService groupService;
 
     @Autowired
     RegistrationService(MyUserServiceImpl userService, PeopleService peopleService, EmailSenderService emailSenderService, GroupService groupService){
@@ -66,8 +64,6 @@ public class RegistrationService {
      * Contains at least one lower alpha char and one upper alpha char
      * Contains at least one char within a set of special chars (!@#%$^ etc.)
      * Does not contain space, tab, etc.
-     * @param password
-     * @return
      */
     public static boolean isPasswordValid(String password) {
         String pattern = "^.*(?=.{6,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$";

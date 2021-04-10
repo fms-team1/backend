@@ -1,8 +1,13 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.User;
+import kg.neobis.fms.entity.enums.CategoryStatus;
+import kg.neobis.fms.entity.enums.UserStatus;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.ModelToChangePassword;
+import kg.neobis.fms.models.ModelToUpdateUser;
+import kg.neobis.fms.models.StatusModel;
 import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.repositories.UserRepository;
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,7 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("user")
 @CrossOrigin
-//@PreAuthorize("hasAuthority('READ_USER')")
+@PreAuthorize("hasAuthority('READ_USER')")
 public class UserController {
     private final MyUserServiceImpl userService;
     private final UserRepository userRepository;
@@ -35,6 +41,15 @@ public class UserController {
         this.userService = myUserService;
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
+    }
+
+
+    @GetMapping("getAllStatuses")
+    public ResponseEntity<List<StatusModel>> getAllStatus(){
+        List<StatusModel> list = new ArrayList<>();
+        for(UserStatus status: UserStatus.values())
+            list.add(new StatusModel(status.ordinal(), status.name()));
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("getCurrentUser")
@@ -60,9 +75,13 @@ public class UserController {
     }
 
     @PutMapping("updateProfile")
-    public ResponseEntity updateProfile(@RequestBody UserModel model){
-        userService.updateUser(model);
-        return null;
+    public ResponseEntity<String> updateProfile(@RequestBody ModelToUpdateUser model){
+        try {
+            userService.updateUser(model);
+            return ResponseEntity.ok("successfully updated");
+        } catch (RecordNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/forgot")

@@ -4,7 +4,9 @@ import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.GroupModel;
+import kg.neobis.fms.models.ModelToUpdateUser;
 import kg.neobis.fms.models.PersonModel;
+import kg.neobis.fms.models.UserModel;
 import kg.neobis.fms.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,30 @@ public class PeopleService {
         Set<GroupModel> resultSet = new HashSet<>();
         for(GroupOfPeople group: groupOfPeople)
             resultSet.add(new GroupModel(group.getId(), group.getName(), group.getGroupStatus()));
+        return resultSet;
+    }
+
+    public void update(ModelToUpdateUser model) throws RecordNotFoundException {
+        Optional<People> optionalPerson = peopleRepository.findById(model.getId());
+        if(optionalPerson.isEmpty())
+            throw new RecordNotFoundException("id does not exist");
+        People person = optionalPerson.get();
+
+        if(model.getSurname() != null)
+            person.setSurname(model.getSurname());
+        if(model.getName() != null)
+            person.setName(model.getName());
+        if(model.getPhoneNumber() != null)
+            person.setPhoneNumber(model.getPhoneNumber());
+        if(model.getGroupIds() != null)
+            person.setGroupOfPeople(getSetOfGroups(model.getGroupIds()));
+        peopleRepository.save(person);
+    }
+
+    private Set<GroupOfPeople> getSetOfGroups(Set<Long> ids) throws RecordNotFoundException {
+        Set<GroupOfPeople> resultSet = new HashSet<>();
+        for(long id: ids)
+            resultSet.add(groupService.getById(id));
         return resultSet;
     }
 }
