@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class WalletModel {
-    private long id;
+    private Long id;
     private String name;
-    private double availableBalance;
+    private Double availableBalance;
     private WalletStatus status;
 }

@@ -2,10 +2,12 @@ package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
+import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.ModelToGetCategories;
 import kg.neobis.fms.models.NeoSectionModel;
+import kg.neobis.fms.models.StatusModel;
 import kg.neobis.fms.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,10 +31,12 @@ public class CategoryController {
     }
 
     @GetMapping("getAllStatuses")
-    public ResponseEntity<CategoryStatus[]> getAllStatus(){
-        return ResponseEntity.ok(CategoryStatus.values());
+    public ResponseEntity<List<StatusModel>> getAllStatus(){
+        List<StatusModel> list = new ArrayList<>();
+        for(CategoryStatus status: CategoryStatus.values())
+            list.add(new StatusModel(status.ordinal(), status.name()));
+        return ResponseEntity.ok(list);
     }
-
 
     @GetMapping("getAllActiveCategoriesBySectionAndType")
     public ResponseEntity<List<CategoryModel>> getTransactionTypes(@ModelAttribute ModelToGetCategories model){
@@ -74,24 +78,23 @@ public class CategoryController {
     @PreAuthorize("hasAnyAuthority('ADD_CATEGORY')")
     @PostMapping("add")
     public ResponseEntity<String> addNewCategory(@RequestBody CategoryModel model){
-        if(categoryService.isCategoryExist(model))
-            return new ResponseEntity<>("Category with the same name already exists", HttpStatus.BAD_REQUEST);
-        categoryService.addNewCategory(model);
-        return ResponseEntity.ok("successfully added");
+        try {
+            categoryService.addNewCategory(model);
+            return ResponseEntity.ok("successfully added");
+        } catch (AlreadyExistException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CATEGORY')")
     @PutMapping("update")
     public ResponseEntity<String> updateCategory(@RequestBody CategoryModel model){
-        return categoryService.updateCategory(model);
+        try {
+            categoryService.updateCategory(model);
+            return ResponseEntity.ok("successfully updated");
+        } catch (RecordNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
-
-    @PreAuthorize("hasAnyAuthority('ARCHIVE_CATEGORY')")
-    @PutMapping("archive")
-    public ResponseEntity<String> archiveCategory(@RequestBody CategoryModel model){
-        return categoryService.archiveCategory(model);
-    }
-
-
 
 }

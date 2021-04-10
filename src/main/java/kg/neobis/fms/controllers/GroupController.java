@@ -1,7 +1,11 @@
 package kg.neobis.fms.controllers;
 
+import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.GroupStatus;
+import kg.neobis.fms.exception.AlreadyExistException;
+import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.GroupModel;
+import kg.neobis.fms.models.StatusModel;
 import kg.neobis.fms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PreAuthorize("hasAnyAuthority('READ_GROUP')")
@@ -24,9 +29,12 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/getAllStatuses")
-    public ResponseEntity<GroupStatus[]> getAllStatuses(){
-        return ResponseEntity.ok(GroupStatus.values());
+    @GetMapping("getAllStatuses")
+    public ResponseEntity<List<StatusModel>> getAllStatus(){
+        List<StatusModel> list = new ArrayList<>();
+        for(GroupStatus status: GroupStatus.values())
+            list.add(new StatusModel(status.ordinal(), status.name()));
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/getAll")
@@ -44,23 +52,23 @@ public class GroupController {
     @PreAuthorize("hasAnyAuthority('ADD_GROUP')")
     @PostMapping("/add")
     public ResponseEntity<String> addNewGroup(@RequestBody GroupModel groupModel){
-        if(groupService.isGroupExist(groupModel))
-            return new ResponseEntity<>("This group is already exist", HttpStatus.BAD_REQUEST);
-        groupService.addNewGroup(groupModel);
-        return ResponseEntity.ok("successfully added");
+        try {
+            groupService.addNewGroup(groupModel);
+            return ResponseEntity.ok("successfully added");
+        } catch (AlreadyExistException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAnyAuthority('UPDATE_GROUP')")
     @PutMapping("/update")
     public ResponseEntity<String> updateGroup(@RequestBody GroupModel groupModel){
-        return groupService.updateGroup(groupModel);
-    }
-
-    //нужно ли отправлять bad_request, если отправленная группа уже заархивирована?
-    @PreAuthorize("hasAnyAuthority('ARCHIVE_GROUP')")
-    @PutMapping("/archive")
-    public ResponseEntity<String> archiveGroup(@RequestBody GroupModel groupModel){
-        return groupService.archiveGroup(groupModel);
+        try {
+            groupService.updateGroup(groupModel);
+            return ResponseEntity.ok("successfully updated");
+        } catch (RecordNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

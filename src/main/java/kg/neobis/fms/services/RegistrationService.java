@@ -5,6 +5,7 @@ import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.User;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
+import kg.neobis.fms.models.CounterpartyRegistrationModel;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.models.RegistrationModel;
 import kg.neobis.fms.models.UserModel;
@@ -91,4 +92,15 @@ public class RegistrationService {
     }
 
 
+    public void addNewCounterparty(CounterpartyRegistrationModel model) throws WrongDataException, RecordNotFoundException {
+        if(model.getName().isEmpty())
+            throw new WrongDataException("name cannot be empty");
+
+        PersonModel personModel = new PersonModel();
+        personModel.setName(model.getName());
+        personModel.setSurname(model.getSurname());
+        personModel.setPhoneNumber(model.getPhoneNumber());
+        Set<GroupOfPeople> setOfGroups = getSetOfGroups(model.getGroup_ids());
+        peopleService.addNewPerson(personModel, setOfGroups);
+    }
 }

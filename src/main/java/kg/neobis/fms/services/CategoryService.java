@@ -4,6 +4,7 @@ import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionType;
+import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.CategoryModel;
 import kg.neobis.fms.models.ModelToGetCategories;
@@ -72,42 +73,39 @@ public class CategoryService {
         return resultList;
     }
 
-    public boolean isCategoryExist(CategoryModel model) {
+    private boolean isCategoryExist(CategoryModel model) {
         Category category = categoryRepository.findByName(model.getName());
         return category != null;
     }
 
-    public void addNewCategory(CategoryModel model) {
+    public void addNewCategory(CategoryModel model) throws AlreadyExistException {
+        if(isCategoryExist(model))
+            throw new AlreadyExistException("Category with the same name already exists");
         Category category = new Category();
         category.setName(model.getName());
         category.setNeoSection(model.getNeoSection());
         category.setTransactionType(model.getTransactionType());
-        category.setCategoryStatus(CategoryStatus.ACTIVE);
+        if(model.getCategoryStatus() != null)
+            category.setCategoryStatus(model.getCategoryStatus());
+        else
+            category.setCategoryStatus(CategoryStatus.ACTIVE);
         categoryRepository.save(category);
     }
 
-    public ResponseEntity<String> updateCategory(CategoryModel model) {
-        Optional<Category> optionalCategory = categoryRepository.findById(model.getId());
-        if(!optionalCategory.isPresent())
-            return new ResponseEntity<>("the category id does not exist", HttpStatus.BAD_REQUEST);
-        Category category = optionalCategory.get();
-        category.setName(model.getName());
-        category.setNeoSection(model.getNeoSection());
-        category.setTransactionType(model.getTransactionType());
-        category.setCategoryStatus(model.getCategoryStatus());
-        categoryRepository.save(category);
-        return ResponseEntity.ok("successfully updated");
-    }
-
-    public ResponseEntity<String> archiveCategory(CategoryModel model) {
+    public void updateCategory(CategoryModel model) throws RecordNotFoundException {
         Optional<Category> optionalCategory = categoryRepository.findById(model.getId());
         if(optionalCategory.isEmpty())
-            return new ResponseEntity<>("the category id does not exist", HttpStatus.BAD_REQUEST);
-
+            throw new RecordNotFoundException("the category id does not exist");
         Category category = optionalCategory.get();
-        category.setCategoryStatus(CategoryStatus.ARCHIVED);
+        if(model.getName() != null)
+            category.setName(model.getName());
+        if(model.getNeoSection() != null)
+            category.setNeoSection(model.getNeoSection());
+        if(model.getTransactionType() != null)
+            category.setTransactionType(model.getTransactionType());
+        if(model.getCategoryStatus() != null)
+            category.setCategoryStatus(model.getCategoryStatus());
         categoryRepository.save(category);
-        return ResponseEntity.ok("successfully archived");
     }
 
     public List<CategoryModel> getCategoriesByNeoSection(long neoSectionId) throws RecordNotFoundException {

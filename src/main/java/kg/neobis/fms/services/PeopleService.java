@@ -71,7 +71,7 @@ public class PeopleService {
     private Set<GroupModel> getGroupModels(Set<GroupOfPeople> groupOfPeople ){
         Set<GroupModel> resultSet = new HashSet<>();
         for(GroupOfPeople group: groupOfPeople)
-            resultSet.add(new GroupModel(group.getId(), group.getName()));
+            resultSet.add(new GroupModel(group.getId(), group.getName(), group.getGroupStatus()));
         return resultSet;
     }
 }

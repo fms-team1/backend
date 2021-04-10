@@ -71,7 +71,10 @@ public class WalletServiceImpl implements WalletService {
         Wallet wallet = new Wallet();
         wallet.setName(model.getName());
         wallet.setAvailableBalance(model.getAvailableBalance());
-        wallet.setWalletStatus(WalletStatus.ACCESSIBLE);
+        if(model.getStatus() != null)
+            wallet.setWalletStatus(model.getStatus());
+        else
+            wallet.setWalletStatus(WalletStatus.ACCESSIBLE);
         long time = new Date().getTime();
         wallet.setCreatedDate(new java.sql.Date(time));
         walletRepository.save(wallet);
@@ -80,13 +83,16 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public void updateWallet(WalletModel model) throws RecordNotFoundException {
         Optional<Wallet> optionalWallet = walletRepository.findById(model.getId());
-        if(!optionalWallet.isPresent()){
+        if(!optionalWallet.isPresent())
             throw new RecordNotFoundException("wallet id doest exist");
-        }
+
         Wallet wallet = optionalWallet.get();
-        wallet.setName(model.getName());
-        wallet.setAvailableBalance(model.getAvailableBalance());
-        wallet.setWalletStatus(model.getStatus());
+        if(model.getName() != null)
+            wallet.setName(model.getName());
+        if(model.getAvailableBalance() != null)
+            wallet.setAvailableBalance(model.getAvailableBalance());
+        if(model.getStatus() != null)
+            wallet.setWalletStatus(model.getStatus());
         walletRepository.save(wallet);
     }
 
