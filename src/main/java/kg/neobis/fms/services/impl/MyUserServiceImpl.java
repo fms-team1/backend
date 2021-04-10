@@ -1,5 +1,6 @@
 package kg.neobis.fms.services.impl;
 
+import kg.neobis.fms.controllers.ModelToUpdateProfile;
 import kg.neobis.fms.entity.*;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
@@ -137,5 +138,12 @@ public class MyUserServiceImpl implements UserDetailsService {
 
     public User findUserByResetToken(String resetToken) {
         return userRepository.findByResetToken(resetToken);
+    }
+
+    public void updateProfile(ModelToUpdateProfile model) {
+        User currentUser = getCurrentUser();
+        People person = currentUser.getPerson();
+        peopleService.updateProfile(person, model);
+
     }
 }

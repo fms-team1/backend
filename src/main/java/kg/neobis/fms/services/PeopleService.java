@@ -1,5 +1,6 @@
 package kg.neobis.fms.services;
 
+import kg.neobis.fms.controllers.ModelToUpdateProfile;
 import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.exception.RecordNotFoundException;
@@ -92,6 +93,17 @@ public class PeopleService {
         if(model.getGroupIds() != null)
             person.setGroupOfPeople(getSetOfGroups(model.getGroupIds()));
         peopleRepository.save(person);
+    }
+
+    public void updateProfile(People person, ModelToUpdateProfile model){
+        if(model.getSurname() != null)
+            person.setSurname(model.getSurname());
+        if(model.getName() != null)
+            person.setName(model.getName());
+        if(model.getPhoneNumber() != null)
+            person.setPhoneNumber(model.getPhoneNumber());
+        peopleRepository.save(person);
+
     }
 
     private Set<GroupOfPeople> getSetOfGroups(Set<Long> ids) throws RecordNotFoundException {

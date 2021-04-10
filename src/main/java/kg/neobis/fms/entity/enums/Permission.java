@@ -17,5 +17,6 @@ public enum Permission {
     READ_WALLET,        // 13
     ADD_WALLET,         // 14
     UPDATE_WALLET,      // 15
-    READ_USER           // 16
+    READ_USER,          // 16
+    UPDATE_USER         //17
 }

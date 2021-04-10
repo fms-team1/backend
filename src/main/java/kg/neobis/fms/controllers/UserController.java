@@ -75,7 +75,14 @@ public class UserController {
     }
 
     @PutMapping("updateProfile")
-    public ResponseEntity<String> updateProfile(@RequestBody ModelToUpdateUser model){
+    public ResponseEntity<String> updateProfile(@RequestBody ModelToUpdateProfile model){
+        userService.updateProfile(model);
+        return ResponseEntity.ok("successfully updated");
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_USER')")
+    @PutMapping("updateUser")
+    public ResponseEntity<String> updateUser(@RequestBody ModelToUpdateUser model){
         try {
             userService.updateUser(model);
             return ResponseEntity.ok("successfully updated");
