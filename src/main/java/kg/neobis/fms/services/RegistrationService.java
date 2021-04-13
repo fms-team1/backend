@@ -55,7 +55,7 @@ public class RegistrationService {
         People person = peopleService.getById(createdPersonId);
         userService.addNewUser(userModel, registrationModel.getPassword(), person);
 
-        emailSenderService.sendEmailToConfirmEmail(userModel.getEmail(),personModel.getName());
+//        emailSenderService.sendEmailToConfirmEmail(userModel.getEmail(),personModel.getName());
     }
 
     /**
