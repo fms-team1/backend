@@ -5,10 +5,7 @@ import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
-import kg.neobis.fms.models.ModelToChangePassword;
-import kg.neobis.fms.models.ModelToUpdateUser;
-import kg.neobis.fms.models.StatusModel;
-import kg.neobis.fms.models.UserModel;
+import kg.neobis.fms.models.*;
 import kg.neobis.fms.repositories.UserRepository;
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +127,16 @@ public class UserController {
         userRepository.save(user);
 
         return "Password has been updated!";
+    }
+
+
+    @PutMapping("updateProfileWithPassword")
+    public ResponseEntity<String> updateProfileForTeam3(@RequestBody ModelToUpdateProfileWithPassword model){
+        try {
+            userService.updateProfile(model);
+        } catch (WrongDataException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok("successfully updated");
     }
 }

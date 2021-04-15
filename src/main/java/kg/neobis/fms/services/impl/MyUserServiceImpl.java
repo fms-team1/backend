@@ -5,10 +5,7 @@ import kg.neobis.fms.entity.*;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
-import kg.neobis.fms.models.GroupModel;
-import kg.neobis.fms.models.ModelToChangePassword;
-import kg.neobis.fms.models.ModelToUpdateUser;
-import kg.neobis.fms.models.UserModel;
+import kg.neobis.fms.models.*;
 import kg.neobis.fms.models.security.MyUserDetails;
 import kg.neobis.fms.repositories.UserRepository;
 import kg.neobis.fms.services.PeopleService;
@@ -144,6 +141,27 @@ public class MyUserServiceImpl implements UserDetailsService {
         User currentUser = getCurrentUser();
         People person = currentUser.getPerson();
         peopleService.updateProfile(person, model);
+
+    }
+
+    public void updateProfile(ModelToUpdateProfileWithPassword model) throws WrongDataException {
+        User currentUser = getCurrentUser();
+        People person = currentUser.getPerson();
+
+        if(model.getOldPassword() != null && model.getNewPassword() != null) {
+            if (!model.getOldPassword().equals(currentUser.getPassword()))
+                throw new WrongDataException("текущий пароль не правильный");
+            if (!RegistrationService.isPasswordValid(model.getNewPassword()))
+                throw new WrongDataException("новый пароль не соответствует требованиям");
+            currentUser.setPassword(model.getNewPassword());
+        }
+
+        ModelToUpdateProfile modelToUpdateProfile = new ModelToUpdateProfile();
+        modelToUpdateProfile.setName(model.getName());
+        modelToUpdateProfile.setSurname(model.getSurname());
+        modelToUpdateProfile.setPhoneNumber(model.getPhoneNumber());
+        peopleService.updateProfile(person, modelToUpdateProfile);
+        userRepository.save(currentUser);
 
     }
 }
