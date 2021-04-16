@@ -19,11 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private MyUserServiceImpl myUserServiceImpl;
+    private final MyUserServiceImpl myUserServiceImpl;
+    private final JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    public SecurityConfig(MyUserServiceImpl myUserServiceImpl, JwtRequestFilter jwtRequestFilter) {
+        this.myUserServiceImpl = myUserServiceImpl;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/login", "/user/forget", "/user/reset", "/registration/newCounterparty").permitAll()
+                    .antMatchers("/login", "user/forget", "user/reset", "registration/newCounterparty").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .logout()
