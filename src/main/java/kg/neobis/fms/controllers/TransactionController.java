@@ -125,4 +125,16 @@ public class TransactionController {
         AnalyticsModel result = transactionService.getAnalytics(model);
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("updateTransaction")// на стадии разработки
+    public ResponseEntity<String> updateTransaction(@RequestBody TransactionModel model){
+
+        try {
+            transactionService.update(model);
+        } catch (RecordNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

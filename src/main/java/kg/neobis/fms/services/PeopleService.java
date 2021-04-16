@@ -43,6 +43,16 @@ public class PeopleService {
         return  person.getId();
     }
 
+    public void addNewPerson(CounterpartyRegistrationModel model) throws RecordNotFoundException {
+        People person = new People();
+        person.setName(model.getName());
+        person.setSurname(model.getSurname());
+        person.setPhoneNumber(model.getPhoneNumber());
+        person.setCreatedDate(new Date(System.currentTimeMillis()));
+        person.setGroupOfPeople(getSetOfGroups(model.getGroup_ids()));
+        peopleRepository.save(person);
+    }
+
     public People getById(long id) throws RecordNotFoundException {
         Optional<People> optionalPerson = peopleRepository.findById(id);
         if(optionalPerson.isPresent())
@@ -92,6 +102,23 @@ public class PeopleService {
         peopleRepository.save(person);
     }
 
+    public void update(PersonModel model) throws RecordNotFoundException {
+        Optional<People> optionalPerson = peopleRepository.findById(model.getId());
+        if(optionalPerson.isEmpty())
+            throw new RecordNotFoundException("id does not exist");
+        People person = optionalPerson.get();
+
+        if(model.getSurname() != null)
+            person.setSurname(model.getSurname());
+        if(model.getName() != null)
+            person.setName(model.getName());
+        if(model.getPhoneNumber() != null)
+            person.setPhoneNumber(model.getPhoneNumber());
+        if(model.getGroupOfPeople() != null)
+            person.setGroupOfPeople(getSetOfGroupsFromGroupModels(model.getGroupOfPeople()));
+        peopleRepository.save(person);
+    }
+
     public void updateProfile(People person, ModelToUpdateProfile model){
         if(model.getSurname() != null)
             person.setSurname(model.getSurname());
@@ -109,4 +136,13 @@ public class PeopleService {
             resultSet.add(groupService.getById(id));
         return resultSet;
     }
+    private Set<GroupOfPeople> getSetOfGroupsFromGroupModels(Set<GroupModel> list) throws RecordNotFoundException {
+        Set<GroupOfPeople> resultSet = new HashSet<>();
+
+        for(GroupModel model: list)
+            resultSet.add(groupService.getById(model.getId()));
+        return resultSet;
+    }
+
+
 }

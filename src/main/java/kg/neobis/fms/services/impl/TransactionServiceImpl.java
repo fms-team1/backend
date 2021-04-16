@@ -428,6 +428,21 @@ public class TransactionServiceImpl implements TransactionService {
         return result;
     }
 
+    @Override
+    public void update(TransactionModel model) throws RecordNotFoundException {
+//        Optional<Transaction> optionalTransaction = transactionRepository.findById(model.getId());
+//        if(optionalTransaction.isEmpty())
+//            throw new RecordNotFoundException("нет тразакта с таким id");
+//
+//        Transaction transaction = optionalTransaction.get();
+//
+//        if(model.getAmount() != null)
+//            transaction.setAmount(model.getAmount());
+//        if(model.getTransactionType() != null)
+//            transaction.setTr
+
+    }
+
 
     private TransactionModel convertToTransactionModel(Transaction transaction){
         TransactionModel transactionModel = new TransactionModel();
