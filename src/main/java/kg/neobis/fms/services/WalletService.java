@@ -17,4 +17,6 @@ public interface WalletService {
     void updateWallet(WalletModel model) throws RecordNotFoundException;
 
     TotalBalanceModel getTotalSumOfAllWallets();
+
+    List<WalletModel> getAll();
 }

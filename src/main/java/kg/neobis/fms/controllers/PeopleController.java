@@ -1,15 +1,10 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.User;
 import kg.neobis.fms.models.PersonModel;
 import kg.neobis.fms.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,4 +26,5 @@ public class PeopleController {
         List<PersonModel> list = peopleService.getAll();
         return ResponseEntity.ok(list);
     }
+
 }

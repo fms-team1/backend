@@ -51,6 +51,16 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public List<WalletModel> getAllActiveWallets() {
         List<Wallet> list =  walletRepository.findAllByWalletStatus(WalletStatus.ACCESSIBLE);
+        return getListOfWalletModels(list);
+    }
+
+    @Override
+    public List<WalletModel> getAll() {
+        List<Wallet> list =  walletRepository.findAll();
+        return getListOfWalletModels(list);
+    }
+
+    private List<WalletModel> getListOfWalletModels(List<Wallet> list){
         List<WalletModel> resultList = new ArrayList<>();
 
         for(Wallet wallet: list){
@@ -102,6 +112,7 @@ public class WalletServiceImpl implements WalletService {
         TotalBalanceModel model = new TotalBalanceModel(totalSumOfAllWallets);
         return model;
     }
+
 
     public Wallet getWalletById(long id) throws RecordNotFoundException {
         Optional<Wallet> optionalWallet = walletRepository.findById(id);

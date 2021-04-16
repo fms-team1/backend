@@ -393,9 +393,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
-        TransactionType[] types = TransactionType.values();
-        for(TransactionType type: types)
-            resultList.add(new TransactionTypeModel(type.ordinal(), type));
+
+
+        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
+        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
+        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "Перевод"));
+
         return resultList;
     }
 
