@@ -81,6 +81,8 @@ public class MyUserServiceImpl implements UserDetailsService {
         model.setRole(user.getRole());
         model.setGroups(getGroupModels(user.getPerson().getGroupOfPeople()));
         model.setUserStatus(user.getUserStatus());
+        model.setResetToken(user.getResetToken());
+
         return model;
     }
 
