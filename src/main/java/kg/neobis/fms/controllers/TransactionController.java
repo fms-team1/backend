@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@PreAuthorize("hasAnyAuthority('READ_TRANSACTION')")
 @RestController
 @RequestMapping("transaction")
 @CrossOrigin
@@ -39,7 +37,6 @@ public class TransactionController {
         return transactionService.getTransactionById(id);
     }
 
-    @PreAuthorize("hasAuthority('ADD_TRANSACTION')")
     @PostMapping("addIncomeOrExpense")
     public ResponseEntity<String> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
         try {
@@ -50,7 +47,6 @@ public class TransactionController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADD_TRANSACTION')")
     @PostMapping("addTransfer")
     public ResponseEntity<String> addTransfer(@RequestBody TransferModel model){
 

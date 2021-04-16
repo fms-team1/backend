@@ -1,9 +1,6 @@
-package kg.neobis.fms.controllers;
+package kg.neobis.fms.models;
 
-import kg.neobis.fms.entity.enums.UserStatus;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 public class ModelToUpdateProfile {

@@ -1,6 +1,5 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.GroupStatus;
 import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
@@ -10,19 +9,16 @@ import kg.neobis.fms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@PreAuthorize("hasAnyAuthority('READ_GROUP')")
 @RestController
 @RequestMapping("group")
 @CrossOrigin
 public class GroupController {
-
-    private GroupService groupService;
+    private final GroupService groupService;
 
     @Autowired
     GroupController(GroupService groupService){
@@ -49,7 +45,6 @@ public class GroupController {
         return ResponseEntity.ok(list);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADD_GROUP')")
     @PostMapping("/add")
     public ResponseEntity<String> addNewGroup(@RequestBody GroupModel groupModel){
         try {
@@ -60,7 +55,6 @@ public class GroupController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_GROUP')")
     @PutMapping("/update")
     public ResponseEntity<String> updateGroup(@RequestBody GroupModel groupModel){
         try {
