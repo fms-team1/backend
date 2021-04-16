@@ -1,6 +1,6 @@
 package kg.neobis.fms.services.impl;
 
-import kg.neobis.fms.controllers.ModelToUpdateProfile;
+import kg.neobis.fms.models.ModelToUpdateProfile;
 import kg.neobis.fms.entity.*;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;

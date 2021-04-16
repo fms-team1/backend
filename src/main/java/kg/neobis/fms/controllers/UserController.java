@@ -1,7 +1,6 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.User;
-import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 @CrossOrigin
-@PreAuthorize("hasAuthority('READ_USER')")
 public class UserController {
     private final MyUserServiceImpl userService;
     private final UserRepository userRepository;
@@ -39,7 +35,6 @@ public class UserController {
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
     }
-
 
     @GetMapping("getAllStatuses")
     public ResponseEntity<List<StatusModel>> getAllStatus(){
@@ -77,7 +72,6 @@ public class UserController {
         return ResponseEntity.ok("successfully updated");
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_USER')")
     @PutMapping("updateUser")
     public ResponseEntity<String> updateUser(@RequestBody ModelToUpdateUser model){
         try {
@@ -88,7 +82,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/forgot")
+    @PostMapping("/forget")
     public String processForgotPasswordForm(@RequestParam("email") String userEmail, HttpServletRequest request) {
         User user = userService.getByEmail(userEmail);
 
@@ -128,7 +122,6 @@ public class UserController {
 
         return "Password has been updated!";
     }
-
 
     @PutMapping("updateProfileWithPassword")
     public ResponseEntity<String> updateProfileForTeam3(@RequestBody ModelToUpdateProfileWithPassword model){

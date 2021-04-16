@@ -1,6 +1,6 @@
 package kg.neobis.fms.services;
 
-import kg.neobis.fms.controllers.ModelToUpdateProfile;
+import kg.neobis.fms.models.ModelToUpdateProfile;
 import kg.neobis.fms.entity.GroupOfPeople;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.exception.RecordNotFoundException;

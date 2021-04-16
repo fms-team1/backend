@@ -1,36 +1,28 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Wallet;
-import kg.neobis.fms.entity.enums.CategoryStatus;
-import kg.neobis.fms.entity.enums.GroupStatus;
 import kg.neobis.fms.entity.enums.WalletStatus;
 import kg.neobis.fms.exception.AlreadyExistException;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.models.*;
-import kg.neobis.fms.services.GroupService;
 import kg.neobis.fms.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@PreAuthorize("hasAnyAuthority('READ_WALLET')")
 @RestController
 @RequestMapping("wallet")
 @CrossOrigin
 public class WalletController {
-
-    private WalletService walletService;
+    private final WalletService walletService;
 
     @Autowired
     WalletController(WalletService walletService){
         this.walletService = walletService;
     }
-
 
     @GetMapping("getAllStatuses")
     public ResponseEntity<List<StatusModel>> getAllStatus(){
@@ -58,7 +50,6 @@ public class WalletController {
         return  ResponseEntity.ok(model);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADD_WALLET')")
     @PostMapping("add")
     public ResponseEntity<String> addNewCategory(@RequestBody WalletModel model){
         try {
@@ -69,7 +60,6 @@ public class WalletController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_WALLET')")
     @PutMapping("update")
     public ResponseEntity<String> updateWallet(@RequestBody WalletModel model){
         try {

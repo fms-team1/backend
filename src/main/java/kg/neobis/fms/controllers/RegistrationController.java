@@ -1,6 +1,5 @@
 package kg.neobis.fms.controllers;
 
-
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
 import kg.neobis.fms.models.CounterpartyRegistrationModel;
@@ -9,16 +8,13 @@ import kg.neobis.fms.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@PreAuthorize("hasAnyAuthority('REGISTRATION')")
 @RequestMapping("/registration")
 @CrossOrigin
 public class RegistrationController {
-
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
     @Autowired
     RegistrationController(RegistrationService registrationService){

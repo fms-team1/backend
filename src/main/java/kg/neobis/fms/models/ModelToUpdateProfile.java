@@ -1,4 +1,4 @@
-package kg.neobis.fms.controllers;
+package kg.neobis.fms.models;
 
 import lombok.Data;
 

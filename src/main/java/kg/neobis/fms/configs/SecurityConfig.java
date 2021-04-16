@@ -1,9 +1,7 @@
 package kg.neobis.fms.configs;
 
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,11 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private MyUserServiceImpl myUserServiceImpl;
+    private final MyUserServiceImpl myUserServiceImpl;
+    private final JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    public SecurityConfig(MyUserServiceImpl myUserServiceImpl, JwtRequestFilter jwtRequestFilter) {
+        this.myUserServiceImpl = myUserServiceImpl;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/login", "/user/reset").permitAll()
+                    .antMatchers("/login", "/registration/newCounterparty", "/user/forget", "/user/reset").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .logout()

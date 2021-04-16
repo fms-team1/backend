@@ -344,13 +344,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return resultList;
-
-//        List<Transaction> transactions = transactionDao.test();
-//        List<TransactionModel> resultList = new ArrayList<>();
-//        for(Transaction transaction: transactions)
-//            resultList.add(convertToTransactionModel(transaction));
-//        return resultList;
-
     }
 
     @Override
