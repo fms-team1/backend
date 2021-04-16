@@ -1,7 +1,6 @@
 package kg.neobis.fms.controllers;
 
 import kg.neobis.fms.entity.User;
-import kg.neobis.fms.entity.enums.CategoryStatus;
 import kg.neobis.fms.entity.enums.UserStatus;
 import kg.neobis.fms.exception.RecordNotFoundException;
 import kg.neobis.fms.exception.WrongDataException;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping("user")
 @CrossOrigin
@@ -39,7 +37,6 @@ public class UserController {
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
     }
-
 
     @GetMapping("getAllStatuses")
     public ResponseEntity<List<StatusModel>> getAllStatus(){
@@ -88,7 +85,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/forgot")
+    @PostMapping("/forget")
     public String processForgotPasswordForm(@RequestParam("email") String userEmail, HttpServletRequest request) {
         User user = userService.getByEmail(userEmail);
 
@@ -128,7 +125,6 @@ public class UserController {
 
         return "Password has been updated!";
     }
-
 
     @PutMapping("updateProfileWithPassword")
     public ResponseEntity<String> updateProfileForTeam3(@RequestBody ModelToUpdateProfileWithPassword model){
