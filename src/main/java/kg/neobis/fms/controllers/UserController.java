@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 @CrossOrigin
 @PreAuthorize("hasAuthority('READ_USER')")
 public class UserController {

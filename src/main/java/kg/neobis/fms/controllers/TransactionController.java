@@ -125,9 +125,7 @@ public class TransactionController {
     }
 
     @GetMapping("getAnalytics")
-    public ResponseEntity<AnalyticsModel> getAnalytics(
-        @ModelAttribute ModelToGetAnalytics model
-    ){
+    public ResponseEntity<AnalyticsModel> getAnalytics(@ModelAttribute ModelToGetAnalytics model){
         AnalyticsModel result = transactionService.getAnalytics(model);
         return ResponseEntity.ok(result);
     }

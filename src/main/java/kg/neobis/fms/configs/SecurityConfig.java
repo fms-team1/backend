@@ -1,9 +1,7 @@
 package kg.neobis.fms.configs;
 
 import kg.neobis.fms.services.impl.MyUserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/login", "user/forget", "user/reset", "registration/newCounterparty").permitAll()
+                    .antMatchers("/login", "/user/forget", "/user/reset", "/registration/newCounterparty").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .logout()
