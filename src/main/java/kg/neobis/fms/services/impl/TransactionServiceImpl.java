@@ -371,7 +371,6 @@ public class TransactionServiceImpl implements TransactionService {
                 flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
             if(flag )
                 resultList.add(convertToTransactionModel(transaction));
-
         }
 
         return new PageImpl<>(resultList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), resultList.size());
@@ -382,7 +381,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
-
 
         resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
         resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
@@ -446,9 +444,6 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setCategory(categoryService.getById(model.getCategoryId()));
 
         transactionRepository.save(transaction);
-
-
-
     }
 
 
@@ -457,6 +452,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionModel.setId(transaction.getId());
         transactionModel.setCreatedDate(transaction.getCreatedDate());
+        transactionModel.setTransactionTypeId(transaction.getCategory().getId());
         transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
         transactionModel.setCategoryId(transaction.getCategory().getId());
         transactionModel.setCategoryName(transaction.getCategory().getName());
