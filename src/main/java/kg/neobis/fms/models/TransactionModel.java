@@ -14,9 +14,9 @@ import java.util.Date;
 @Getter
 @Setter
 public class TransactionModel {
-    private long id;
+    private Long id;
     private Date createdDate;
-    private double amount;
+    private Double amount;
     private TransactionType transactionType;
     private Long categoryId;
     private String categoryName;

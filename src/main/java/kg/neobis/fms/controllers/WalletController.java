@@ -32,8 +32,14 @@ public class WalletController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<WalletModel>> getAll(){
+        List<WalletModel> list = walletService.getAll();
+        return ResponseEntity.ok(list);
+    }
+
     @GetMapping("/getAllActiveWallets")
-    public ResponseEntity<List<WalletModel>> getAllGroups(){
+    public ResponseEntity<List<WalletModel>> getAllWallets(){
         List<WalletModel> list = walletService.getAllActiveWallets();
         return ResponseEntity.ok(list);
     }

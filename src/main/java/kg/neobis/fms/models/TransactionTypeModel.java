@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TransactionTypeModel {
     private Integer id;
-    private TransactionType name;
+    private String name;
 }

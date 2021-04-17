@@ -33,4 +33,6 @@ public interface TransactionService {
 
 
     AnalyticsModel getAnalytics(ModelToGetAnalytics model);
+
+    void update(ModelToUpdateTransaction model) throws RecordNotFoundException;
 }

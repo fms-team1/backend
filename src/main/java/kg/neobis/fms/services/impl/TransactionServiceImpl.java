@@ -382,9 +382,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
-        TransactionType[] types = TransactionType.values();
-        for(TransactionType type: types)
-            resultList.add(new TransactionTypeModel(type.ordinal(), type));
+
+
+        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
+        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
+        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "Перевод"));
+
         return resultList;
     }
 
@@ -419,6 +422,33 @@ public class TransactionServiceImpl implements TransactionService {
         result.setDetails(resultCategoryList);
 
         return result;
+    }
+
+    @Override
+    public void update(ModelToUpdateTransaction model) throws RecordNotFoundException {
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(model.getId());
+        if(optionalTransaction.isEmpty())
+            throw new RecordNotFoundException("нет тразакта с таким id");
+
+        Transaction transaction = optionalTransaction.get();
+
+        if(model.getAmount() != null)
+            transaction.setAmount(model.getAmount());
+        if(model.getComment() != null)
+            transaction.setComment(model.getComment());
+        if(model.getWalletId() != null)
+            transaction.setWallet(walletService.getWalletById(model.getWalletId()));
+        if(model.getTransferWalletId() != null)
+            transaction.setWallet2(walletService.getWalletById(model.getTransferWalletId()));
+        if(model.getCounterpartyId() != null)
+            transaction.setPerson(peopleService.getById(model.getCounterpartyId()));
+        if(model.getCategoryId() != null)
+            transaction.setCategory(categoryService.getById(model.getCategoryId()));
+
+        transactionRepository.save(transaction);
+
+
+
     }
 
 
