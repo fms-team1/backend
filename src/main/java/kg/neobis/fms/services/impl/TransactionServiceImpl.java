@@ -26,17 +26,14 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 
-
 @Service
 public class TransactionServiceImpl implements TransactionService {
-
     private final TransactionPaginationRepository transactionPaginationRepository;
     private final TransactionRepository transactionRepository;
     private final WalletServiceImpl walletService;
     private final CategoryService categoryService;
     private final MyUserServiceImpl userService;
     private final PeopleService peopleService;
-
     private final TransactionDao transactionDao;
 
     @Autowired
@@ -340,7 +337,6 @@ public class TransactionServiceImpl implements TransactionService {
                 flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
             if(flag )
                 resultList.add(convertToTransactionModel(transaction));
-
         }
 
         return resultList;
@@ -432,9 +428,11 @@ public class TransactionServiceImpl implements TransactionService {
         transactionModel.setId(transaction.getId());
         transactionModel.setCreatedDate(transaction.getCreatedDate());
         transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
+        transactionModel.setCategoryId(transaction.getCategory().getId());
         transactionModel.setCategoryName(transaction.getCategory().getName());
         transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
         transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
+        transactionModel.setNeoSectionId(transaction.getCategory().getId());
         transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
         transactionModel.setWalletId(transaction.getWallet().getId());
         transactionModel.setWalletName(transaction.getWallet().getName());
@@ -445,6 +443,7 @@ public class TransactionServiceImpl implements TransactionService {
             transactionModel.setTransferWalletId(transaction.getWallet2().getId());
             transactionModel.setTransferWalletName(transaction.getWallet2().getName());
         } else {
+            transactionModel.setCounterpartyId(transaction.getPerson().getId());
             transactionModel.setCounterpartyName(transaction.getPerson().getName());
             transactionModel.setCounterpartySurname(transaction.getPerson().getSurname());
         }

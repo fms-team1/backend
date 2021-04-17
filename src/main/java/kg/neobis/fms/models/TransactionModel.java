@@ -18,10 +18,13 @@ public class TransactionModel {
     private Date createdDate;
     private double amount;
     private TransactionType transactionType;
+    private Long categoryId;
     private String categoryName;
     private String accountantName;
     private String accountantSurname;
+    private Long neoSectionId;
     private NeoSection neoSection;
+    private Long counterpartyId;
     private String counterpartyName;
     private String counterpartySurname;
     private Long walletId;
