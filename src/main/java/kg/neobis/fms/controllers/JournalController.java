@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/journal")
 @RestController
 @CrossOrigin
-public class JournalController {
+public class    JournalController {
     private final TransactionService transactionService;
 
     @Autowired

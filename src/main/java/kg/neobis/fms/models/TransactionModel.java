@@ -11,13 +11,13 @@ public class TransactionModel {
     private Long id;
     private Date createdDate;
     private Double amount;
-    private Long transactionTypeId;
+    private Integer transactionTypeId;
     private TransactionType transactionType;
     private Long categoryId;
     private String categoryName;
     private String accountantName;
     private String accountantSurname;
-    private Long neoSectionId;
+    private Integer neoSectionId;
     private NeoSection neoSection;
     private Long counterpartyId;
     private String counterpartyName;// for transfers

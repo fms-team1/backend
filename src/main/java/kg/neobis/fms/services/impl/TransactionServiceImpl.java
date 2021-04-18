@@ -452,13 +452,13 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionModel.setId(transaction.getId());
         transactionModel.setCreatedDate(transaction.getCreatedDate());
-        transactionModel.setTransactionTypeId(transaction.getCategory().getId());
+        transactionModel.setTransactionTypeId(transaction.getCategory().getTransactionType().ordinal());
         transactionModel.setTransactionType(transaction.getCategory().getTransactionType());
         transactionModel.setCategoryId(transaction.getCategory().getId());
         transactionModel.setCategoryName(transaction.getCategory().getName());
         transactionModel.setAccountantName(transaction.getUser().getPerson().getName());
         transactionModel.setAccountantSurname(transaction.getUser().getPerson().getSurname());
-        transactionModel.setNeoSectionId(transaction.getCategory().getId());
+        transactionModel.setNeoSectionId(transaction.getCategory().getNeoSection().ordinal());
         transactionModel.setNeoSection(transaction.getCategory().getNeoSection());
         transactionModel.setWalletId(transaction.getWallet().getId());
         transactionModel.setWalletName(transaction.getWallet().getName());
