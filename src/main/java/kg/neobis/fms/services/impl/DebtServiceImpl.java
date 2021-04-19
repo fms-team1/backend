@@ -71,13 +71,13 @@ public class DebtServiceImpl implements DebtService {
 
         transactionModel.setId(debt.getTransaction().getId());
         transactionModel.setCreatedDate(debt.getTransaction().getCreatedDate());
-        transactionModel.setTransactionTypeId(debt.getTransaction().getCategory().getId());
+        transactionModel.setTransactionTypeId(debt.getTransaction().getCategory().getTransactionType().ordinal());
         transactionModel.setTransactionType(debt.getTransaction().getCategory().getTransactionType());
         transactionModel.setCategoryId(debt.getTransaction().getCategory().getId());
         transactionModel.setCategoryName(debt.getTransaction().getCategory().getName());
         transactionModel.setAccountantName(debt.getTransaction().getUser().getPerson().getName());
         transactionModel.setAccountantSurname(debt.getTransaction().getUser().getPerson().getSurname());
-        transactionModel.setNeoSectionId(debt.getTransaction().getCategory().getId());
+        transactionModel.setNeoSectionId(debt.getTransaction().getCategory().getNeoSection().ordinal());
         transactionModel.setNeoSection(debt.getTransaction().getCategory().getNeoSection());
         transactionModel.setWalletId(debt.getTransaction().getWallet().getId());
         transactionModel.setWalletName(debt.getTransaction().getWallet().getName());
