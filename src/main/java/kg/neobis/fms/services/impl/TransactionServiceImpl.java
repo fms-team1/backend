@@ -211,7 +211,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setCategory(category);
         transaction.setComment(model.getComment());
 
-        transaction.setCreatedDate(new Date());
+        transaction.setCreatedDate(model.getCreatedDate());
         transaction.setUser(userService.getCurrentUser());
         transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
 
