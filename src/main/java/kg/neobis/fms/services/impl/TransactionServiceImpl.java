@@ -22,6 +22,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
@@ -133,7 +134,7 @@ public class TransactionServiceImpl implements TransactionService {
     // Method to get transaction by id
     @Override
     public TransactionModel getTransactionById(Long id) {
-        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("There is no such username"));
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There is no transaction with id " + id + "!"));
 
         return convertToTransactionModel(transaction);
     }
