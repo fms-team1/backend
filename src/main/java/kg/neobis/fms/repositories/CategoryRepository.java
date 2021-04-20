@@ -13,6 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByCategoryStatus(CategoryStatus categoryStatus);
     List<Category> findByNeoSection(NeoSection neoSection);
     List<Category> findByNeoSectionAndTransactionType(NeoSection neoSection, TransactionType type);
+    List<Category> findByNeoSectionAndTransactionTypeAndCategoryStatus(NeoSection neoSection, TransactionType type, CategoryStatus status);
 
     Category findByName(String name);
 

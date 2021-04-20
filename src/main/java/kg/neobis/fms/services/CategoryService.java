@@ -54,7 +54,8 @@ public class CategoryService {
         int indexOfNeoSection = model.getNeoSectionId();
         TransactionType type = TransactionType.values()[indexOfTransaction];
         NeoSection neoSection = NeoSection.values()[indexOfNeoSection];
-        List<Category> list = categoryRepository.findByNeoSectionAndTransactionType(neoSection, type);
+//        List<Category> list = categoryRepository.findByNeoSectionAndTransactionType(neoSection, type);
+        List<Category> list = categoryRepository.findByNeoSectionAndTransactionTypeAndCategoryStatus(neoSection, type, CategoryStatus.ACTIVE);
         return getCategoryModels(list);
     }
 
