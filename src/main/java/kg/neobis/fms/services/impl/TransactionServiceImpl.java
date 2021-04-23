@@ -167,7 +167,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException {
+    public TransactionModel addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException {
         Wallet wallet = walletService.getWalletById(model.getWalletId());
         Category category = categoryService.getById(model.getCategoryId());
         double amount = model.getAmount();
@@ -192,10 +192,12 @@ public class TransactionServiceImpl implements TransactionService {
             walletService.decreaseAvailableBalance(wallet, amount);
 
         transactionRepository.save(transaction);
+
+        return convertToTransactionModel(transaction);
     }
 
     @Override
-    public void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance {
+    public TransactionModel addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance {
         Wallet walletFrom = walletService.getWalletById(model.getWalletFromId());//transfer money FROM this wallet
         Wallet walletTo = walletService.getWalletById(model.getWalletToId());//TO this one
         Category category = categoryService.getById(1_000_000l);// CREATE a category in the database called "transfer"!!!!!!!!!!!!!!!!!!!!
@@ -216,6 +218,7 @@ public class TransactionServiceImpl implements TransactionService {
         walletService.increaseAvailableBalance(walletTo, amount);
 
         transactionRepository.save(transaction);
+        return convertToTransactionModel(transaction);
     }
 
     @Override

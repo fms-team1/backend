@@ -31,9 +31,9 @@ public interface TransactionService {
 
     IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException; // get sum of expenses and incomes for default period of time
 
-    void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException;
+    TransactionModel addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException;
 
-    void addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance;
+    TransactionModel addMoneyTransfer(TransferModel model) throws RecordNotFoundException, NotEnoughAvailableBalance;
 
     List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model);
 
