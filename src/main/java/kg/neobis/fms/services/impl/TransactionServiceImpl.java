@@ -51,7 +51,6 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionDao = transactionDao;
     }
 
-    // Method to get last 15 transactions
     @Override
     public List<TransactionModel> getLastFifteenTransactions() {
         List<Transaction> transactions = transactionRepository.findTop15ByOrderByIdDesc();
@@ -65,7 +64,6 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionModelList;
     }
 
-    // Method to get all transactions
     @Override
     public List<JournalTransactionInfoModel> getAllTransactions() {
         List<Transaction> transactions = transactionRepository.findAll();
@@ -133,7 +131,6 @@ public class TransactionServiceImpl implements TransactionService {
         return new PageImpl<>(transactionModelList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), transactionList.size());
     }
 
-    // Method to get transaction by id
     @Override
     public TransactionModel getTransactionById(Long id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There is no transaction with id " + id + "!"));
@@ -141,7 +138,6 @@ public class TransactionServiceImpl implements TransactionService {
         return convertToTransactionModel(transaction);
     }
 
-    // method to get income and expenses for particular period of date
     @Override
     public IncomesAndExpensesHomeModel getIncomeAndExpenseForPeriod(String period) throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
@@ -156,7 +152,6 @@ public class TransactionServiceImpl implements TransactionService {
         return incomesAndExpensesHomeModel;
     }
 
-    // method to get income and expenses for last week
     @Override
     public IncomesAndExpensesHomeModel getIncomeANdExpenseForDefaultDate() throws ParseException {
         IncomesAndExpensesHomeModel incomesAndExpensesHomeModel = new IncomesAndExpensesHomeModel();
@@ -252,68 +247,6 @@ public class TransactionServiceImpl implements TransactionService {
         return counterparty;
     }
 
-    // method to convert string do date format
-    private java.sql.Date dateConverter(String period, boolean flag) throws ParseException {
-        String trimQuotes = period.replaceAll("^\"|\"$", "");
-        String[] date = trimQuotes.split(" ");
-
-        if (flag)
-            return java.sql.Date.valueOf(date[0]);
-        else
-            return java.sql.Date.valueOf(date[1]);
-    }
-
-    // method to get past week since today
-    private java.sql.Date getLastWeek(java.sql.Date today) throws ParseException {
-        LocalDate start = today.toLocalDate();
-
-        for (int i = 0; i < 8; i++) {
-            start = start.minusDays(1);
-        }
-
-        return java.sql.Date.valueOf(start);
-    }
-
-    // method to get current date
-    private java.sql.Date getCurrentDate() throws ParseException {
-        LocalDate today = LocalDate.now();
-        today = today.plusDays(1);
-
-        return java.sql.Date.valueOf(today);
-    }
-
-    // method to get income for particular period of date
-    private Double getIncome(List<Transaction> transactions) {
-        List<Double> incomes = new ArrayList<>();
-        Double totalSum = 0.0;
-
-        transactions.forEach(transaction -> {
-            if (transaction.getCategory().getTransactionType().toString().equals("INCOME"))
-                incomes.add(transaction.getAmount());
-        });
-
-        for (Double d : incomes)
-            totalSum += d;
-
-        return totalSum;
-    }
-
-    // method to get expense for particular period of date
-    private Double getExpense(List<Transaction> transactions) {
-        List<Double> expenses = new ArrayList<>();
-        Double totalSum = 0.0;
-
-        transactions.forEach(transaction -> {
-            if (transaction.getCategory().getTransactionType().toString().equals("EXPENSE"))
-                expenses.add(transaction.getAmount());
-        });
-
-        for (Double d : expenses)
-            totalSum += d;
-
-        return totalSum;
-    }
-
     @Override
     public List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model) {// change it later
         List<Transaction> transactions;
@@ -378,7 +311,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         return new PageImpl<>(resultList, PageRequest.of(pageNo, pageSize, Sort.by(sortBy)), resultList.size());
     }
-
 
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
@@ -448,7 +380,6 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
     }
 
-
     private TransactionModel convertToTransactionModel(Transaction transaction) {
         TransactionModel transactionModel = new TransactionModel();
 
@@ -477,5 +408,67 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return transactionModel;
+    }
+
+    // method to convert string do date format
+    private java.sql.Date dateConverter(String period, boolean flag) throws ParseException {
+        String trimQuotes = period.replaceAll("^\"|\"$", "");
+        String[] date = trimQuotes.split(" ");
+
+        if (flag)
+            return java.sql.Date.valueOf(date[0]);
+        else
+            return java.sql.Date.valueOf(date[1]);
+    }
+
+    // method to get past week since today
+    private java.sql.Date getLastWeek(java.sql.Date today) throws ParseException {
+        LocalDate start = today.toLocalDate();
+
+        for (int i = 0; i < 8; i++) {
+            start = start.minusDays(1);
+        }
+
+        return java.sql.Date.valueOf(start);
+    }
+
+    // method to get current date
+    private java.sql.Date getCurrentDate() throws ParseException {
+        LocalDate today = LocalDate.now();
+        today = today.plusDays(1);
+
+        return java.sql.Date.valueOf(today);
+    }
+
+    // method to get income for particular period of date
+    private Double getIncome(List<Transaction> transactions) {
+        List<Double> incomes = new ArrayList<>();
+        Double totalSum = 0.0;
+
+        transactions.forEach(transaction -> {
+            if (transaction.getCategory().getTransactionType().toString().equals("INCOME"))
+                incomes.add(transaction.getAmount());
+        });
+
+        for (Double d : incomes)
+            totalSum += d;
+
+        return totalSum;
+    }
+
+    // method to get expense for particular period of date
+    private Double getExpense(List<Transaction> transactions) {
+        List<Double> expenses = new ArrayList<>();
+        Double totalSum = 0.0;
+
+        transactions.forEach(transaction -> {
+            if (transaction.getCategory().getTransactionType().toString().equals("EXPENSE"))
+                expenses.add(transaction.getAmount());
+        });
+
+        for (Double d : expenses)
+            totalSum += d;
+
+        return totalSum;
     }
 }

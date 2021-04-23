@@ -1,10 +1,14 @@
 package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Debt;
+import kg.neobis.fms.entity.enums.DebtStatus;
 import kg.neobis.fms.entity.enums.TransactionType;
+import kg.neobis.fms.models.CreateDebtModel;
 import kg.neobis.fms.models.DebtModel;
 import kg.neobis.fms.models.TransactionModel;
+import kg.neobis.fms.models.UpdateDebtModel;
 import kg.neobis.fms.repositories.DebtRepository;
+import kg.neobis.fms.repositories.TransactionRepository;
 import kg.neobis.fms.services.DebtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +20,31 @@ import java.util.List;
 @Service
 public class DebtServiceImpl implements DebtService {
     private final DebtRepository debtRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    public DebtServiceImpl(DebtRepository debtRepository) {
+    public DebtServiceImpl(DebtRepository debtRepository, TransactionRepository transactionRepository) {
         this.debtRepository = debtRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
     public List<DebtModel> getAll() {
         List<Debt> debts = debtRepository.findAll();
+        List<DebtModel> debtModels = new ArrayList<>();
+
+        debts.forEach(debt -> {
+            DebtModel debtModel = toDebtModel(debt);
+
+            debtModels.add(debtModel);
+        });
+
+        return debtModels;
+    }
+
+    @Override
+    public List<DebtModel> getAllByDebtStatus(Boolean debtStatus) {
+        List<Debt> debts = debtRepository.findAllByDebtStatus(debtStatus);
         List<DebtModel> debtModels = new ArrayList<>();
 
         debts.forEach(debt -> {
@@ -43,21 +63,45 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public DebtModel create(Debt debt) {
+    public DebtModel create(CreateDebtModel createDebtModel) {
+        Debt debt = new Debt();
+
+        debt.setAmount(createDebtModel.getAmount());
+        debt.setPaid(createDebtModel.getPaid());
+        debt.setOwe(createDebtModel.getOwe());
+
+        if (createDebtModel.getTransactionId() != null) {
+            debt.setTransaction(transactionRepository.findById(createDebtModel.getTransactionId()).
+                    orElseThrow(() -> new EntityNotFoundException("Transaction with id " + createDebtModel.getTransactionId() + " is not exist!")));
+        }
+
+        if (createDebtModel.getDebtStatusId())
+            debt.setDebtStatus(DebtStatus.OWE);
+        else
+            debt.setDebtStatus(DebtStatus.PAID);
+
         return toDebtModel(debtRepository.save(debt));
     }
 
     @Override
-    public DebtModel update(long id, Debt debt) {
-        Debt updateDebt = debtRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Debt with id " + id + " is not found!"));
+    public DebtModel update(long id, UpdateDebtModel updateDebtModel) {
+        Debt debt = debtRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Debt with id " + id + " is not found!"));
 
-        updateDebt.setTransaction(debt.getTransaction());
-        updateDebt.setAmount(debt.getAmount());
-        updateDebt.setPaid(debt.getPaid());
-        updateDebt.setOwe(debt.getOwe());
-        updateDebt.setDebtStatus(debt.getDebtStatus());
+        debt.setAmount(updateDebtModel.getAmount());
+        debt.setPaid(updateDebtModel.getPaid());
+        debt.setOwe(updateDebtModel.getOwe());
 
-        return toDebtModel(debtRepository.save(updateDebt));
+        if (updateDebtModel.getTransactionId() != null) {
+            debt.setTransaction(transactionRepository.findById(updateDebtModel.getTransactionId())
+                    .orElseThrow(() -> new EntityNotFoundException("Transaction with id " + id + " is not exist!")));
+        }
+
+        if (updateDebtModel.getDebtStatusId())
+            debt.setDebtStatus(DebtStatus.OWE);
+        else
+            debt.setDebtStatus(DebtStatus.PAID);
+
+        return toDebtModel(debtRepository.save(debt));
     }
 
     @Override

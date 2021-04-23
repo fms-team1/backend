@@ -1,7 +1,8 @@
 package kg.neobis.fms.controllers;
 
-import kg.neobis.fms.entity.Debt;
+import kg.neobis.fms.models.CreateDebtModel;
 import kg.neobis.fms.models.DebtModel;
+import kg.neobis.fms.models.UpdateDebtModel;
 import kg.neobis.fms.services.DebtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +30,19 @@ public class DebtController {
         return debtService.getById(id);
     }
 
+    @GetMapping("/{debtStatus}")
+    public List<DebtModel> getById(@PathVariable("debtStatus") Boolean debtStatus) {
+        return debtService.getAllByDebtStatus(debtStatus);
+    }
+
     @PostMapping
-    public DebtModel create(@RequestBody Debt debt) {
-        return debtService.create(debt);
+    public DebtModel create(@RequestBody CreateDebtModel createDebtModel) {
+        return debtService.create(createDebtModel);
     }
 
     @PutMapping("/{id}")
-    public DebtModel update(@PathVariable("id") long id, @RequestBody Debt debt) {
-        return debtService.update(id, debt);
+    public DebtModel update(@PathVariable("id") long id, @RequestBody UpdateDebtModel updateDebtModel) {
+        return debtService.update(id, updateDebtModel);
     }
 
     @DeleteMapping("/{id}")

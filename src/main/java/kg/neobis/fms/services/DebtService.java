@@ -1,14 +1,16 @@
 package kg.neobis.fms.services;
 
-import kg.neobis.fms.entity.Debt;
+import kg.neobis.fms.models.CreateDebtModel;
 import kg.neobis.fms.models.DebtModel;
+import kg.neobis.fms.models.UpdateDebtModel;
 
 import java.util.List;
 
 public interface DebtService {
     List<DebtModel> getAll();
+    List<DebtModel> getAllByDebtStatus(Boolean debtStatus);
     DebtModel getById(long id);
-    DebtModel create(Debt debt);
-    DebtModel update(long id, Debt debt);
+    DebtModel create(CreateDebtModel createDebtModel);
+    DebtModel update(long id, UpdateDebtModel updateDebtModel);
     void delete(long id);
 }
