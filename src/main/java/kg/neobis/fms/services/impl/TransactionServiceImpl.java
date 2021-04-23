@@ -4,14 +4,14 @@ import kg.neobis.fms.dao.TransactionDao;
 import kg.neobis.fms.entity.Category;
 import kg.neobis.fms.entity.People;
 import kg.neobis.fms.entity.Transaction;
-import kg.neobis.fms.entity.enums.NeoSection;
-import kg.neobis.fms.models.*;
 import kg.neobis.fms.entity.Wallet;
+import kg.neobis.fms.entity.enums.NeoSection;
 import kg.neobis.fms.entity.enums.TransactionStatus;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.exception.NotEnoughAvailableBalance;
 import kg.neobis.fms.exception.NotEnoughDataException;
 import kg.neobis.fms.exception.RecordNotFoundException;
+import kg.neobis.fms.models.*;
 import kg.neobis.fms.repositories.TransactionPaginationRepository;
 import kg.neobis.fms.repositories.TransactionRepository;
 import kg.neobis.fms.services.CategoryService;
@@ -19,13 +19,15 @@ import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -39,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     TransactionServiceImpl(TransactionPaginationRepository transactionPaginationRepository, TransactionRepository transactionRepository, WalletServiceImpl walletService,
-                           CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService, TransactionDao transactionDao){
+                           CategoryService categoryService, MyUserServiceImpl userService, PeopleService peopleService, TransactionDao transactionDao) {
         this.transactionPaginationRepository = transactionPaginationRepository;
         this.transactionRepository = transactionRepository;
         this.walletService = walletService;
@@ -182,16 +184,16 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setWallet(wallet);
         transaction.setCategory(category);
         transaction.setComment(model.getComment());
-        if(model.getDate() != null)
+        if (model.getDate() != null)
             transaction.setCreatedDate(model.getDate());
         else
             transaction.setCreatedDate(new Date());
         transaction.setUser(userService.getCurrentUser());
         transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
 
-        if(category.getTransactionType().equals(TransactionType.INCOME))
+        if (category.getTransactionType().equals(TransactionType.INCOME))
             walletService.increaseAvailableBalance(wallet, amount);
-        else if(category.getTransactionType().equals(TransactionType.EXPENSE))
+        else if (category.getTransactionType().equals(TransactionType.EXPENSE))
             walletService.decreaseAvailableBalance(wallet, amount);
 
         transactionRepository.save(transaction);
@@ -216,7 +218,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setTransactionStatus(TransactionStatus.SUCCESSFULLY);
 
         walletService.decreaseAvailableBalance(walletFrom, amount);
-        walletService.increaseAvailableBalance(walletTo,amount);
+        walletService.increaseAvailableBalance(walletTo, amount);
 
         transactionRepository.save(transaction);
     }
@@ -237,9 +239,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     private People getCounterparty(Long counterpartyId, String counterpartyName) throws RecordNotFoundException, NotEnoughDataException {
         People counterparty;
-        if( counterpartyId != null)
+        if (counterpartyId != null)
             counterparty = peopleService.getById(counterpartyId);
-        else if (counterpartyName != null){
+        else if (counterpartyName != null) {
             PersonModel personModel = new PersonModel();
             personModel.setName(counterpartyName);
 
@@ -313,30 +315,30 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model){// change it later
+    public List<TransactionModel> getByGlobalFiltration(ModelToGetFilteredTransactions model) {// change it later
         List<Transaction> transactions;
-        if(model.getStartDate() != null && model.getEndDate() != null)
+        if (model.getStartDate() != null && model.getEndDate() != null)
             transactions = transactionRepository.findAllByCreatedDateBetween(model.getStartDate(), model.getEndDate());
         else
             transactions = transactionRepository.findAll();
         List<TransactionModel> resultList = new ArrayList<>();
-        for(Transaction transaction: transactions){
+        for (Transaction transaction : transactions) {
             boolean flag = true;
-            if(model.getTransactionTypeId() != null)
+            if (model.getTransactionTypeId() != null)
                 flag = transaction.getCategory().getTransactionType().ordinal() == model.getTransactionTypeId();
-            if(model.getWalletId() != null && flag)
+            if (model.getWalletId() != null && flag)
                 flag = transaction.getWallet().getId() == model.getWalletId();
-            if(model.getCategoryId() != null && flag)
+            if (model.getCategoryId() != null && flag)
                 flag = transaction.getCategory().getId() == model.getCategoryId();
-            if(model.getUserId() != null && flag)
+            if (model.getUserId() != null && flag)
                 flag = transaction.getUser().getPerson().getId() == model.getUserId();
-            if(model.getCounterpartyId() != null && flag)
-                flag = transaction.getPerson() != null &&transaction.getPerson().getId() == model.getCounterpartyId();
-            if(model.getTransferWalletId() != null && flag)
+            if (model.getCounterpartyId() != null && flag)
+                flag = transaction.getPerson() != null && transaction.getPerson().getId() == model.getCounterpartyId();
+            if (model.getTransferWalletId() != null && flag)
                 flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
-            if(model.getNeoSectionId() != null && flag)
+            if (model.getNeoSectionId() != null && flag)
                 flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
-            if(flag )
+            if (flag)
                 resultList.add(convertToTransactionModel(transaction));
         }
 
@@ -344,33 +346,33 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Page<TransactionModel> getByGlobalFiltrationPagination(ModelToGetFilteredTransactions model, Integer pageNo, Integer pageSize, String sortBy){
+    public Page<TransactionModel> getByGlobalFiltrationPagination(ModelToGetFilteredTransactions model, Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
         Page<Transaction> transactions;
-        if(model.getStartDate() != null && model.getEndDate() != null)
+        if (model.getStartDate() != null && model.getEndDate() != null)
             transactions = transactionPaginationRepository.findAllByCreatedDateBetween(model.getStartDate(), model.getEndDate(), pageable);
         else
             transactions = transactionPaginationRepository.findAll(pageable);
 
         List<TransactionModel> resultList = new ArrayList<>();
-        for(Transaction transaction: transactions){
+        for (Transaction transaction : transactions) {
             boolean flag = true;
-            if(model.getTransactionTypeId() != null)
+            if (model.getTransactionTypeId() != null)
                 flag = transaction.getCategory().getTransactionType().ordinal() == model.getTransactionTypeId();
-            if(model.getWalletId() != null && flag)
+            if (model.getWalletId() != null && flag)
                 flag = transaction.getWallet().getId() == model.getWalletId();
-            if(model.getCategoryId() != null && flag)
+            if (model.getCategoryId() != null && flag)
                 flag = transaction.getCategory().getId() == model.getCategoryId();
-            if(model.getUserId() != null && flag)
+            if (model.getUserId() != null && flag)
                 flag = transaction.getUser().getPerson().getId() == model.getUserId();
-            if(model.getCounterpartyId() != null && flag)
-                flag = transaction.getPerson() != null &&transaction.getPerson().getId() == model.getCounterpartyId();
-            if(model.getTransferWalletId() != null && flag)
+            if (model.getCounterpartyId() != null && flag)
+                flag = transaction.getPerson() != null && transaction.getPerson().getId() == model.getCounterpartyId();
+            if (model.getTransferWalletId() != null && flag)
                 flag = transaction.getWallet2().getId() == model.getTransferWalletId() && model.getTransactionTypeId() == TransactionType.MONEY_TRANSFER.ordinal();
-            if(model.getNeoSectionId() != null && flag)
+            if (model.getNeoSectionId() != null && flag)
                 flag = transaction.getCategory().getNeoSection().ordinal() == model.getNeoSectionId();
-            if(flag )
+            if (flag)
                 resultList.add(convertToTransactionModel(transaction));
         }
 
@@ -378,14 +380,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-
     @Override
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
 
-        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
-        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
-        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "Перевод"));
+        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "INCOME"));
+        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "EXPENSE"));
+        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "MONEY_TRANSFER"));
 
         return resultList;
     }
@@ -398,14 +399,14 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionType transactionType = TransactionType.values()[model.getTransactionTypeId()];
         java.sql.Date startDate = model.getStartDate();
         java.sql.Date endDate = model.getEndDate();
-        endDate.setTime(endDate.getTime() + 23*60*60* 1000); // hour * minutes* sec * millisec, 23ч перевел на миллисек и добавил к endDate. Это нужно было,чтобы сделать период [startDate endDate]
-        Double totalBalance = transactionRepository.totalSum(neoSection,transactionType, startDate, endDate);
+        endDate.setTime(endDate.getTime() + 23 * 60 * 60 * 1000); // hour * minutes* sec * millisec, 23ч перевел на миллисек и добавил к endDate. Это нужно было,чтобы сделать период [startDate endDate]
+        Double totalBalance = transactionRepository.totalSum(neoSection, transactionType, startDate, endDate);
 
         ModelToGetCategories modelToGetCategories = new ModelToGetCategories(model.getNeoSectionId(), model.getTransactionTypeId());
         List<CategoryModel> categories = categoryService.getAllActiveCategoriesByNeoSectionAndTransactionType(modelToGetCategories);
 
         List<CategoryForAnalyticsModel> resultCategoryList = new ArrayList<>();
-        for(CategoryModel category: categories){
+        for (CategoryModel category : categories) {
             Long categoryId = category.getId();
 
             Double categoryAmount = transactionRepository.categoryAmount(categoryId, startDate, endDate);
@@ -426,29 +427,29 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void update(ModelToUpdateTransaction model) throws RecordNotFoundException {
         Optional<Transaction> optionalTransaction = transactionRepository.findById(model.getId());
-        if(optionalTransaction.isEmpty())
+        if (optionalTransaction.isEmpty())
             throw new RecordNotFoundException("нет тразакта с таким id");
 
         Transaction transaction = optionalTransaction.get();
 
-        if(model.getAmount() != null)
+        if (model.getAmount() != null)
             transaction.setAmount(model.getAmount());
-        if(model.getComment() != null)
+        if (model.getComment() != null)
             transaction.setComment(model.getComment());
-        if(model.getWalletId() != null)
+        if (model.getWalletId() != null)
             transaction.setWallet(walletService.getWalletById(model.getWalletId()));
-        if(model.getTransferWalletId() != null)
+        if (model.getTransferWalletId() != null)
             transaction.setWallet2(walletService.getWalletById(model.getTransferWalletId()));
-        if(model.getCounterpartyId() != null)
+        if (model.getCounterpartyId() != null)
             transaction.setPerson(peopleService.getById(model.getCounterpartyId()));
-        if(model.getCategoryId() != null)
+        if (model.getCategoryId() != null)
             transaction.setCategory(categoryService.getById(model.getCategoryId()));
 
         transactionRepository.save(transaction);
     }
 
 
-    private TransactionModel convertToTransactionModel(Transaction transaction){
+    private TransactionModel convertToTransactionModel(Transaction transaction) {
         TransactionModel transactionModel = new TransactionModel();
 
         transactionModel.setId(transaction.getId());
