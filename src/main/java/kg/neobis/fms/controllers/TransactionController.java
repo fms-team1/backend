@@ -38,12 +38,11 @@ public class TransactionController {
     }
 
     @PostMapping("addIncomeOrExpense")
-    public ResponseEntity<String> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
+    public ResponseEntity<TransactionModel> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
         try {
-            transactionService.addIncomeOrExpense(model);
-            return ResponseEntity.ok("successfully added");
+            return transactionService.addIncomeOrExpense(model);
         } catch (RecordNotFoundException | NotEnoughAvailableBalance | NotEnoughDataException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

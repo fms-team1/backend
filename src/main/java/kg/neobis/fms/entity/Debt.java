@@ -21,6 +21,9 @@ public class Debt implements Serializable {
     @Column(name = "amount", nullable = false)
     private long amount;
 
+    @Column(name = "to_be_paid")
+    private long toBePaid;
+
     @Column(name = "paid")
     private long paid;
 
