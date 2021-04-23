@@ -19,8 +19,6 @@ import kg.neobis.fms.services.PeopleService;
 import kg.neobis.fms.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -169,7 +167,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public ResponseEntity<TransactionModel> addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException {
+    public void addIncomeOrExpense(IncomeExpenseModel model) throws RecordNotFoundException, NotEnoughAvailableBalance, NotEnoughDataException {
         Wallet wallet = walletService.getWalletById(model.getWalletId());
         Category category = categoryService.getById(model.getCategoryId());
         double amount = model.getAmount();
@@ -193,7 +191,7 @@ public class TransactionServiceImpl implements TransactionService {
         else if (category.getTransactionType().equals(TransactionType.EXPENSE))
             walletService.decreaseAvailableBalance(wallet, amount);
 
-        return new ResponseEntity(transactionRepository.save(transaction), HttpStatus.ACCEPTED);
+        transactionRepository.save(transaction);
     }
 
     @Override
@@ -318,9 +316,9 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
 
-        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
-        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
-        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "Перевод"));
+        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "INCOME"));
+        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "EXPENSE"));
+        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "MONEY_TRANSFER"));
 
         return resultList;
     }

@@ -25,22 +25,25 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    // API to get all transactions
     @GetMapping("/getAll")
     public List<TransactionModel> getAllTransactions() {
         return transactionService.getAllTransactionsTeam2();
     }
 
+    // API to get transaction by id
     @GetMapping("/getById/{id}")
     public TransactionModel getTransactionById(@PathVariable Long id) {
         return transactionService.getTransactionById(id);
     }
 
     @PostMapping("addIncomeOrExpense")
-    public ResponseEntity<TransactionModel> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
+    public ResponseEntity<String> addIncomeOrExpense(@RequestBody IncomeExpenseModel model){
         try {
-            return transactionService.addIncomeOrExpense(model);
+            transactionService.addIncomeOrExpense(model);
+            return ResponseEntity.ok("successfully added");
         } catch (RecordNotFoundException | NotEnoughAvailableBalance | NotEnoughDataException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
