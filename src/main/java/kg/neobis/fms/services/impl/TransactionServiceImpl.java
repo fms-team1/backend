@@ -319,9 +319,9 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionTypeModel> getTransactionTypes() {
         List<TransactionTypeModel> resultList = new ArrayList<>();
 
-        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "INCOME"));
-        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "EXPENSE"));
-        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "MONEY_TRANSFER"));
+        resultList.add(new TransactionTypeModel(TransactionType.INCOME.ordinal(), "Доход"));
+        resultList.add(new TransactionTypeModel(TransactionType.EXPENSE.ordinal(), "Расход"));
+        resultList.add(new TransactionTypeModel(TransactionType.MONEY_TRANSFER.ordinal(), "Перевод"));
 
         return resultList;
     }
