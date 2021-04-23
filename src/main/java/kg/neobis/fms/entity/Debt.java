@@ -29,8 +29,4 @@ public class Debt implements Serializable {
 
     @Column(name = "owe")
     private long owe;
-
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "debt_status_id", nullable = false )
-    private DebtStatus debtStatus;
 }

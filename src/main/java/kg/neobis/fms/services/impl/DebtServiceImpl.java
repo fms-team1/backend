@@ -1,7 +1,6 @@
 package kg.neobis.fms.services.impl;
 
 import kg.neobis.fms.entity.Debt;
-import kg.neobis.fms.entity.enums.DebtStatus;
 import kg.neobis.fms.entity.enums.TransactionType;
 import kg.neobis.fms.models.CreateDebtModel;
 import kg.neobis.fms.models.DebtModel;
@@ -67,6 +66,7 @@ public class DebtServiceImpl implements DebtService {
         Debt debt = new Debt();
 
         debt.setAmount(createDebtModel.getAmount());
+        debt.setToBePaid(createDebtModel.getToBePaid());
         debt.setPaid(createDebtModel.getPaid());
         debt.setOwe(createDebtModel.getOwe());
 
@@ -74,11 +74,6 @@ public class DebtServiceImpl implements DebtService {
             debt.setTransaction(transactionRepository.findById(createDebtModel.getTransactionId()).
                     orElseThrow(() -> new EntityNotFoundException("Transaction with id " + createDebtModel.getTransactionId() + " is not exist!")));
         }
-
-        if (createDebtModel.getDebtStatusId())
-            debt.setDebtStatus(DebtStatus.OWE);
-        else
-            debt.setDebtStatus(DebtStatus.PAID);
 
         return toDebtModel(debtRepository.save(debt));
     }
@@ -88,6 +83,7 @@ public class DebtServiceImpl implements DebtService {
         Debt debt = debtRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Debt with id " + id + " is not found!"));
 
         debt.setAmount(updateDebtModel.getAmount());
+        debt.setToBePaid(updateDebtModel.getToBePaid());
         debt.setPaid(updateDebtModel.getPaid());
         debt.setOwe(updateDebtModel.getOwe());
 
@@ -95,11 +91,6 @@ public class DebtServiceImpl implements DebtService {
             debt.setTransaction(transactionRepository.findById(updateDebtModel.getTransactionId())
                     .orElseThrow(() -> new EntityNotFoundException("Transaction with id " + id + " is not exist!")));
         }
-
-        if (updateDebtModel.getDebtStatusId())
-            debt.setDebtStatus(DebtStatus.OWE);
-        else
-            debt.setDebtStatus(DebtStatus.PAID);
 
         return toDebtModel(debtRepository.save(debt));
     }
@@ -139,7 +130,7 @@ public class DebtServiceImpl implements DebtService {
 
         debtModel.setId(debt.getId());
         debtModel.setTransactionModel(transactionModel);
-        debtModel.setDebtStatus(debt.getDebtStatus());
+        debtModel.setToBePaid(debt.getToBePaid());
         debtModel.setOwe(debt.getOwe());
         debtModel.setPaid(debt.getPaid());
         debtModel.setAmount(debt.getAmount());

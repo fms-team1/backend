@@ -6,7 +6,7 @@ import lombok.Data;
 public class UpdateDebtModel {
     private Long transactionId;
     private long amount;
+    private long toBePaid;
     private long paid;
     private long owe;
-    private Boolean debtStatusId;
 }
