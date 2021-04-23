@@ -44,8 +44,8 @@ public class CategoryController {
     @GetMapping("getNeoSections")
     public ResponseEntity<List<NeoSectionModel>> getNeoSections(){
         List<NeoSectionModel> list = new ArrayList<>();
-        for(NeoSection neoSection: NeoSection.values())
-            list.add(new NeoSectionModel(neoSection.ordinal(), neoSection));
+        list.add(new NeoSectionModel(NeoSection.NEOBIS.ordinal(), NeoSection.NEOBIS));
+        list.add(new NeoSectionModel(NeoSection.NEOLABS.ordinal(), NeoSection.NEOLABS));
         return ResponseEntity.ok(list);
     }
 
