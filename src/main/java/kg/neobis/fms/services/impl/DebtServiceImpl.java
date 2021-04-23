@@ -51,7 +51,6 @@ public class DebtServiceImpl implements DebtService {
     public DebtModel create(CreateDebtModel createDebtModel) {
         Debt debt = new Debt();
 
-        debt.setAmount(createDebtModel.getAmount());
         debt.setToBePaid(createDebtModel.getToBePaid());
         debt.setPaid(createDebtModel.getPaid());
         debt.setOwe(createDebtModel.getOwe());
@@ -68,7 +67,6 @@ public class DebtServiceImpl implements DebtService {
     public DebtModel update(long id, UpdateDebtModel updateDebtModel) {
         Debt debt = debtRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Debt with id " + id + " is not found!"));
 
-        debt.setAmount(updateDebtModel.getAmount());
         debt.setToBePaid(updateDebtModel.getToBePaid());
         debt.setPaid(updateDebtModel.getPaid());
         debt.setOwe(updateDebtModel.getOwe());
@@ -119,7 +117,6 @@ public class DebtServiceImpl implements DebtService {
         debtModel.setToBePaid(debt.getToBePaid());
         debtModel.setOwe(debt.getOwe());
         debtModel.setPaid(debt.getPaid());
-        debtModel.setAmount(debt.getAmount());
 
         return debtModel;
     }

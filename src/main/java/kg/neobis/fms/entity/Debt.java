@@ -1,7 +1,6 @@
 package kg.neobis.fms.entity;
 
-import kg.neobis.fms.entity.enums.DebtStatus;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,9 +16,6 @@ public class Debt implements Serializable {
 
     @ManyToOne
     private Transaction transaction;
-
-    @Column(name = "amount", nullable = false)
-    private long amount;
 
     @Column(name = "to_be_paid")
     private long toBePaid;
