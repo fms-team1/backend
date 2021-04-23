@@ -32,6 +32,7 @@ public class CategoryService {
 
     public List<CategoryModel> getAllCategories() {
         List<Category> list = categoryRepository.findAll();
+
         return getCategoryModels(list);
 
     }
