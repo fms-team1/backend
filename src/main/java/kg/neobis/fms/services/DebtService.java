@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface DebtService {
     List<DebtModel> getAll();
-    List<DebtModel> getAllByDebtStatus(Boolean debtStatus);
     DebtModel getById(long id);
     DebtModel create(CreateDebtModel createDebtModel);
     DebtModel update(long id, UpdateDebtModel updateDebtModel);

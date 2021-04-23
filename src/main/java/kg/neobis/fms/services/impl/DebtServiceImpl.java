@@ -42,20 +42,6 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public List<DebtModel> getAllByDebtStatus(Boolean debtStatus) {
-        List<Debt> debts = debtRepository.findAllByDebtStatus(debtStatus);
-        List<DebtModel> debtModels = new ArrayList<>();
-
-        debts.forEach(debt -> {
-            DebtModel debtModel = toDebtModel(debt);
-
-            debtModels.add(debtModel);
-        });
-
-        return debtModels;
-    }
-
-    @Override
     public DebtModel getById(long id) {
         Debt debt = debtRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Debt with id " + id + " is not found!"));
         return toDebtModel(debt);

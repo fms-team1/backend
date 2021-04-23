@@ -30,11 +30,6 @@ public class DebtController {
         return debtService.getById(id);
     }
 
-    @GetMapping("/{debtStatus}")
-    public List<DebtModel> getById(@PathVariable("debtStatus") Boolean debtStatus) {
-        return debtService.getAllByDebtStatus(debtStatus);
-    }
-
     @PostMapping
     public DebtModel create(@RequestBody CreateDebtModel createDebtModel) {
         return debtService.create(createDebtModel);
